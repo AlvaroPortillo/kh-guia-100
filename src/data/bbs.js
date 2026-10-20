@@ -16,6 +16,18 @@ export const FUENTES = {
   khwikiGolpes: { nombre: 'KHWiki — Finish Command (KHBBS)', url: 'https://www.khwiki.com/Finish_command_(KHBBS)' },
   khwikiArena: { nombre: 'KHWiki — Arena Mission', url: 'https://www.khwiki.com/Arena_Mission' },
   trueTrophies: { nombre: 'TrueTrophies — comentarios sobre «El Maestro»', url: 'https://www.truetrophies.com/t90563/critical-competitor-trophy' },
+  guiaSteam: { nombre: 'Guía de logros de BBS Final Mix (Steam, en castellano)', url: 'https://steamcommunity.com/sharedfiles/filedetails/?id=3300421820' },
+  khwikiArenaMode: { nombre: 'KHWiki — Arena Mode (desbloqueos y estrellas)', url: 'https://www.khwiki.com/Arena_Mode' },
+  khwikiTickets: { nombre: 'KHWiki — Battle Tickets', url: 'https://www.khwiki.com/Risky_Ticket' },
+  khwikiCoso: { nombre: 'KHWiki — Mirage Arena (nivel del Coso)', url: 'https://www.khwiki.com/Mirage_Arena' },
+  wikiEsXehanort: { nombre: 'Wiki ES — Informes Xehanort', url: 'https://kingdomhearts.fandom.com/es/wiki/Informes_Xehanort' },
+  wikiEsHelado: { nombre: 'Wiki ES — Helado', url: 'https://kingdomhearts.fandom.com/es/wiki/Helado' },
+  wikiEsPegatinas: { nombre: 'Wiki ES — Álbum de Pegatinas', url: 'https://kingdomhearts.fandom.com/es/wiki/%C3%81lbum_de_Pegatinas' },
+  wikiEsCorona: { nombre: 'Wiki ES — Corona Eterna', url: 'https://kingdomhearts.fandom.com/es/wiki/Corona_Eterna' },
+  wikiEsArtema: { nombre: 'Wiki ES — Arma Artema', url: 'https://kingdomhearts.fandom.com/es/wiki/Arma_Artema' },
+  wikiEsHilatiempo: { nombre: 'Wiki ES — Hilatiempo', url: 'https://kingdomhearts.fandom.com/es/wiki/Hilatiempo' },
+  wikiEsCarga: { nombre: 'Wiki ES — Carga Eléctrica', url: 'https://kingdomhearts.fandom.com/es/wiki/Carga_El%C3%A9ctrica' },
+  kh13: { nombre: 'KH13 — hilo «Post your BBS builds»', url: 'https://www.kh13.com/forums/topic/22838-post-your-bbs-builds-here/' },
 };
 
 export const PERSONAJES = {
@@ -39,9 +51,9 @@ export const RUTA = [
   {
     id: 'r-dificultad',
     titulo: 'Elige la dificultad Maestro desde el principio',
-    texto: 'El logro «El Maestro» pide completar el juego en Maestro. Jugadores en TrueTrophies indican que cuenta completar las historias en esa dificultad, y que terminar solo el episodio secreto en Maestro no basta. Además, en Maestro el episodio secreto se desbloquea solo con completar el Episodio Final (ver más abajo).',
+    texto: 'Para «El Maestro» hay que jugar en Maestro las tres historias, el Episodio Final y el Episodio Secreto, y no se pueden mezclar dificultades: el Episodio Final o Secreto en Maestro exige haber terminado las historias en Maestro. En TrueTrophies coinciden en que terminar solo el episodio secreto en Maestro no basta. No hay logros perdibles.',
     logros: ['ACH_153', 'ACH_154'],
-    fuentes: ['steam', 'trueTrophies', 'wikiEsSecreto'],
+    fuentes: ['guiaSteam', 'trueTrophies'],
   },
   {
     id: 'r-historias',
@@ -52,17 +64,17 @@ export const RUTA = [
   },
   {
     id: 'r-trance',
-    titulo: 'Desbloquea Trance armónico al terminar tu primera historia',
-    texto: 'El trofeo interno «Cosa de uno» (completar la historia de un personaje) da el estilo de comandos Trance armónico. También se obtiene con 140 puntos del Álbum de pegatinas. Se activa llenando la barra con ataques de tipo Rayo o Minas. Úsalo 20 veces para «A todo ritmo».',
+    titulo: 'Desbloquea el estilo Trance armónico',
+    texto: 'El estilo Trance armónico se obtiene con 140 puntos del Álbum de pegatinas (todas las pegatinas, bien pegadas). La wiki en español añade que también lo da el trofeo interno «Cosa de uno» (terminar la historia de un personaje). Se activa llenando la barra con ataques de tipo Rayo o Minas. Úsalo 20 veces para «A todo ritmo».',
     logros: ['ACH_171'],
-    fuentes: ['wikiEsTrofeos', 'wikiEsEstilos'],
+    fuentes: ['guiaSteam', 'wikiEsTrofeos', 'wikiEsEstilos'],
   },
   {
     id: 'r-secreto',
     titulo: 'Desbloquea el episodio secreto',
-    texto: 'Primero hay que desbloquear el Episodio Final. Después depende de la dificultad: Principiante, inaccesible. Normal, completar el Álbum de pegatinas con los tres personajes y obtener el trofeo interno «Gladiador» (derrotar a 9999 nescientes). Experto, completar el Álbum de pegatinas con los tres. Maestro, completar el Episodio Final.',
+    texto: 'Las fuentes no coinciden. La guía de Steam (escrita para esta versión) dice: termina las tres historias y completa sus Informes al 100 %. La wiki en español da condiciones según la dificultad: Principiante, inaccesible; Normal, Álbum de pegatinas completo con los tres y trofeo interno «Gladiador» (9999 nescientes); Experto, Álbum de pegatinas completo con los tres; Maestro, completar el Episodio Final. Si juegas en Maestro y completas los Informes, cumples ambas.',
     logros: ['ACH_154', 'ACH_165'],
-    fuentes: ['wikiEsSecreto', 'wikiEsTrofeos'],
+    fuentes: ['guiaSteam', 'wikiEsSecreto', 'wikiEsTrofeos'],
   },
   {
     id: 'r-vanitas',
@@ -195,26 +207,127 @@ export const CUARTELILLO = {
   aqua: ['Cura++ + Coraza Tino (síntesis tipo N)', 'Cura++ + Coraza Cura (síntesis tipo P)'],
 };
 
-// Encuentros del Coso Virtual. Orden: KHWiki (Arena Mission, Final Mix).
-// Nombres y fichas: Wiki ES. `null` = la wiki no tiene ficha de ese encuentro todavía.
+// Coso Virtual. Estrellas, rondas, medallas base y desbloqueo: KHWiki (Arena Mode).
+// Las medallas se multiplican ×1,5 si eres el MVP del combate (KHWiki).
+// Nombres en castellano: Wiki ES y guía de Steam. Recompensas: KHWiki (nombres de la Wiki ES).
+// `nivel` = nivel del Coso necesario; `abre` = otras formas de entrar.
+export const COSO_INFO = {
+  nivel: 'El nivel del Coso (máx. 30) sube uno por cada misión del Coso que completes: reunir medallas, superar combates, carreras… Algunos combates piden un nivel mínimo.',
+  tickets: 'Los tickets se compran con medallas al Moguri del Coso y permiten entrar una vez en su combate aunque no tengas el nivel necesario.',
+  medallas: 'Para farmear medallas: «Engendro Marino» con un Megafulgor, el resto Cuadro de minas y el estilo Trance armónico desbloqueado. Golpea dos barriles hacia Monstruo para aturdirlo, usa los Cuadros de minas en su boca y remata con el estilo. Menos de un minuto por combate.',
+};
+
 export const COSO = [
-  { id: 'dia-del-juicio', nombre: 'Día del Juicio', nivel: 1, medallas: 75, rival: 'Ferrocustodio I', premio: null },
-  { id: 'perdicion-rodada', nombre: 'Perdición Rodada', nivel: 1, medallas: 90, rival: 'Carroza Poseída', premio: { aqua: 'VT máx. +5' } },
-  { id: 'traicionera-avaricia', nombre: 'Traicionera Avaricia', nivel: 8, medallas: 105, rival: 'Avituallador', premio: null },
-  { id: 'rueca-loca', nombre: 'Rueca Loca', nivel: 1, medallas: 120, rival: 'Rueca Fatal', premio: { terra: 'VT máx. +5' } },
-  { id: 'carcelero-implacable', nombre: 'Carcelero Implacable', nivel: 3, medallas: 150, rival: 'Ferrocustodio II', premio: { terra: 'Informe Xehanort V', ventus: 'Trepacielos' } },
-  { id: 'el-conjurador', nombre: 'El Conjurador' },
-  { id: 'amenaza-conjunta', nombre: 'Amenaza Conjunta', nivel: 7, medallas: 210, rival: 'Triarmadura', premio: { aqua: 'Trepacielos' } },
-  { id: 'tesoro-peleon', nombre: 'Tesoro Peleón', nivel: 15, medallas: 240, rival: 'Avituallador', premio: null },
-  { id: 'castigo-inexorable', nombre: 'Castigo Inexorable' },
-  { id: 'halito-gelido', nombre: 'Hálito Gélido' },
-  { id: 'maestro-de-ilusiones', nombre: 'Maestro de Ilusiones' },
-  { id: 'custodios-del-coso', nombre: 'Custodios del Coso', logro: 'ACH_196' },
-  { id: 'engendro-marino', nombre: 'Engendro Marino', fm: true, nivel: 8, medallas: 675, rival: 'Monstruo', premio: { terra: 'Minimalia', ventus: 'Minimalia', aqua: 'Minimalia' } },
-  { id: 'vil-venganza', nombre: 'Vil Venganza', nivel: 25, medallas: 750, rival: 'Jefes del Coso en serie (8 rondas)', premio: { terra: 'Arma Artema', ventus: 'Arma Artema', aqua: 'Arma Artema' }, logro: 'ACH_197' },
-  { id: 'mentor-de-la-luz', nombre: 'Mentor de la Luz', fm: true, nivel: 28, medallas: 800, rival: 'Armadura de Eraqus', premio: { terra: 'VT máx. +5', ventus: 'VT máx. +5', aqua: 'VT máx. +5' }, logro: 'ACH_162' },
-  { id: 'oscuridad-manifiesta', nombre: 'Oscuridad Manifiesta', fm: true, nivel: 30, medallas: 999, rival: 'Noheart', premio: { terra: 'Corona Eterna', ventus: 'Corona Eterna', aqua: 'Corona Eterna' }, logro: 'ACH_161' },
+  { id: 'dia-del-juicio', nombre: 'Día del Juicio', estrellas: 1, rondas: 4, medallas: 50, rival: 'Ferrocustodio I',
+    abre: 'Disponible desde el principio.' },
+  { id: 'perdicion-rodada', nombre: 'Perdición Rodada', estrellas: 1, rondas: 4, medallas: 60, rival: 'Carroza Poseída',
+    abre: 'Aqua: desde el principio. Terra y Ventus: termina el juego con Aqua.', premio: { aqua: 'VT máx. +5' } },
+  { id: 'traicionera-avaricia', nombre: 'Traicionera Avaricia', estrellas: 1, rondas: 3, medallas: 70, rival: 'Avituallador',
+    nivel: 8, ticket: true },
+  { id: 'rueca-loca', nombre: 'Rueca Loca', estrellas: 2, rondas: 4, medallas: 80, rival: 'Rueca Fatal',
+    abre: 'Terra: desde el principio. Ventus y Aqua: termina el juego con Terra.', premio: { terra: 'VT máx. +5' } },
+  { id: 'carcelero-implacable', nombre: 'Carcelero Implacable', estrellas: 2, rondas: 5, medallas: 100, rival: 'Ferrocustodio II',
+    nivel: 3, ticket: true, premio: { terra: 'Informe Xehanort V', ventus: 'Trepacielos' } },
+  { id: 'el-conjurador', nombre: 'El Conjurador', estrellas: 2, rondas: 5, medallas: 120,
+    nivel: 5, ticket: true, premio: { terra: 'Mella Sombría', ventus: 'VT máx. +5' } },
+  { id: 'amenaza-conjunta', nombre: 'Amenaza Conjunta', estrellas: 3, rondas: 6, medallas: 140, rival: 'Triarmadura',
+    abre: 'Completa Vergel Radiante, termina el juego con cualquier personaje o compra su ticket.', premio: { aqua: 'Trepacielos' } },
+  { id: 'tesoro-peleon', nombre: 'Tesoro Peleón', estrellas: 3, rondas: 3, medallas: 160, rival: 'Avituallador',
+    nivel: 15, ticket: true },
+  { id: 'castigo-inexorable', nombre: 'Castigo Inexorable', estrellas: 3, rondas: 6, medallas: 200,
+    nivel: 10 },
+  { id: 'halito-gelido', nombre: 'Hálito Gélido', estrellas: 4, rondas: 8, medallas: 250, rival: 'Hades y Zack (primera mitad)',
+    abre: 'Terra y Ventus: termina el juego con Aqua. Aqua: completa el Coliseo del Olimpo o compra su ticket (solo Aqua).', premio: { ventus: 'VT máx. +5', aqua: 'VT máx. +5' } },
+  { id: 'maestro-de-ilusiones', nombre: 'Maestro de Ilusiones', estrellas: 4, rondas: 8, medallas: 300,
+    nivel: 17, premio: { terra: 'VT máx. +5' } },
+  { id: 'custodios-del-coso', nombre: 'Custodios del Coso', estrellas: 4, rondas: 9, medallas: 400, rival: 'Ferrocustodio III',
+    nivel: 20, premio: { terra: 'Cañón Artema', ventus: 'Multivórtice', aqua: 'Fogonazo' }, logro: 'ACH_196',
+    nota: 'En el BBS original era de 5 estrellas; en Final Mix es de 4.' },
+  { id: 'engendro-marino', nombre: 'Engendro Marino', fm: true, estrellas: 4, rondas: 8, medallas: 450, rival: 'Monstruo',
+    nivel: 8, premio: { terra: 'Minimalia', ventus: 'Minimalia', aqua: 'Minimalia' } },
+  { id: 'vil-venganza', nombre: 'Vil Venganza', estrellas: 5, rondas: 8, medallas: 500, rival: 'Jefes del Coso en serie',
+    nivel: 25, premio: { terra: 'Arma Artema', ventus: 'Arma Artema', aqua: 'Arma Artema' }, logro: 'ACH_197' },
+  { id: 'mentor-de-la-luz', nombre: 'Mentor de la Luz', fm: true, estrellas: 5, rondas: 1, medallas: 800, rival: 'Armadura de Eraqus',
+    nivel: 28, premio: { terra: 'VT máx. +15', ventus: 'VT máx. +15', aqua: 'VT máx. +15' }, logro: 'ACH_162',
+    nota: 'La Wiki ES indica VT máx. +5 como recompensa.' },
+  { id: 'oscuridad-manifiesta', nombre: 'Oscuridad Manifiesta', fm: true, estrellas: 5, rondas: 1, medallas: 1000, rival: 'Noheart',
+    nivel: 30, premio: { terra: 'Corona Eterna', ventus: 'Corona Eterna', aqua: 'Corona Eterna' }, logro: 'ACH_161' },
 ];
+
+// Consejos por logro (guía de Steam en castellano, salvo indicación).
+export const CONSEJOS = {
+  ACH_153: 'Juega en Maestro las tres historias, el Episodio Final y el Episodio Secreto. No se pueden mezclar dificultades.',
+  ACH_154: 'Termina las tres historias y completa sus Informes al 100 % (ver «Ruta de logros»: la wiki en español da otras condiciones).',
+  ACH_158: 'Termina las tres historias y reúne los 13 Informes Xehanort. Crea una partida nueva para jugar el Episodio Final con Aqua.',
+  ACH_159: 'Lleva Tiro certero y pociones, sin Curas (el jefe también se cura). Al empezar, ve a la roca grande de la izquierda y mantén a Vanitas al otro lado mientras le disparas con Tiro certero.',
+  ACH_160: 'Ve por encima del nivel 50 con tu llave espada más fuerte. Alterna Cura y Carga Eléctrica en la baraja y equipa Bloqueo/Coraza Cura. Ataca con Carga Eléctrica cuando venga hacia ti y esquiva. Mira la build de cada personaje.',
+  ACH_161: '«Oscuridad Manifiesta» en el Coso Virtual. Equipa solo Curas y Bloqueo/Coraza Tino y ataca únicamente con Tiro certero; bloquea para recuperar la barra Tino.',
+  ACH_162: '«Mentor de la Luz» en el Coso Virtual. Equipa solo Curas y Bloqueo/Coraza Tino y ataca únicamente con Tiro certero; bloquea para recuperar la barra Tino.',
+  ACH_163: 'Saca rango 3 en los nueve retos de los nescientes (objetivos en Informes → Retos).',
+  ACH_164: 'La mayoría se obtienen al terminar la historia de cada personaje. Revisa Informes → Informes Xehanort.',
+  ACH_165: 'Encuentra todas las pegatinas y pégalas bien hasta llegar a 140 puntos en el álbum.',
+  ACH_169: 'Te saldrá solo al completar los combates del Coso Virtual.',
+  ACH_170: 'Tras completar la historia de Ciudad Disney, juega al Tablero de comandos fuera del Coso. Cae en la casilla azul con estrellas para que aparezca el Capitán Oscuro o Justicia y llévalo de acompañante: al acabar se desbloquea su Nexo-D. Úsalo 10 veces.',
+  ACH_171: 'Desbloquea Trance armónico con 140 puntos del álbum de pegatinas y actívalo 20 veces.',
+  ACH_178: 'Los ingredientes los suelta el Avituallador. Lanza Imán++ y, al terminar, otro inmediatamente hasta derrotar al grupo. Los helados se preparan hablando con los sobrinos en la Plaza Mayor de Ciudad Disney.',
+  ACH_179: 'Gana 7 partidas en el Tablero de comandos del Coso Virtual; el Tablero Llave Espada es el más rápido.',
+  ACH_180: 'Saca «Fantástico» en todas las canciones en Principiante y Experto (puntuaciones en Informes → Minijuegos). Basta con un personaje.',
+  ACH_181: 'Gana los cuatro circuitos desde el Coso Virtual. Desbloquéalos antes ganando en Ciudad Disney.',
+  ACH_182: 'Habla con Horacio junto a la Plaza Mayor de Ciudad Disney y vence a todos los equipos.',
+  ACH_192: 'Completa todos los combates de 1 estrella (ver Informes → Coso Virtual).',
+  ACH_193: 'Completa todos los combates de 2 estrellas.',
+  ACH_194: 'Completa todos los combates de 3 estrellas.',
+  ACH_195: 'Completa todos los combates de 4 estrellas.',
+  ACH_196: 'Necesitas nivel 20 del Coso. Para las hordas, comandos de área como Megafulgor o Imán++.',
+  ACH_197: 'Necesitas nivel 25 del Coso. Contra los jefes, ataca con Tiro certero.',
+};
+
+// Build recomendada por personaje. Cada línea indica su fuente.
+export const BUILDS = {
+  comun: {
+    llave: [
+      { t: 'Corona Eterna', d: 'Fuerza +8, Magia +7. La más poderosa; recompensa de «Oscuridad Manifiesta» (Noheart).', f: 'wikiEsCorona' },
+      { t: 'Arma Artema (mientras tanto)', d: 'Fuerza +7, Magia +6. Recompensa de «Vil Venganza».', f: 'wikiEsArtema' },
+    ],
+    habilidades: { t: 'Atracción, Electro ↑, Ataque Veloz, Prisa Mágica, Último Estertor y Una vez más', d: 'Desactiva el resto contra los jefes más duros.', f: 'guiaSteam' },
+    defensa: { t: 'Bloqueo Cura (Terra, Ventus) / Coraza Cura (Aqua)', d: 'Contra los superjefes. Contra Noheart y la armadura de Eraqus, Bloqueo/Coraza Tino.', f: 'guiaSteam' },
+  },
+  terra: {
+    ataque: [
+      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido. Síntesis (por ejemplo, Piroembestida + Electro+) o tienda Moguri por 700 platines tras obtenerla una vez.', f: 'guiaSteam' },
+    ],
+    magia: [
+      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++. La primera, en acceso rápido.', f: 'guiaSteam' },
+      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
+    ],
+    tiro: { t: 'Rayo Célere', d: 'Recomendado contra los jefes del Coso.', f: 'guiaSteam' },
+    accion: { t: 'Quítate Impulso Sónico', d: 'Según la guía, molesta más que ayuda.', f: 'guiaSteam' },
+  },
+  ventus: {
+    ataque: [
+      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido.', f: 'guiaSteam' },
+      { t: 'Hilatiempo', d: 'Exclusivo de Ventus y Aqua; en el foro KH13 lo llevan por triplicado. Se obtiene por síntesis.', f: 'kh13' },
+    ],
+    magia: [
+      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++.', f: 'guiaSteam' },
+      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
+    ],
+    tiro: { t: 'Multivórtice', d: 'Su Tiro certero definitivo (recompensa de «Custodios del Coso»).', f: 'guiaSteam' },
+    accion: { t: 'Voltereta', d: 'Más invulnerabilidad al esquivar.', f: 'guiaSteam' },
+  },
+  aqua: {
+    ataque: [
+      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido.', f: 'guiaSteam' },
+      { t: 'Hilatiempo', d: 'Exclusivo de Ventus y Aqua. Aqua lo encuentra en un cofre del País de Nunca Jamás.', f: 'wikiEsHilatiempo' },
+    ],
+    magia: [
+      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++.', f: 'guiaSteam' },
+      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
+    ],
+    tiro: { t: 'Chorro Irisado', d: 'Recomendado contra los jefes del Coso. Alternativa: Fogonazo, su Tiro certero definitivo.', f: 'guiaSteam' },
+    accion: { t: 'Rueda', d: 'Más invulnerabilidad al esquivar.', f: 'guiaSteam' },
+  },
+};
 
 export const BBS = {
   id: 'bbs',

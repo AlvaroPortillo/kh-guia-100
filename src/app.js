@@ -1,8 +1,11 @@
 import { store } from './store.js';
 import { JUEGOS } from './data/juegos.js';
 import {
-  BBS, PERSONAJES, GRUPOS_LOGROS, RUTA, GOLPES_FINALES, ESTILOS, CUARTELILLO, COSO, FUENTES,
+  BBS, PERSONAJES, GRUPOS_LOGROS, RUTA, GOLPES_FINALES, ESTILOS, CUARTELILLO, COSO, COSO_INFO,
+  CONSEJOS, BUILDS, FUENTES,
 } from './data/bbs.js';
+import { INFORMES_XEHANORT, MINIJUEGOS, RETOS, HELADOS, PEGATINAS } from './data/bbs-informes.js';
+import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
 const $top = document.getElementById('topbar');
@@ -12,14 +15,39 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const pctFmt = (n) => (n == null ? '' : `${n.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de jugadores en Steam`);
 const logroPorId = Object.fromEntries(BBS.logros.map((l) => [l.id, l]));
+const PJS = Object.values(PERSONAJES);
 
 const ID = {
   logro: (id) => `bbs.logro.${id}`,
-  ruta: (id) => `bbs.ruta.${id}`,
   golpe: (pj, nombre) => `bbs.golpe.${pj}.${slug(nombre)}`,
   estilo: (pj, nombre) => `bbs.estilo.${pj}.${slug(nombre)}`,
   coso: (id) => `bbs.coso.${id}`,
+  xeh: (id) => `bbs.inf.xeh.${id}`,
+  mini: (g, id) => `bbs.inf.mini.${g}.${id}`,
+  reto: (id) => `bbs.inf.reto.${id}`,
+  helado: (id) => `bbs.inf.helado.${id}`,
+  pegatina: (pj, pts) => `bbs.peg.${pj}.${pts}`,
 };
+
+// Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
+const logrosPj = (pj) => BBS.logros.filter((l) => l.pj === pj).map((l) => ID.logro(l.id));
+const juegoPj = (pj) => [
+  ...INFORMES_XEHANORT.filter((x) => x.pj === pj).map((x) => ID.xeh(x.id)),
+  ...GOLPES_FINALES[pj].map((g) => ID.golpe(pj, g.nombre)),
+  ...ESTILOS[pj].map((e) => ID.estilo(pj, e.nombre)),
+  ...PEGATINAS[pj].map(([p]) => ID.pegatina(pj, p)),
+];
+const juegoComun = () => [
+  ...COSO.map((c) => ID.coso(c.id)),
+  ...MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))),
+  ...RETOS.map((r) => ID.reto(r.id)),
+  ...HELADOS.map((h) => ID.helado(h.id)),
+];
+const juegoBBS = () => [...juegoComun(), ...PJS.flatMap((p) => juegoPj(p.id))];
+const ETQ_LOGROS = 'Logros de Steam';
+const ETQ_JUEGO = '100 % del juego (Informes)';
+
+const modo = () => store.ajuste('modo', 'logros');
 
 // Medidores de progreso que se actualizan sin repintar la página.
 let medidores = {};
@@ -28,7 +56,7 @@ function medidor(clave, ids, etiqueta) {
   const n = store.contar(ids);
   const total = ids.length;
   return `
-    <div class="meter" data-meter="${clave}">
+    <div class="meter${n === total && total ? ' is-full' : ''}" data-meter="${clave}">
       <div class="meter-head"><span class="meter-label">${esc(etiqueta)}</span>
         <span class="meter-num"><b>${n}</b> / ${total}</span></div>
       <div class="meter-track" role="progressbar" aria-label="${esc(etiqueta)}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${n}">
@@ -44,6 +72,10 @@ function refrescarMedidores() {
     el.querySelector('.meter-track').setAttribute('aria-valuenow', n);
     el.querySelector('.meter-fill').style.setProperty('--p', ids.length ? n / ids.length : 0);
     el.classList.toggle('is-full', n === ids.length);
+  });
+  document.querySelectorAll('[data-count]').forEach((el) => {
+    const ids = medidores[el.dataset.count];
+    if (ids) el.textContent = `${store.contar(ids)}/${ids.length}`;
   });
 }
 
@@ -83,12 +115,16 @@ function vidriera(colores, { porciones = 18, clase = '' } = {}) {
 }
 
 function fuentes(claves) {
-  return `<p class="sources">Fuente${claves.length > 1 ? 's' : ''}: ${claves
+  const unicas = [...new Set(claves)];
+  return `<p class="sources">Fuente${unicas.length > 1 ? 's' : ''}: ${unicas
     .map((k) => `<a href="${esc(FUENTES[k].url)}" target="_blank" rel="noopener">${esc(FUENTES[k].nombre)}</a>`)
     .join(' · ')}</p>`;
 }
 
-function item({ id, titulo, desc, meta = '', icono = '', spoiler = false, extra = '' }) {
+const estrellas = (n) => `<span class="stars" aria-label="${n} de 5 estrellas">${'★'.repeat(n)}<span class="stars-off">${'★'.repeat(5 - n)}</span></span>`;
+const tagPj = (pj, texto) => `<span class="tag tag-${pj}">${esc(texto)}</span>`;
+
+function item({ id, titulo, desc, meta = '', icono = '', spoiler = false, extra = '', antes = '' }) {
   const hecho = store.hecho(id);
   return `
   <li class="item${hecho ? ' is-done' : ''}">
@@ -97,7 +133,7 @@ function item({ id, titulo, desc, meta = '', icono = '', spoiler = false, extra 
       <span class="crown">${CORONA}</span>
       ${icono ? `<img class="item-icon" src="${esc(icono)}" alt="" width="48" height="48" loading="lazy">` : ''}
       <span class="item-body">
-        <span class="item-title">${esc(titulo)}</span>
+        <span class="item-title">${antes}${esc(titulo)}</span>
         ${desc && !spoiler ? `<span class="item-desc">${esc(desc)}</span>` : ''}
         ${meta ? `<span class="item-meta">${meta}</span>` : ''}
       </span>
@@ -114,6 +150,7 @@ const itemLogro = (l) => item({
   meta: esc(pctFmt(l.pct)),
   icono: `assets/img/bbs/logros/${l.id}.jpg`,
   spoiler: l.oculto,
+  extra: CONSEJOS[l.id] ? `<details class="tip"><summary>Cómo conseguirlo</summary><p>${esc(CONSEJOS[l.id])}</p></details>` : '',
 });
 
 // ---------- barra superior ----------
@@ -141,6 +178,22 @@ function topbar(migas) {
       </details>
     </div>`;
   document.body.classList.toggle('hide-done', ocultar);
+}
+
+// Selector de modo: Logros de Steam / Informes (100 %).
+function selectorModo(clLogros, idsLogros, clJuego, idsJuego, { subLogros = 'Los 45 logros oficiales', subJuego = 'Todo lo que registra el juego' } = {}) {
+  medidores[clLogros] = idsLogros;
+  medidores[clJuego] = idsJuego;
+  const m = modo();
+  const tab = (valor, titulo, sub, cl, ids) => `
+    <button type="button" role="tab" class="mode mode-${valor}" data-modo="${valor}" aria-selected="${m === valor}">
+      <span class="mode-title">${titulo}</span>
+      <span class="mode-sub"><span class="mode-desc">${sub} · </span><b data-count="${cl}">${store.contar(ids)}/${ids.length}</b></span>
+    </button>`;
+  return `<div class="modes" role="tablist" aria-label="Qué quieres ver">
+    ${tab('logros', 'Logros de Steam', subLogros, clLogros, idsLogros)}
+    ${tab('informes', 'Informes · 100 %', subJuego, clJuego, idsJuego)}
+  </div>`;
 }
 
 // ---------- vistas ----------
@@ -186,38 +239,142 @@ function subnav(secciones) {
     .map(([id, t]) => `<a href="#${id}" data-goto="${id}">${esc(t)}</a>`).join('')}</nav>`;
 }
 
+function bloque(id, titulo, contenido, { meter = '', lead = '' } = {}) {
+  return `
+    <section class="block" id="${id}">
+      <div class="block-head"><h2>${titulo}</h2>${meter}</div>
+      ${lead ? `<p class="lead">${lead}</p>` : ''}
+      ${contenido}
+    </section>`;
+}
+
+// --- Hub de BBS: modo Logros ---
+function hubLogros() {
+  const ruta = RUTA.map((r, i) => `
+    <li class="step">
+      <span class="step-n" aria-hidden="true">${i + 1}</span>
+      <div class="step-body">
+        <h3>${esc(r.titulo)}</h3>
+        <p>${esc(r.texto)}</p>
+        <div class="item-foot">${r.logros.map((id) => `<span class="chip">${esc(logroPorId[id].nombre)}</span>`).join('')}</div>
+        ${fuentes(r.fuentes)}
+      </div>
+    </li>`).join('');
+
+  const grupo = (titulo, ids) => {
+    const clave = `g-${slug(titulo)}`;
+    medidores[clave] = ids.map(ID.logro);
+    return `
+    <div class="group">
+      <h3>${esc(titulo)} <span class="count" data-count="${clave}">${store.contar(medidores[clave])}/${ids.length}</span></h3>
+      <ul class="list">${ids.map((id) => itemLogro(logroPorId[id])).join('')}</ul>
+    </div>`;
+  };
+
+  const comunes = GRUPOS_LOGROS.map((g) => grupo(g.titulo, g.ids)).join('');
+  const porPj = PJS.map((p) => `<div class="pj-${p.id}">${grupo(`Logros de ${p.nombre}`, BBS.logros.filter((l) => l.pj === p.id).map((l) => l.id))}</div>`).join('');
+
+  return `
+    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje']])}
+    ${bloque('ruta', 'Ruta de logros', `<ol class="steps">${ruta}</ol>`, { lead: 'Lo que conviene saber antes de empezar para no repetir partidas.' })}
+    ${bloque('logros', 'Logros comunes', `${comunes}${fuentes(['steam', 'guiaSteam'])}`, {
+      meter: medidor('bbs-comunes-logros', GRUPOS_LOGROS.flatMap((g) => g.ids).map(ID.logro), 'Logros comunes'),
+      lead: 'Abre «Cómo conseguirlo» para ver el consejo de cada uno.',
+    })}
+    ${bloque('logros-pj', 'Logros de cada personaje', porPj)}`;
+}
+
+// --- Hub de BBS: modo Informes ---
+function cosoLista() {
+  const premio = (c) => (c.premio ? PJS.filter((p) => c.premio[p.id]).map((p) => tagPj(p.id, `${p.nombre}: ${c.premio[p.id]}`)).join('') : '');
+  const entrada = (c) => [
+    c.nivel ? `Nivel ${c.nivel} del Coso${c.ticket ? ', o compra su ticket en la tienda de medallas' : ''}.` : '',
+    c.abre || '',
+  ].filter(Boolean).join(' ');
+  const logroEstrellas = { 1: 'ACH_192', 2: 'ACH_193', 3: 'ACH_194', 4: 'ACH_195' };
+  return [1, 2, 3, 4, 5].map((n) => {
+    const lista = COSO.filter((c) => c.estrellas === n);
+    const l = logroEstrellas[n] && logroPorId[logroEstrellas[n]];
+    return `
+    <div class="group">
+      <h3>${estrellas(n)} ${l ? `<span class="chip chip-logro">Logro «${esc(l.nombre)}»</span>` : '<span class="chip">Cada uno tiene su propio logro</span>'}</h3>
+      <ul class="list">${lista.map((c) => item({
+        id: ID.coso(c.id),
+        titulo: c.nombre + (c.fm ? ' · Final Mix' : ''),
+        desc: `Cómo entrar: ${entrada(c)}`,
+        meta: [
+          `<span>${c.rondas} ${c.rondas === 1 ? 'ronda' : 'rondas'} · ${c.medallas} medallas (${Math.round(c.medallas * 1.5)} como MVP)${c.rival ? ` · Jefe: ${esc(c.rival)}` : ''}</span>`,
+          premio(c),
+          c.logro ? `<span class="chip chip-logro">Logro «${esc(logroPorId[c.logro].nombre)}»</span>` : '',
+          c.nota ? `<span class="note">${esc(c.nota)}</span>` : '',
+        ].join(''),
+      })).join('')}</ul>
+    </div>`;
+  }).join('');
+}
+
+function hubInformes() {
+  const xeh = INFORMES_XEHANORT.map((x) => item({
+    id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde, meta: tagPj(x.pj, PERSONAJES[x.pj].nombre),
+  })).join('');
+
+  const minis = MINIJUEGOS.map((g) => {
+    const ids = g.items.map((i) => ID.mini(g.id, i.id));
+    medidores[`mini-${g.id}`] = ids;
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="mini-${g.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">${esc(g.intro)}</p>
+      <ul class="list">${g.items.map((i) => item({ id: ID.mini(g.id, i.id), titulo: i.nombre, desc: i.desc })).join('')}</ul>
+    </div>`;
+  }).join('');
+
+  const retos = RETOS.map((r) => item({
+    id: ID.reto(r.id), titulo: `${r.mundo}: ${r.rival}`, desc: `Rango 3: ${r.meta}.`,
+    meta: r.premio ? `<span class="chip">Recompensa: ${esc(r.premio)}</span>` : '',
+  })).join('');
+
+  const helados = HELADOS.map((h) => item({
+    id: ID.helado(h.id), titulo: h.nombre, desc: `Ingredientes: ${h.ing}.`,
+    meta: `<span>Activa ${esc(h.estilo)} · ${esc(h.pjs)}</span>`,
+  })).join('');
+
+  return `
+    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['retos', 'Retos'], ['helados', 'Helados']])}
+    <p class="mode-note">Los golpes finales, estilos de comandos y pegatinas de cada personaje están en su página.</p>
+    ${bloque('xehanort', 'Informes Xehanort', `<ul class="list">${xeh}</ul>${fuentes(['wikiEsXehanort', 'guiaSteam'])}`, {
+      meter: medidor('inf-xeh', INFORMES_XEHANORT.map((x) => ID.xeh(x.id)), 'Documentos'),
+      lead: 'Son 13 documentos repartidos entre los tres personajes. Con todos y las tres historias terminadas se desbloquea el Episodio Final.',
+    })}
+    ${bloque('coso', 'Coso Virtual', `
+      <div class="info-cards">
+        <div class="info-card"><h3>Nivel del Coso</h3><p>${esc(COSO_INFO.nivel)}</p></div>
+        <div class="info-card"><h3>Tickets</h3><p>${esc(COSO_INFO.tickets)}</p></div>
+        <div class="info-card"><h3>Medallas rápidas</h3><p>${esc(COSO_INFO.medallas)}</p></div>
+      </div>
+      ${cosoLista()}
+      ${fuentes(['khwikiArenaMode', 'khwikiTickets', 'khwikiCoso', 'wikiEsCoso', 'guiaSteam'])}`, {
+      meter: medidor('inf-coso', COSO.map((c) => ID.coso(c.id)), 'Combates'),
+      lead: 'Agrupados por estrellas, que es como cuentan los logros. Cada combate indica cómo se desbloquea.',
+    })}
+    ${bloque('minijuegos', 'Minijuegos', `${minis}${fuentes(['guiaSteam'])}`, {
+      meter: medidor('inf-mini', MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))), 'Minijuegos'),
+    })}
+    ${bloque('retos', 'Retos de los nescientes', `<ul class="list">${retos}</ul>${fuentes(['guiaSteam'])}`, {
+      meter: medidor('inf-retos', RETOS.map((r) => ID.reto(r.id)), 'Retos'),
+      lead: 'Uno por mundo. Hay que sacar el rango más alto (3) en todos para el logro «Exterminador».',
+    })}
+    ${bloque('helados', 'Helados', `<ul class="list">${helados}</ul>${fuentes(['wikiEsHelado', 'guiaSteam'])}`, {
+      meter: medidor('inf-helados', HELADOS.map((h) => ID.helado(h.id)), 'Helados'),
+      lead: 'Se preparan con los sobrinos en la Plaza Mayor de Ciudad Disney. Los ingredientes los suelta el Avituallador. Al prepararlos todos recibes la llave espada Dulce Sorpresa.',
+    })}`;
+}
+
 function vistaBBS() {
   topbar([{ t: 'Juegos', href: '#/juegos' }, { t: 'Birth by Sleep' }]);
   const todosLogros = BBS.logros.map((l) => ID.logro(l.id));
-  const comunes = GRUPOS_LOGROS.flatMap((g) => g.ids).map(ID.logro);
-  const rutaIds = RUTA.map((r) => ID.ruta(r.id));
-  const cosoIds = COSO.map((c) => ID.coso(c.id));
 
-  const ruta = RUTA.map((r) => item({
-    id: ID.ruta(r.id),
-    titulo: r.titulo,
-    desc: r.texto,
-    extra: `<div class="item-foot">${r.logros.map((id) => `<span class="chip">${esc(logroPorId[id].nombre)}</span>`).join('')}${fuentes(r.fuentes)}</div>`,
-  })).join('');
-
-  const grupos = GRUPOS_LOGROS.map((g) => `
-    <div class="group">
-      <h3>${esc(g.titulo)}</h3>
-      <ul class="list">${g.ids.map((id) => itemLogro(logroPorId[id])).join('')}</ul>
-    </div>`).join('');
-
-  const pjs = Object.values(PERSONAJES);
-  const premio = (c) => (c.premio
-    ? pjs.filter((p) => c.premio[p.id]).map((p) => `<span class="tag tag-${p.id}">${p.nombre}: ${esc(c.premio[p.id])}</span>`).join('')
-    : '');
-  const coso = COSO.map((c) => item({
-    id: ID.coso(c.id),
-    titulo: c.nombre + (c.fm ? ' (Final Mix)' : ''),
-    desc: c.nivel ? `Nivel ${c.nivel} · ${c.medallas} medallas · Último asalto: ${c.rival}` : 'Ficha pendiente: la wiki en español aún no detalla este encuentro.',
-    meta: [premio(c), c.logro ? `<span class="chip">Logro: ${esc(logroPorId[c.logro].nombre)}</span>` : ''].join(''),
-  })).join('');
-
-  const trio = pjs.map((p) => `
+  const trio = PJS.map((p) => `
     <a class="hero-card pj-${p.id}" href="#/bbs/${p.id}">
       <span class="stage">
         ${vidriera([`var(--${p.id})`], { porciones: 12, clase: 'floor' })}
@@ -231,7 +388,7 @@ function vistaBBS() {
     </a>`).join('');
 
   return `
-  <section class="page">
+  <section class="page" data-modo="${modo()}">
     <header class="game-hero">
       <img class="game-hero-logo" src="${BBS.logo}" alt="Kingdom Hearts Birth by Sleep Final Mix" width="652" height="478">
       <div class="game-hero-stats">
@@ -239,52 +396,28 @@ function vistaBBS() {
         ${medidor('bbs-100', juegoBBS(), ETQ_JUEGO)}
       </div>
     </header>
-
-    <section class="trio-wrap" aria-label="Personajes">
-      <div class="trio">${trio}</div>
-    </section>
-
-    ${subnav([['ruta', 'Ruta al 100 %'], ['coso', 'Coso Virtual'], ['logros', 'Logros comunes']])}
-
-    <section class="block" id="ruta">
-      <div class="block-head"><h2>Ruta al 100 % ${tipo('juego')}</h2>${medidor('bbs-ruta', rutaIds, 'Pasos')}</div>
-      <p class="lead">Lo que conviene saber antes de empezar. Marca cada paso cuando lo tengas.</p>
-      <ol class="list list-steps">${ruta}</ol>
-    </section>
-
-    <section class="block" id="coso">
-      <div class="block-head"><h2>Coso Virtual ${tipo('juego')}</h2>${medidor('bbs-coso', cosoIds, 'Encuentros')}</div>
-      <p class="lead">Encuentros de combate y su recompensa para cada personaje.</p>
-      <ul class="list">${coso}</ul>
-      ${fuentes(['wikiEsCoso', 'khwikiArena'])}
-    </section>
-
-    <section class="block" id="logros">
-      <div class="block-head"><h2>Logros comunes ${tipo('logros')}</h2>${medidor('bbs-comunes', comunes, 'Logros')}</div>
-      <p class="lead">Los logros de un solo personaje están en su página.</p>
-      ${grupos}
-      ${fuentes(['steam'])}
-    </section>
+    <section class="trio-wrap" aria-label="Personajes"><div class="trio">${trio}</div></section>
+    ${selectorModo('modo-logros', todosLogros, 'modo-100', juegoBBS())}
+    ${modo() === 'logros' ? hubLogros() : hubInformes()}
   </section>`;
 }
 
-// Dos progresos independientes: los logros de Steam y el 100 % del juego
-// (lo que registran los Informes: golpes finales, estilos, Coso Virtual…).
-const logrosPj = (pj) => BBS.logros.filter((l) => l.pj === pj).map((l) => ID.logro(l.id));
-const juegoPj = (pj) => [
-  ...GOLPES_FINALES[pj].map((g) => ID.golpe(pj, g.nombre)),
-  ...ESTILOS[pj].map((e) => ID.estilo(pj, e.nombre)),
-];
-const juegoBBS = () => [
-  ...RUTA.map((r) => ID.ruta(r.id)),
-  ...COSO.map((c) => ID.coso(c.id)),
-  ...Object.keys(PERSONAJES).flatMap(juegoPj),
-];
-const ETQ_LOGROS = 'Logros de Steam';
-const ETQ_JUEGO = '100 % del juego (Informes)';
-const tipo = (t) => (t === 'logros'
-  ? '<span class="kind kind-logros">Cuenta para logros</span>'
-  : '<span class="kind kind-juego">Cuenta para el 100 %</span>');
+// --- Página de personaje ---
+function buildPj(pj) {
+  const b = BUILDS[pj];
+  const c = BUILDS.comun;
+  const linea = (x) => `<li><b>${esc(x.t)}</b><span>${esc(x.d)}</span><a class="src" href="${esc(FUENTES[x.f].url)}" target="_blank" rel="noopener">${esc(FUENTES[x.f].nombre)}</a></li>`;
+  const tarjeta = (titulo, lineas) => `<div class="build-card"><h3>${titulo}</h3><ul>${lineas.map(linea).join('')}</ul></div>`;
+  return `
+    <div class="build">
+      ${tarjeta('Llave espada', c.llave)}
+      ${tarjeta('Ataque', b.ataque)}
+      ${tarjeta('Magia', b.magia)}
+      ${tarjeta('Tiro certero', [b.tiro])}
+      ${tarjeta('Acción y defensa', [b.accion, c.defensa])}
+      ${tarjeta('Habilidades', [c.habilidades])}
+    </div>`;
+}
 
 function vistaPersonaje(pj) {
   const p = PERSONAJES[pj];
@@ -293,7 +426,8 @@ function vistaPersonaje(pj) {
   const golpes = GOLPES_FINALES[pj];
   const estilos = ESTILOS[pj];
   const niveles = [...new Set(golpes.map((g) => g.nivel))];
-  const otros = Object.values(PERSONAJES).filter((o) => o.id !== pj);
+  const otros = PJS.filter((o) => o.id !== pj);
+  const m = modo();
 
   const arbol = niveles.map((n) => `
     <div class="tier">
@@ -306,8 +440,43 @@ function vistaPersonaje(pj) {
       })).join('')}</ul>
     </div>`).join('');
 
+  const contLogros = `
+    ${subnav([['build', 'Build'], ['logros', 'Logros'], ['cuartelillo', 'Cuartelillo']])}
+    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Equipamiento que recomiendan las guías para los jefes más duros. Cada línea enlaza su fuente.' })}
+    ${bloque('logros', `Logros de ${p.nombre}`, `<ul class="list">${logros.map(itemLogro).join('')}</ul>${fuentes(['steam', 'guiaSteam'])}`)}
+    ${bloque('cuartelillo', 'Cuartelillo', `
+      <ul class="recipes">${CUARTELILLO[pj].map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
+      <p class="hint">Cada síntesis tiene un 10 % de probabilidad de dar Cuartelillo; el 90 % restante da Hoja Afortunada.</p>
+      ${fuentes(['wikiEsCuartelillo'])}`, {
+      lead: `Ejecutarlo con ${p.nombre} da el logro «${esc(logros.find((l) => /Cuartelillo/.test(l.desc))?.nombre)}». Hay uno en un cofre de Ciudad Disney (sala de juegos de Pete) o puedes sintetizarlo:`,
+    })}`;
+
+  const xeh = INFORMES_XEHANORT.filter((x) => x.pj === pj);
+  const contInformes = `
+    ${subnav([['build', 'Build'], ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['comandos', 'Comandos']])}
+    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Equipamiento que recomiendan las guías para los jefes más duros. Cada línea enlaza su fuente.' })}
+    ${bloque('xehanort', `Informes Xehanort de ${p.nombre}`, `<ul class="list">${xeh.map((x) => item({ id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde })).join('')}</ul>${fuentes(['wikiEsXehanort'])}`, {
+      meter: medidor(`pj-${pj}-xeh`, xeh.map((x) => ID.xeh(x.id)), 'Documentos'),
+    })}
+    ${bloque('golpes', 'Golpes finales', `<div class="tree">${arbol}</div>${fuentes(['wikiEsGolpes', 'khwikiGolpes'])}`, {
+      meter: medidor(`pj-${pj}-golpes`, golpes.map((g) => ID.golpe(pj, g.nombre)), 'Golpes finales'),
+      lead: `Se aprenden en forma de árbol: para desbloquear uno, equipa su antecesor y cumple la condición. Aprenderlos todos da el logro «El guerrero: ${p.nombre}».`,
+    })}
+    ${bloque('estilos', 'Estilos de comandos', `<ul class="list">${estilos.map((e) => item({
+      id: ID.estilo(pj, e.nombre), titulo: e.nombre, desc: e.cond, meta: esc(e.tipo),
+    })).join('')}</ul>${fuentes(['wikiEsEstilos'])}`, {
+      meter: medidor(`pj-${pj}-estilos`, estilos.map((e) => ID.estilo(pj, e.nombre)), 'Estilos'),
+    })}
+    ${bloque('pegatinas', 'Álbum de pegatinas', `<ul class="list">${PEGATINAS[pj].map(([pts, premio]) => item({
+      id: ID.pegatina(pj, pts), titulo: `${pts} puntos`, desc: `Recompensa: ${premio}.`,
+    })).join('')}</ul>${fuentes(['wikiEsPegatinas', 'guiaSteam'])}`, {
+      meter: medidor(`pj-${pj}-peg`, PEGATINAS[pj].map(([pts]) => ID.pegatina(pj, pts)), 'Recompensas'),
+      lead: 'Cada pegatina da entre 5 y 7 puntos según lo bien que la coloques. Hay que encontrarlas todas y pegarlas bien para llegar a 140.',
+    })}
+    ${bloque('comandos', 'Comandos', `<div class="empty"><p><b>Próxima entrega.</b> Lista completa de comandos de ${p.nombre} (ataque, magia, acción, defensa, Tiro certero y Nexo-D) con su receta de síntesis o dónde conseguirlos.</p></div>`)}`;
+
   return `
-  <section class="page pj pj-${pj}">
+  <section class="page pj pj-${pj}" data-modo="${m}">
     <header class="pj-hero">
       <div class="stage stage-lg">
         ${vidriera([`var(--${pj})`], { porciones: 16, clase: 'floor' })}
@@ -319,50 +488,13 @@ function vistaPersonaje(pj) {
           ${medidor(`pj-${pj}-logros`, logrosPj(pj), ETQ_LOGROS)}
           ${medidor(`pj-${pj}-100`, juegoPj(pj), ETQ_JUEGO)}
         </div>
-        <div class="pj-meters">
-          ${medidor(`pj-${pj}-golpes`, golpes.map((g) => ID.golpe(pj, g.nombre)), 'Golpes finales')}
-          ${medidor(`pj-${pj}-estilos`, estilos.map((e) => ID.estilo(pj, e.nombre)), 'Estilos de comandos')}
-        </div>
         <p class="pj-switch">Cambiar a ${otros.map((o) => `<a href="#/bbs/${o.id}" class="pj-link pj-${o.id}">${o.nombre}</a>`).join(' o ')}</p>
       </div>
     </header>
-    ${subnav([['logros', 'Logros'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos de comandos'], ['cuartelillo', 'Cuartelillo'], ['comandos', 'Comandos']])}
-
-    <section class="block" id="logros">
-      <h2>Logros de ${p.nombre} ${tipo('logros')}</h2>
-      <ul class="list">${logros.map(itemLogro).join('')}</ul>
-      ${fuentes(['steam'])}
-    </section>
-
-    <section class="block" id="golpes">
-      <h2>Golpes finales ${tipo('juego')}</h2>
-      <p class="lead">Se aprenden en forma de árbol: para desbloquear uno, equipa su antecesor y cumple la condición. Aprenderlos todos da el logro «El guerrero: ${p.nombre}».</p>
-      <div class="tree">${arbol}</div>
-      ${fuentes(['wikiEsGolpes', 'khwikiGolpes'])}
-    </section>
-
-    <section class="block" id="estilos">
-      <h2>Estilos de comandos ${tipo('juego')}</h2>
-      <ul class="list">${estilos.map((e) => item({
-        id: ID.estilo(pj, e.nombre), titulo: e.nombre, desc: e.cond, meta: esc(e.tipo),
-      })).join('')}</ul>
-      ${fuentes(['wikiEsEstilos'])}
-    </section>
-
-    <section class="block" id="cuartelillo">
-      <h2>Cuartelillo</h2>
-      <p class="lead">Ejecutarlo con ${p.nombre} da el logro «${esc(logros.find((l) => /Cuartelillo/.test(l.desc))?.nombre)}». Hay uno en un cofre de Ciudad Disney (sala de juegos de Pete) o puedes sintetizarlo:</p>
-      <ul class="recipes">${CUARTELILLO[pj].map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
-      <p class="hint">Cada síntesis tiene un 10 % de probabilidad de dar Cuartelillo; el 90 % restante da Hoja Afortunada.</p>
-      ${fuentes(['wikiEsCuartelillo'])}
-    </section>
-
-    <section class="block" id="comandos">
-      <h2>Comandos</h2>
-      <div class="empty">
-        <p><b>Próxima entrega.</b> Aquí irá la lista completa de comandos de ${p.nombre} (ataque, magia, acción, defensa, Tiro certero y Nexo-D) con cómo conseguir cada uno: tiendas, cofres, síntesis y recompensas.</p>
-      </div>
-    </section>
+    ${selectorModo(`pj-${pj}-modo-logros`, logrosPj(pj), `pj-${pj}-modo-100`, juegoPj(pj), {
+      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos y pegatinas',
+    })}
+    ${m === 'logros' ? contLogros : contInformes}
   </section>`;
 }
 
@@ -372,8 +504,9 @@ function vista404() {
 }
 
 // ---------- router ----------
-function render() {
+function render({ conservarScroll = false } = {}) {
   medidores = {};
+  const y = window.scrollY;
   const ruta = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   let html;
   if (ruta.length === 0) html = vistaTitulo();
@@ -384,8 +517,11 @@ function render() {
   document.body.dataset.view = ruta[0] || 'titulo';
   $main.innerHTML = html;
   refrescarMedidores();
-  window.scrollTo(0, 0);
-  $main.focus({ preventScroll: true });
+  if (conservarScroll) window.scrollTo(0, y);
+  else {
+    window.scrollTo(0, 0);
+    $main.focus({ preventScroll: true });
+  }
 }
 
 // ---------- eventos ----------
@@ -407,6 +543,15 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     const el = document.getElementById(goto.dataset.goto);
     el?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    return;
+  }
+  const tab = e.target.closest('[data-modo]');
+  if (tab && tab.matches('button')) {
+    if (tab.dataset.modo !== modo()) {
+      store.fijarAjuste('modo', tab.dataset.modo);
+      render({ conservarScroll: true });
+      document.querySelector(`.mode-${tab.dataset.modo}`)?.focus({ preventScroll: true });
+    }
     return;
   }
   const btn = e.target.closest('button[data-accion]');
@@ -435,6 +580,15 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Flechas izquierda/derecha entre las dos pestañas del selector de modo.
+document.addEventListener('keydown', (e) => {
+  const tab = e.target.closest?.('.modes [role="tab"]');
+  if (!tab || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  const otro = tab.parentElement.querySelector(`[role="tab"]:not([data-modo="${tab.dataset.modo}"])`);
+  otro?.click();
+});
+
 store.alCambiar(refrescarMedidores);
-window.addEventListener('hashchange', render);
+window.addEventListener('hashchange', () => render());
 render();
+iniciarEstela();

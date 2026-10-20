@@ -14,7 +14,7 @@ puede exportar/importar como archivo JSON desde «Mi progreso».
 
 | Juego | Estado |
 |---|---|
-| Birth by Sleep Final Mix | En curso: logros, ruta al 100 %, Coso Virtual, golpes finales, estilos de comandos y Cuartelillo |
+| Birth by Sleep Final Mix | En curso: logros con consejos, Informes (Informes Xehanort, Coso Virtual con desbloqueos, minijuegos, retos, helados, pegatinas), golpes finales, estilos y build por personaje. Falta: lista de comandos |
 | Kingdom Hearts Final Mix | Pendiente |
 | Re:Chain of Memories | Pendiente |
 | Kingdom Hearts II Final Mix | Pendiente |

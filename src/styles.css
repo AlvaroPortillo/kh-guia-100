@@ -48,7 +48,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 128px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 160px; }
 body {
   margin: 0;
   min-height: 100svh;
@@ -379,6 +379,82 @@ body[data-view="juegos"] .sky { opacity: .9; }
 }
 .empty b { color: var(--text); }
 
+/* ---------- selector de modo: Logros / Informes ---------- */
+.modes {
+  position: sticky; top: 55px; z-index: 12;
+  margin: 40px 0 0; padding: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  border-radius: var(--r-l); border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(14px);
+}
+.mode {
+  --m: var(--gold);
+  display: grid; gap: 4px; text-align: left; cursor: pointer;
+  padding: 14px 18px; border-radius: calc(var(--r-l) - 6px); border: 1px solid transparent;
+  background: transparent; color: var(--text-2); font: inherit;
+  transition: background var(--t) var(--ease), color var(--t) var(--ease), border-color var(--t) var(--ease);
+}
+.mode-informes { --m: var(--pj, var(--aqua)); }
+.mode:hover { color: var(--text); background: var(--surface); }
+.mode[aria-selected="true"] {
+  color: var(--text); border-color: color-mix(in srgb, var(--m) 60%, transparent);
+  background: color-mix(in srgb, var(--m) 14%, var(--surface));
+  box-shadow: inset 0 -3px 0 var(--m);
+}
+.mode-title { font-weight: 800; font-size: 1.05rem; }
+.mode[aria-selected="true"] .mode-title { color: var(--m); }
+.mode-sub { font-size: .8125rem; }
+.mode-sub b { color: var(--text); }
+.modes + .subnav { position: static; margin-top: 8px; }
+.mode-note { margin-top: 24px; color: var(--text-2); font-size: .9375rem; }
+
+/* Ruta de logros: pasos numerados (sí es una secuencia) */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.step {
+  display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding: 18px 20px;
+  border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface);
+}
+.step-n {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  font: 700 1.05rem/1 var(--f-display); color: var(--gold-ink); background: var(--gold);
+}
+.step-body h3 { margin-bottom: 6px; }
+.step-body p { color: var(--text-2); max-width: 72ch; }
+.step-body .item-foot { padding: 12px 0 0; }
+.step-body .sources { margin-top: 10px; }
+
+.count { margin-left: 8px; font-size: .8125rem; font-weight: 600; color: var(--text-2); }
+.group-intro { color: var(--text-2); font-size: .9375rem; margin: -2px 0 10px; max-width: 72ch; }
+.tip { padding: 0 8px 14px 50px; font-size: .9375rem; color: var(--text-2); }
+.item-row:has(.item-icon) ~ .tip { padding-left: 112px; }
+.tip summary { cursor: pointer; font-size: .8125rem; font-weight: 600; color: var(--gold); width: fit-content; }
+.tip p { margin-top: 6px; max-width: 70ch; }
+.chip-logro { border-color: color-mix(in srgb, var(--gold) 55%, transparent); color: var(--gold); }
+.stars { color: var(--gold); letter-spacing: .1em; font-size: 1.05rem; }
+.stars-off { color: color-mix(in srgb, var(--text-2) 35%, transparent); }
+.group h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+.info-card { padding: 16px 18px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.info-card h3 { font-size: .9375rem; margin-bottom: 6px; color: var(--aqua); }
+.info-card p { color: var(--text-2); font-size: .875rem; }
+
+/* Build recomendada */
+.build { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+.build-card {
+  padding: 18px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
+  border-top: 2px solid var(--accent);
+}
+.build-card h3 { font-size: .8125rem; color: var(--accent); margin-bottom: 10px; }
+.build-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.build-card li { display: grid; gap: 3px; }
+.build-card li b { font-weight: 700; }
+.build-card li span { color: var(--text-2); font-size: .875rem; }
+.build-card .src { font-size: .75rem; color: var(--text-2); text-underline-offset: 2px; }
+.build-card .src:hover { color: var(--text); }
+
+/* Estela de llave espada */
+.estela { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .game-grid { grid-template-columns: 1fr 1fr; }
@@ -392,6 +468,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
   .hero-card .stage { grid-row: span 2; height: 220px; }
   .hero-name { text-align: left; align-self: end; }
   .pj-hero { grid-template-columns: 1fr; }
+  .build, .info-cards { grid-template-columns: 1fr 1fr; }
   .stage-lg { height: 420px; }
 }
 @media (max-width: 560px) {
@@ -402,6 +479,15 @@ body[data-view="juegos"] .sky { opacity: .9; }
   .t-short { display: inline; }
   .game-grid { grid-template-columns: 1fr; }
   .pj-meters, .meters-big { grid-template-columns: 1fr; }
+  .build, .info-cards { grid-template-columns: 1fr; }
+  .modes { top: 53px; }
+  .mode { padding: 10px 12px; }
+  .mode-title { font-size: .9375rem; }
+  .mode-desc { display: none; }
+
+  .step { grid-template-columns: 1fr; gap: 10px; padding: 16px; }
+  .item-row:has(.item-icon) ~ .tip { padding-left: 44px; }
+  .tip { padding-left: 44px; }
   .item-row { gap: 12px; padding: 12px 4px; }
   .item-icon { width: 40px; height: 40px; }
   .item-row:has(.item-icon) ~ .spoiler { padding-left: 44px; }
