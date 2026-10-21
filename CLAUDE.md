@@ -41,6 +41,8 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
   y sus fuentes (`FUENTES_BUILD`, que se mezclan en `FUENTES`). Imágenes en `assets/img/bbs/build/`.
 - `src/data/bbs-coso.js`: rondas, reto extra HD y estrategia de cada combate del Coso (se abren fichas de la build).
 - `src/data/bbs-jefes.js`: jefes de la historia por personaje (debilidades, recompensas, diario oficial, estrategia).
+- `src/data/bbs-tableros.js` (**generado**) y `bbs-tableros-info.js`: casillas bonus, desbloqueo y rivales de cada tablero.
+- `src/data/bbs-avance.js`: build «Avanzar por la historia» (grupos, jefes y curación por personaje).
 - `src/data/bbs-comandos.js`: **generado** (scripts en `notas/herramientas/`): comandos de cada personaje con ficha,
   vías de obtención y recetas. No editar a mano.
 - `DESIGN.md`: sistema de diseño (vidriera como elemento distintivo, tokens en `:root`).

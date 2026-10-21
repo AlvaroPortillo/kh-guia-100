@@ -4,6 +4,7 @@ import { LOGROS_BBS } from './bbs-logros.js';
 import { FUENTES_BUILD } from './bbs-build.js';
 import { FUENTES_COSO } from './bbs-coso.js';
 import { FUENTES_JEFES } from './bbs-jefes.js';
+import { FUENTES_AVANCE } from './bbs-avance.js';
 
 export const FUENTES = {
   steam: { nombre: 'Steam — logros oficiales (español)', url: 'https://steamcommunity.com/stats/2552430/achievements/?l=spanish' },
@@ -34,6 +35,7 @@ export const FUENTES = {
   ...FUENTES_BUILD,
   ...FUENTES_COSO,
   ...FUENTES_JEFES,
+  ...FUENTES_AVANCE,
 };
 
 export const PERSONAJES = {

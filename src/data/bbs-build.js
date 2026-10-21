@@ -48,6 +48,7 @@ export const FUENTES_BUILD = {
   wikiEsTableros: { nombre: 'Wiki ES — Tablero de Comandos (nombres de los tableros)', url: 'https://kingdomhearts.fandom.com/es/wiki/Tablero_de_Comandos' },
   khwikiNexos: { nombre: 'KHWiki — Dimension Link (lista de Nexos-D)', url: 'https://www.khwiki.com/Dimension_Link' },
   khwikiPegatinas: { nombre: 'KHWiki — Sticker Album (zona de cada pegatina)', url: 'https://www.khwiki.com/Sticker_Album' },
+  khwikiTableros: { nombre: 'KHWiki — Command Board y página de cada tablero (casillas bonus; mapas de la guía oficial japonesa)', url: 'https://www.khwiki.com/Command_Board' },
   khwikiImagenes: { nombre: 'KHWiki — imágenes y capturas del juego (kh.wiki.gallery; versión original en inglés)', url: 'https://www.khwiki.com/Category:Kingdom_Hearts_Birth_by_Sleep_images' },
 };
 

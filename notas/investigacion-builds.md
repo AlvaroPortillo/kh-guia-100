@@ -183,3 +183,16 @@ Scripts en `notas/herramientas/` (ejecutar con `python -I`, en este orden, sobre
 - `notas/herramientas/pegatinas.py` (KHWiki «Sticker Album»: zona de cada pegatina; mundo de cada zona por redirección
   de su página) y `genera_pegatinas.py`. 20 pegatinas por personaje en 10 mundos.
 - El cuadro de mundo de KHWiki trae el nombre oficial en castellano (`|es=`): útil para comprobar nombres de mundos.
+
+## Tableros de comandos (21-10-2026) — `src/data/bbs-tableros.js` (GENERADO con `notas/herramientas/tableros.py`)
+- Logro ACH_179: texto oficial «Vence en cada uno de los Tableros de comandos» / «Win each playable Command Board».
+  La guía de Steam dice que bastan 7 victorias en el Coso: se muestran las dos cosas.
+- KHWiki «Report»: cada personaje tiene su propio Informe (colección de comandos, récords de minijuegos).
+- KHWiki «Command Board»: en el Coso faltan casi todas las casillas bonus; las recompensas «limitadas» salen mientras
+  no tengas ese comando. Mapas numerados: lámina de la guía oficial japonesa (KHWiki «<Tablero> Full Map KHBBS.png»).
+- Comandos solo de tablero (sin receta ni otra vía): Terra/Ventus: Bloqueo Tino, Lluvia Meteórica, Ragnarok;
+  Aqua: Coraza Tino, Ragnarok.
+
+## Build «Avanzar por la historia» — `src/data/bbs-avance.js`
+- Fuente: guías «Ultimate Command Deck» de GameSkinny (una por personaje, 2015). Nombres en castellano con la
+  correspondencia validada de los comandos. Las vías de cada comando salen de bbs-comandos.js.

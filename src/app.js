@@ -10,6 +10,9 @@ import { JEFES, FASES } from './data/bbs-jefes.js';
 import { LISTAS_COMANDOS, COMANDOS } from './data/bbs-comandos.js';
 import { NEXOS } from './data/bbs-nexos.js';
 import { PEGATINAS_MUNDOS } from './data/bbs-pegatinas.js';
+import { TABLEROS } from './data/bbs-tableros.js';
+import { TABLEROS_INFO } from './data/bbs-tableros-info.js';
+import { AVANCE } from './data/bbs-avance.js';
 import { INFORMES_XEHANORT, MINIJUEGOS, RETOS, HELADOS, PEGATINAS } from './data/bbs-informes.js';
 import { iniciarEstela } from './cursor.js';
 
@@ -257,6 +260,79 @@ function bloque(id, titulo, contenido, { meter = '', lead = '' } = {}) {
 }
 
 // --- Hub de BBS: modo Logros ---
+// --- Tableros de comandos: qué hace falta, comandos exclusivos y casillas bonus de cada tablero ---
+// Un comando es «solo de tablero» para un personaje si no tiene receta ni otra vía independiente
+// (la tienda «una vez conseguido por otra vía» no cuenta) y sí alguna casilla de tablero.
+function exclusivosDeTablero(pj) {
+  const res = [];
+  for (const l of Object.values(LISTAS_COMANDOS[pj])) {
+    for (const n of l) {
+      const c = COMANDOS[n];
+      const vias = c.vias.filter((v) => !v.pj || v.pj.includes(pj));
+      const recetas = c.recetas.filter((r) => !r.excl || r.excl.toLowerCase().includes(pj));
+      const otras = vias.filter((v) => v.v !== 'tablero' && !(v.v === 'tienda' && /^[\d.]+ platines, una vez conseguido por otra vía\.$/.test(v.t)));
+      if (recetas.length || otras.length || !vias.some((v) => v.v === 'tablero')) continue;
+      const donde = [];
+      for (const t of TABLEROS) {
+        for (const cas of t.casillas) {
+          for (const [tipo, lista] of [['normal', cas.normal], ['limitada', cas.limitada]]) {
+            if (lista.some((x) => x.n === n && (!x.solo || x.solo.includes(pj)))) donde.push({ t, num: cas.num, tipo });
+          }
+        }
+      }
+      res.push({ n, donde });
+    }
+  }
+  return res;
+}
+
+function tablerosBloque() {
+  const nombreCmd = (x) => `${esc(x.n)}${x.pct ? ` <small>${esc(x.pct)} %</small>` : ''}${x.solo ? ` <small>(solo ${x.solo.map((p) => PERSONAJES[p].nombre).join(' y ')})</small>` : ''}`;
+  const lista = (xs) => xs.map(nombreCmd).join(' · ');
+  const exclusivos = PJS.map((p) => `
+    <div class="tb-pj pj-${p.id}">
+      <h4>${esc(p.nombre)}</h4>
+      <ul>${exclusivosDeTablero(p.id).map((e) => `
+        <li><b>${esc(e.n)}</b><span>${e.donde.map((d) => `<a href="#tablero-${d.t.id}" data-goto="tablero-${d.t.id}">${esc(d.t.nombre)}, casilla ${d.num}</a>${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}`).join(' · ')}</span></li>`).join('')}</ul>
+    </div>`).join('');
+  const tableros = TABLEROS.map((t) => `
+    <article class="tb" id="tablero-${t.id}">
+      <a class="tb-mapa" href="${IMG_BUILD}tablero-${t.id}.webp" target="_blank" rel="noopener" aria-label="Ver el mapa del ${esc(t.nombre)} a tamaño completo">
+        <img src="${IMG_BUILD}tablero-${t.id}.webp" alt="Mapa del ${esc(t.nombre)} con las casillas bonus numeradas" loading="lazy"></a>
+      <div class="tb-cuerpo">
+        <h3>${esc(t.nombre)}</h3>
+        <p><b>Se desbloquea:</b> ${esc(TABLEROS_INFO[t.id].desbloqueo)}</p>
+        <p><b>Rivales:</b> ${esc(TABLEROS_INFO[t.id].rivales)}</p>
+        <ol class="tb-casillas">${t.casillas.map((c) => `
+          <li><span class="tb-num">${c.num}</span><span>${lista(c.normal)}${c.limitada.length ? `<br><span class="tb-lim">Mientras no lo tengas: ${lista(c.limitada)}</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${lista(c.coso)}</span>` : ''}</span></li>`).join('')}</ol>
+      </div>
+    </article>`).join('');
+  return `
+    <div class="tb-claves">
+      <div class="info-card"><h3>Logro «${esc(logroPorId.ACH_179.nombre)}»</h3>
+        <p>«${esc(logroPorId.ACH_179.desc)}» (en inglés, «Win each playable Command Board»): <b>una victoria en cada uno de los 7 tableros, con cualquier personaje</b>. La guía de Steam dice que bastan 7 victorias en el Coso Virtual; para ir sobre seguro, gana una vez en cada tablero.</p></div>
+      <div class="info-card"><h3>Informes al 100 %</h3>
+        <p>Cada personaje tiene su propio Informe, con su colección de comandos y sus récords de minijuegos (KHWiki). Por eso los comandos y los tableros cuentan <b>con cada personaje por separado</b>. Ninguna fuente pide ganar 7 veces en el Coso con cada uno.</p></div>
+      <div class="info-card"><h3>Juega desde el menú</h3>
+        <p>En el Coso Virtual faltan casi todas las casillas bonus. Los comandos de tablero se consiguen jugando desde el menú, con el personaje de la historia que tengas cargada.</p></div>
+    </div>
+    <div class="tb-intro">
+      <figure class="bx-shot"><img src="${IMG_BUILD}tablero-partida.webp" alt="Partida en el Tablero de la Llave Espada" width="480" height="272" loading="lazy">
+        <figcaption>Una partida en el Tablero de la Llave Espada (captura de la versión en inglés).</figcaption></figure>
+      <div>
+        <h3 class="bx-sub">Qué es una casilla bonus</h3>
+        <p class="hint">Son las casillas con una estrella dorada. Si caes en una y pagas su precio, te llevas un comando nuevo sin gastar una carta. En los mapas de abajo están numeradas, y la lista de cada tablero dice qué da cada número.</p>
+        <p class="hint">Algunas tienen una recompensa «limitada» (por ejemplo, un Tiro certero): sale mientras no tengas ese comando y, cuando ya lo tienes, la casilla da la recompensa normal.</p>
+      </div>
+    </div>
+    <h3 class="tier-title">Comandos que solo salen de un tablero</h3>
+    <p class="group-intro">No se sintetizan, no están en cofres ni los suelta ningún enemigo: para tenerlos con cada personaje hay que caer en esa casilla jugando con él.</p>
+    <div class="tb-exclusivos">${exclusivos}</div>
+    <h3 class="tier-title">Los 7 tableros</h3>
+    <div class="tbs">${tableros}</div>
+    ${fuentes(['khwikiTableros', 'wikiEsTableros', 'steam', 'guiaSteam'])}`;
+}
+
 function hubLogros() {
   const ruta = RUTA.map((r, i) => `
     <li class="step">
@@ -283,13 +359,14 @@ function hubLogros() {
   const porPj = PJS.map((p) => `<div class="pj-${p.id}">${grupo(`Logros de ${p.nombre}`, BBS.logros.filter((l) => l.pj === p.id).map((l) => l.id))}</div>`).join('');
 
   return `
-    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje']])}
+    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje'], ['tableros', 'Tableros']])}
     ${bloque('ruta', 'Ruta de logros', `<ol class="steps">${ruta}</ol>`, { lead: 'Lo que conviene saber antes de empezar para no repetir partidas.' })}
     ${bloque('logros', 'Logros comunes', `${comunes}${fuentes(['steam', 'guiaSteam'])}`, {
       meter: medidor('bbs-comunes-logros', GRUPOS_LOGROS.flatMap((g) => g.ids).map(ID.logro), 'Logros comunes'),
       lead: 'Abre «Cómo conseguirlo» para ver el consejo de cada uno.',
     })}
-    ${bloque('logros-pj', 'Logros de cada personaje', porPj)}`;
+    ${bloque('logros-pj', 'Logros de cada personaje', porPj)}
+    ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}`;
 }
 
 // --- Hub de BBS: modo Informes ---
@@ -400,7 +477,7 @@ function hubInformes() {
   })).join('');
 
   return `
-    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['retos', 'Retos'], ['helados', 'Helados']])}
+    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['tableros', 'Tableros'], ['retos', 'Retos'], ['helados', 'Helados']])}
     <p class="mode-note">Los golpes finales, estilos de comandos y pegatinas de cada personaje están en su página.</p>
     ${bloque('xehanort', 'Informes Xehanort', `<ul class="list">${xeh}</ul>${fuentes(['wikiEsXehanort', 'guiaSteam'])}`, {
       meter: medidor('inf-xeh', INFORMES_XEHANORT.map((x) => ID.xeh(x.id)), 'Documentos'),
@@ -421,6 +498,7 @@ function hubInformes() {
     ${bloque('minijuegos', 'Minijuegos', `${minis}${fuentes(['guiaSteam'])}`, {
       meter: medidor('inf-mini', MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))), 'Minijuegos'),
     })}
+    ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}
     ${bloque('retos', 'Retos de los nescientes', `<ul class="list">${retos}</ul>${fuentes(['guiaSteam'])}`, {
       meter: medidor('inf-retos', RETOS.map((r) => ID.reto(r.id)), 'Retos'),
       lead: 'Uno por mundo. Hay que sacar el rango más alto (3) en todos para el logro «Exterminador».',
@@ -484,7 +562,51 @@ const ICONO_VIA = {
   caida: '<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>',
 };
 const GRUPOS_BUILD = [['llave', 'Llave espada'], ['baraja', 'Baraja de comandos'], ['tiro', 'Tiro certero'], ['movimiento', 'Movimiento'], ['defensa', 'Defensa']];
-const combateActual = () => COMBATES.find((c) => c.id === store.ajuste('buildCombate')) ?? COMBATES[0];
+const HISTORIA = { id: 'historia', nombre: 'Avanzar por la historia' };
+const PESTANAS_BUILD = [HISTORIA, ...COMBATES];
+const combateActual = () => PESTANAS_BUILD.find((c) => c.id === store.ajuste('buildCombate')) ?? HISTORIA;
+const imgPestana = (c, pj) => (c === HISTORIA ? PERSONAJES[pj].img : `${IMG_BUILD}${c.img}.webp`);
+
+// Contenido de la pestaña «Historia»: qué llevar para grupos, jefes y curación (bbs-avance.js).
+function avanceBuild(pj) {
+  const a = AVANCE[pj];
+  const catDe = (n) => Object.entries(LISTAS_COMANDOS[pj]).find(([, l]) => l.includes(n))?.[0];
+  const tarjeta = (n) => {
+    const c = COMANDOS[n];
+    // Primero las vías que funcionan por sí solas; la tienda «una vez conseguido por otra vía», al final.
+    const condicional = (v) => /una vez conseguido por otra vía\.$/.test(v.t);
+    const vias = c.vias.filter((v) => !v.pj || v.pj.includes(pj)).sort((x, y) => condicional(x) - condicional(y)).slice(0, 2);
+    const receta = c.recetas.filter((r) => !r.excl || r.excl.toLowerCase().includes(pj)).find((r) => r.pct === '100');
+    const cat = catDe(n);
+    return `
+      <li class="av-cmd">
+        <img src="${IMG_BUILD}ico-${cat}.webp" alt="" width="24" height="24">
+        <div>
+          <b>${esc(n)}</b>
+          <ul class="av-como">${vias.map((v) => `<li>${svg(ICONO_VIA[v.v === 'historia' ? 'inicial' : v.v])}${esc(v.t)}</li>`).join('')}
+            ${receta ? `<li>${svg(ICONO_VIA.sintesis)}${esc(receta.a)} + ${esc(receta.b)}</li>` : ''}</ul>
+          <button type="button" class="av-ver" data-ver-cmd="${esc(n)}">Ver su ficha completa</button>
+        </div>
+      </li>`;
+  };
+  return `
+    <div class="bx-brief">
+      <div class="bx-brief-text">
+        <p class="bx-kicker">Para la historia, mundo a mundo</p>
+        <h3>Avanzar por la historia</h3>
+        <p>${esc(a.estilo)} ${esc(a.combo)}</p>
+      </div>
+      <img class="bx-boss" src="${PERSONAJES[pj].img}" alt="" loading="lazy">
+    </div>
+    ${a.grupos.map(([titulo, desc, cmds]) => `
+      <section class="av-grupo">
+        <h3 class="bx-sub">${esc(titulo)}</h3>
+        <p class="hint">${esc(desc)}</p>
+        <ul class="av-lista">${cmds.map(tarjeta).join('')}</ul>
+      </section>`).join('')}
+    <p class="hint">Cada tarjeta muestra hasta dos formas de conseguir el comando y su receta más segura; la ficha completa está en «Comandos». Los superjefes tienen sus propias pestañas.</p>
+    ${fuentes(a.f)}`;
+}
 
 function mediaPieza(pz, pj) {
   const img = typeof pz.img === 'function' ? pz.img(pj) : pz.img;
@@ -540,6 +662,7 @@ function habilidadesBuild() {
 }
 
 function escenarioBuild(pj, c) {
+  if (c === HISTORIA) return avanceBuild(pj);
   const eq = c.equipo(pj);
   // La primera casilla útil empieza abierta (una sola, aunque la pieza se repita en la baraja).
   const sel = eq.baraja.find((s) => !s.quitar) ?? eq.tiro[0] ?? eq.baraja[0];
@@ -574,14 +697,14 @@ function buildPj(pj) {
   const actual = combateActual();
   const usadas = COMBATES.flatMap((c) => Object.values(c.equipo(pj)).filter(Array.isArray).flat().map((s) => PIEZAS[s.p]));
   const claves = [
-    ...COMBATES.flatMap((c) => c.f), ...usadas.flatMap((p) => p.f), ...HABILIDADES.flatMap((h) => h.f),
+    ...AVANCE[pj].f, ...COMBATES.flatMap((c) => c.f), ...usadas.flatMap((p) => p.f), ...HABILIDADES.flatMap((h) => h.f),
     'khwikiMeld', 'khwikiAbilities', 'khwikiImagenes',
   ];
   return `
     <div class="bx" data-pj="${pj}">
-      <div class="fights" role="tablist" aria-label="Elige el combate">${COMBATES.map((c) => `
+      <div class="fights" role="tablist" aria-label="Elige el combate">${PESTANAS_BUILD.map((c) => `
         <button type="button" role="tab" class="fight" id="fight-${c.id}" data-combate="${c.id}" aria-selected="${c === actual}" tabindex="${c === actual ? 0 : -1}" aria-controls="bx-stage">
-          <img src="${IMG_BUILD}${c.img}.webp" alt="" loading="lazy"><span>${esc(c.nombre)}</span></button>`).join('')}
+          <img src="${imgPestana(c, pj)}" alt="" loading="lazy"><span>${esc(c.nombre)}</span></button>`).join('')}
       </div>
       <div class="bx-stage" id="bx-stage" role="tabpanel" aria-labelledby="fight-${actual.id}">${escenarioBuild(pj, actual)}</div>
       <details class="bx-how">
@@ -606,7 +729,7 @@ function buildPj(pj) {
 
 function cambiarCombate(boton) {
   const bx = boton.closest('.bx');
-  const c = COMBATES.find((x) => x.id === boton.dataset.combate);
+  const c = PESTANAS_BUILD.find((x) => x.id === boton.dataset.combate);
   store.fijarAjuste('buildCombate', c.id);
   bx.querySelectorAll('.fight').forEach((b) => {
     b.setAttribute('aria-selected', b === boton);
@@ -761,8 +884,8 @@ function elegirCategoria(boton) {
 }
 
 function irAComando(boton) {
-  const cmds = boton.closest('.cmds');
-  const li = cmds.querySelector(`.cmd[data-nombre="${CSS.escape(boton.dataset.irCmd)}"]`);
+  const cmds = boton.closest('.cmds') ?? document.querySelector('.cmds');
+  const li = cmds?.querySelector(`.cmd[data-nombre="${CSS.escape(boton.dataset.irCmd ?? boton.dataset.verCmd)}"]`);
   if (!li) return;
   cmds.querySelector('[data-cmd-buscar]').value = '';
   cmds.querySelectorAll('[data-cmd-filtro]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
@@ -810,7 +933,7 @@ function vistaPersonaje(pj) {
 
   const contLogros = () => `
     ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['logros', 'Logros'], ['cuartelillo', 'Cuartelillo'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
-    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Elige el combate y toca cada pieza de la equipación para ver qué es y cómo se consigue.' })}
+    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
     ${bloque('logros', `Logros de ${p.nombre}`, `<ul class="list">${logros.map(itemLogro).join('')}</ul>${fuentes(['steam', 'guiaSteam'])}`)}
     ${bloque('cuartelillo', 'Cuartelillo', `
@@ -829,7 +952,7 @@ function vistaPersonaje(pj) {
   medidores[`pj-${pj}-pegr`] = idsPegPremios;
   const contInformes = () => `
     ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
-    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Elige el combate y toca cada pieza de la equipación para ver qué es y cómo se consigue.' })}
+    ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
     ${bloque('xehanort', `Informes Xehanort de ${p.nombre}`, `<ul class="list">${xeh.map((x) => item({ id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde })).join('')}</ul>${fuentes(['wikiEsXehanort'])}`, {
       meter: medidor(`pj-${pj}-xeh`, xeh.map((x) => ID.xeh(x.id)), 'Documentos'),
@@ -948,7 +1071,7 @@ document.addEventListener('click', (e) => {
   if (catCmd) { elegirCategoria(catCmd); return; }
   const filtro = e.target.closest('[data-cmd-filtro]');
   if (filtro) { filtro.setAttribute('aria-pressed', filtro.getAttribute('aria-pressed') !== 'true'); filtrarComandos(filtro.closest('.cmds')); return; }
-  const irCmd = e.target.closest('[data-ir-cmd]');
+  const irCmd = e.target.closest('[data-ir-cmd], [data-ver-cmd]');
   if (irCmd) { irAComando(irCmd); return; }
   const ficha = e.target.closest('[data-ficha]');
   if (ficha) { abrirFicha(ficha.dataset.ficha, ficha.dataset.fichaPj); return; }

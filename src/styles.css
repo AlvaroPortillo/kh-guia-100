@@ -443,7 +443,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .bx svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 /* Combates: pestañas con el retrato del jefe */
-.fights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.fights { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
 .fight {
   position: relative; overflow: hidden; display: flex; align-items: end; min-height: 108px; padding: 14px;
   border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
@@ -752,6 +752,50 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .nexo b { display: block; margin-bottom: 2px; }
 .nexo p { color: var(--text-2); font-size: .9375rem; }
 
+/* ---------- Tableros de comandos ---------- */
+.tb-claves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.tb-claves .info-card h3 { color: var(--gold); }
+.tb-claves .info-card b { color: var(--text); }
+.tb-intro { display: grid; grid-template-columns: minmax(0, 360px) 1fr; gap: 16px 24px; align-items: start; margin: 24px 0 8px; }
+.tb-intro .hint + .hint { margin-top: 8px; }
+.tb-exclusivos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.tb-pj { padding: 14px 16px; border-radius: var(--r-m); border: 1px solid var(--line); border-top: 3px solid var(--accent); background: var(--surface); }
+.tb-pj h4 { color: var(--accent); font-size: 1rem; margin: 0 0 8px; }
+.tb-pj ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.tb-pj li { display: grid; gap: 2px; }
+.tb-pj li span { font-size: .875rem; color: var(--text-2); }
+.tb-pj a { color: var(--text); text-underline-offset: 2px; }
+.tbs { display: grid; gap: 16px; }
+.tb { display: grid; grid-template-columns: minmax(0, 1.25fr) 1fr; gap: 18px; padding: 16px; border-radius: var(--r-l); border: 1px solid var(--line); background: var(--surface); scroll-margin-top: 150px; }
+.tb-mapa { display: block; border-radius: var(--r-s); overflow: hidden; background: #fff; align-self: start; transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease); }
+.tb-mapa:hover { transform: scale(1.01); box-shadow: 0 0 0 2px var(--accent); }
+.tb-mapa img { width: 100%; height: auto; }
+.tb-cuerpo { display: grid; gap: 8px; align-content: start; }
+.tb-cuerpo h3 { font: 700 1.4rem/1.15 var(--f-display); }
+.tb-cuerpo p { font-size: .9375rem; color: var(--text-2); }
+.tb-cuerpo p b { color: var(--text); }
+.tb-casillas { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.tb-casillas li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font-size: .9375rem; }
+.tb-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #E0343C; color: #fff; font-weight: 800; font-size: .8125rem; }
+.tb-casillas small, .tb-pj small { color: var(--text-2); }
+.tb-lim { color: var(--gold); font-size: .875rem; }
+.tb-coso { color: var(--text-2); font-size: .8125rem; }
+
+/* ---------- Build: avanzar por la historia ---------- */
+.fight img[src$=".png"] { object-position: top center; }
+.av-grupo { display: grid; gap: 6px; }
+.av-grupo .bx-sub { margin-bottom: 0; }
+.av-lista { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.av-cmd { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; padding: 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); transition: border-color var(--t) var(--ease), transform var(--t) var(--ease); }
+.av-cmd:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); transform: translateY(-2px); }
+.av-cmd img { width: 24px; height: 24px; object-fit: contain; margin-top: 2px; }
+.av-cmd b { display: block; margin-bottom: 4px; }
+.av-como { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 4px; font-size: .8125rem; color: var(--text-2); }
+.av-como li { display: flex; gap: 6px; align-items: flex-start; }
+.av-como svg { width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.av-ver { padding: 0; border: 0; background: none; color: var(--gold); font: 600 .8125rem/1.2 var(--f-ui); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.av-ver:hover { color: var(--text); }
+
 /* Estela de llave espada */
 .estela { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
 
@@ -769,6 +813,9 @@ body[data-view="juegos"] .sky { opacity: .9; }
   .hero-name { text-align: left; align-self: end; }
   .pj-hero { grid-template-columns: 1fr; }
   .info-cards { grid-template-columns: 1fr 1fr; }
+  .tb-claves, .tb-exclusivos { grid-template-columns: 1fr; }
+  .tb { grid-template-columns: 1fr; }
+  .tb-intro { grid-template-columns: 1fr; }
   .fights { grid-template-columns: 1fr 1fr; }
   .bx-grid { grid-template-columns: 1fr; }
   .deck { position: static; }
