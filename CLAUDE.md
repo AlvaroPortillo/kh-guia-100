@@ -78,13 +78,25 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
    Jefes de la historia de los tres personajes hechos (pendiente de revisión).
 1. **Comandos de cada personaje y Nexos-D hechos** (pendiente de revisión). Nexos-D: solo cómo se consigue cada uno
    (`src/data/bbs-nexos.js`); el usuario no quiere la lista de comandos de cada Nexo. Si no hay datos, no se pone nada.
+1b. **Tesoros de BBS hechos** (21-10-2026, pendiente de revisión): `src/data/bbs-tesoros.js` (**generado** con
+   `notas/herramientas/genera_tesoros.py` desde la hoja «Treasures» de la guía de Steam 3292773479, en CSV). Ids
+   `bbs.tesoro.<pj>.<mundo>.<zona>.<contenido>`; cuentan para el 100 % salvo los `extra` (tutorial de Ventus y Reino de la
+   Oscuridad de Aqua). Cofre de cada mundo: `assets/img/bbs/build/cofre-*.webp` (KHWiki). Solo mundo, zona y contenido
+   (el usuario no quiere las indicaciones de cómo llegar). **Zonas en castellano:** las que tienen fuente (Wiki ES, guía de
+   Steam) y el resto traducidas por petición del usuario (`ZONA_TRAD` del generador, marcadas `zt`; la web enseña el
+   nombre inglés al pasar el ratón). Los ids usan el nombre inglés de la zona, así que traducir no rompe el progreso.
 2. **Pegatinas por mundo hechas** (`src/data/bbs-pegatinas.js`, generado; ids `bbs.peg.mundo.<pj>.<mundo>`, cuentan para el
    100 %). El usuario las quiere simples: mundo, número y zona; sin imágenes.
 3. Siguientes juegos: KH Final Mix, Re:Chain of Memories, KH II Final Mix (KH FM y KH II FM tienen «Informes Ansem»).
    **KH Final Mix: plan en `notas/plan-khfm.md`.** Entregas 1 y 2 hechas el 21-10-2026 (pendientes de revisión): `#/khfm` con logros,
    ruta, mundos/cerraduras y diario de Pepito; acento `--khfm` (azul del corazón del logo). Cofres: no se listan (el logro
    solo pide 100). Dálmatas con ubicaciones de Final Mix (Destiny Islands + wiki inglesa, filas «FM»); «Los récords» = jugar 9
-   minijuegos, sin puntuación (guía de Steam en castellano). **Siguiente: entrega 3 (armas y síntesis)**, en otra sesión.
+   minijuegos, sin puntuación (guía de Steam en castellano). **Entrega 3 (armas y síntesis) hecha** el 21-10-2026, pendiente de revisión
+   (`src/data/khfm-armas.js`, imágenes en `assets/img/khfm/armas/`; ids `khfm.arma.<id>` y `khfm.sintesis.<id>`, las 3 armas
+   de la lista VI usan solo su id de arma). **Entrega 4 (naves gumi) hecha** el 21-10-2026, pendiente de revisión
+   (`src/data/khfm-gumi.js`, imágenes en `assets/img/khfm/gumi/`; ids `khfm.gumi.mision.<mundo>.<n>` y `khfm.gumi.plano.<id>`,
+   los planos de misión usan el id de su misión III). Piezas gumi: «Gumi Electro», «Gumi Electro+»… cuando hay fuente; si no,
+   inglés entre «». **Siguiente: entrega 5 (Coliseo y jefes).**
    **Fuentes de KH FM (mejor que la Wiki ES, que a menudo da el KH original sin los cambios de Final Mix):**
    - Guía de logros de KH1 en castellano (Steam 3293246581): perdibles, consejos, dónde sale cada llave espada, bastón y escudo,
      materiales de síntesis y sus sincorazón, planos gumi. Otras guías de Steam: 3279160251 (síntesis y materiales),

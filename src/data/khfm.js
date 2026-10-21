@@ -104,8 +104,16 @@ export const CONSEJOS_KHFM = {
   ACH_007: 'Es el jefe exclusivo de Final Mix, en Bastión Hueco: el hombre encapuchado (Xemnas, aunque en este juego no se dice su nombre). Es el enemigo con más vida del juego.',
   ACH_027: 'Monstruo no tiene cerradura: el logro llega al terminar el mundo y salir de la ballena.',
   ACH_052: 'Tras rescatar a Kairi en Bastión Hueco, ella te da su amuleto (el llavero de Prometida) en el Canal Secreto de Ciudad de Paso.',
+  ACH_041: 'La Orfebrería se abre tras terminar Agrabah, con el Trío Verde de la Tienda de Accesorios de Ciudad de Paso. Lo más barato es el Chalé: 1 Guijarro Claro y 1 Guijarro Vital.',
+  ACH_042: 'Tres objetos distintos de la lista I; al hacerlos se abre la lista II.',
+  ACH_043: 'Con 15 objetos distintos se abre la lista IV y el moguri te da la habilidad Más Encuentros.',
+  ACH_044: 'Treinta objetos distintos: todas las listas I a V. Al hacerlo se abre la lista VI.',
+  ACH_040: 'Son 33 objetos. Los tres de la lista VI son armas: Vara de Fantasía, Siete Elementos y Arma Artema. Recetas y materiales en «Informes · 100 %», sección Síntesis.',
+  ACH_053: 'Son 18 llaves espada, contando la Cadena del Reino. La última, el Arma Artema, se fabrica en la lista VI de la síntesis. Dónde sale cada una: «Informes · 100 %», sección Armas.',
+  ACH_054: 'Son 15 bastones. Vara de Fantasía se fabrica en la lista VI de la síntesis y el Cetro de Brujo solo lo suelta el sincorazón Brujo (0,2 %).',
+  ACH_055: 'Son 15 escudos. Siete Elementos se fabrica en la lista VI de la síntesis y el Defensor solo lo suelta el sincorazón Defensor (0,2 %).',
 };
-export const FUENTES_CONSEJOS_KHFM = ['steamKhfm', 'guiaSteamKhfm', 'wikiEsEspectro', 'wikiEsKurtZisa', 'wikiEsCopaHades', 'khwikiKhfm', 'wikiEsSefirot', 'wikiEsXemnas', 'wikiEsMonstruo', 'wikiEsPrometida'];
+export const FUENTES_CONSEJOS_KHFM = ['khwikiSintesis', 'diLlaves', 'diBastones', 'diEscudos','steamKhfm', 'guiaSteamKhfm', 'wikiEsEspectro', 'wikiEsKurtZisa', 'wikiEsCopaHades', 'khwikiKhfm', 'wikiEsSefirot', 'wikiEsXemnas', 'wikiEsMonstruo', 'wikiEsPrometida'];
 
 // Mundos en el orden de sus logros de Steam (ACH_022…ACH_032). `cerradura`: dónde está y cómo se sella.
 export const MUNDOS_KHFM = [

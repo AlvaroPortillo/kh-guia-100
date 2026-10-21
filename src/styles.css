@@ -451,6 +451,94 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .premios-dalm li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--surface); font-size: .9375rem; color: var(--text-2); }
 .premios-dalm b { min-width: 2.2ch; font-size: 1.25rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
 .premios-dalm + .hint { margin-bottom: 28px; }
+/* BBS · tesoros: un desplegable por mundo con el cofre de ese mundo */
+.tes-mundos { display: grid; gap: 10px; }
+.tes-mundo { border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface); transition: border-color var(--t) var(--ease); }
+.tes-mundo[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.tes-mundo summary {
+  display: flex; align-items: center; gap: 14px; padding: 10px 18px 10px 12px; cursor: pointer; list-style: none; border-radius: var(--r-m);
+}
+.tes-mundo summary::-webkit-details-marker { display: none; }
+.tes-mundo summary::after {
+  content: ''; width: 9px; height: 9px; margin-left: 4px; flex: none;
+  border-right: 2px solid var(--text-2); border-bottom: 2px solid var(--text-2); transform: rotate(45deg) translateY(-3px);
+  transition: transform var(--t) var(--ease);
+}
+.tes-mundo[open] summary::after { transform: rotate(225deg) translate(-2px, -1px); }
+.tes-mundo summary:hover { background: var(--surface-2); }
+.tes-mundo summary:hover .tes-cofre { transform: translateY(-3px) rotate(-4deg); }
+.tes-cofre { width: 56px; height: 52px; flex: none; object-fit: contain; transition: transform var(--t) var(--ease); }
+.tes-cofre-gen { padding: 8px 10px; fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; }
+.tes-nombre { font-weight: 700; font-size: 1.0625rem; }
+.tes-mundo summary .count { margin-left: auto; }
+.tes-mundo[data-extra] .tes-nombre::after { content: ' · Final Mix'; color: var(--text-2); font-weight: 500; }
+.tes-zonas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 6px 22px; padding: 4px 16px 16px; }
+.tes-zona h4 { margin: 10px 0 4px; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; color: var(--accent); width: fit-content; }
+.tes-zona h4.tes-trad { text-decoration: underline dotted color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; cursor: help; }
+.tes-lista .item-row { grid-template-columns: 28px 1fr; padding: 8px 4px; gap: 12px; align-items: center; }
+.tes-lista .item-body { grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+.tes-lista .item-meta { justify-content: flex-end; }
+.tes-mundo .nota-fuente { margin: 4px 16px 12px; }
+
+/* KH FM · armas: tarjetas marcables con la imagen del arma */
+.chip-fm { border-color: color-mix(in srgb, var(--accent) 60%, transparent); color: var(--accent); }
+.armas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.item.arma {
+  display: grid; gap: 8px; align-content: start; padding: 14px 16px 16px;
+  border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface);
+  transition: border-color var(--t) var(--ease), background var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.item.arma:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); transform: translateY(-2px); }
+.item.arma.is-done { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); background: color-mix(in srgb, var(--gold) 7%, var(--surface)); }
+.arma-head { display: grid; grid-template-columns: 76px 1fr 28px; align-items: center; gap: 14px; cursor: pointer; border-radius: var(--r-s); }
+.arma-head:has(.check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 4px; }
+.arma-head:hover .crown { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); }
+.arma-art {
+  width: 76px; height: 76px; display: grid; place-items: center; border-radius: 16px; border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%), var(--surface-2);
+}
+.arma-art img { max-width: 64px; max-height: 64px; object-fit: contain; transition: transform var(--t) var(--ease), filter var(--t) var(--ease); }
+.arma:not(.is-done) .arma-art img { filter: saturate(.6) brightness(.85); }
+.arma:hover .arma-art img { transform: rotate(-8deg) scale(1.06); filter: none; }
+.arma-tit { display: grid; gap: 6px; min-width: 0; }
+.arma-tit .item-title { font-size: 1.0625rem; font-weight: 700; }
+.arma-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: .8125rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.arma-desc { font-size: .875rem; font-style: italic; color: var(--text-2); }
+.arma-como { font-size: .9375rem; }
+.arma-como b { color: var(--accent); }
+.arma-nota { padding-left: 10px; border-left: 3px solid var(--gold); font-size: .8125rem; color: var(--text-2); }
+
+/* KH FM · naves gumi */
+.nave-base { margin: 18px 0 8px; max-width: 75ch; }
+.nave-base ol { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 4px; color: var(--text-2); font-size: .875rem; }
+#khfm-planos { margin-top: 44px; }
+.planos .arma-art img { max-width: 68px; max-height: 68px; }
+.rutas-gumi { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.rutas-gumi li { padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); font-size: .75rem; font-weight: 600; }
+
+/* KH FM · síntesis: recetas con enlace a cada material y fichas de materiales */
+.item-row:has(.item-icon) ~ .item-foot { padding-left: 112px; }
+.item-row:has(.item-icon) ~ .nota-fuente { margin-left: 106px; }
+.receta { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.mat-chip {
+  display: inline-flex; align-items: baseline; gap: 5px; padding: 6px 10px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text); font-size: .8125rem; text-decoration: none;
+  transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
+}
+.mat-chip b { color: var(--accent); font-variant-numeric: tabular-nums; }
+.mat-chip.is-fm { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.mat-chip:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface-2)); }
+#khfm-materiales { margin-top: 40px; }
+.mats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 10px; }
+.mat {
+  display: grid; gap: 4px; align-content: start; padding: 12px 14px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--surface);
+  font-size: .875rem; color: var(--text-2); scroll-margin-top: 140px;
+}
+.mat.is-fm { border-left: 3px solid var(--accent); }
+.mat-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; color: var(--text); font-size: .9375rem; }
+.mat-n { margin-left: auto; min-width: 2.4ch; text-align: right; font-size: 1.25rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+.mat p span { color: var(--text); font-weight: 600; }
+.mat-nota { margin-top: 4px; font-size: .8125rem; }
 .nota-fuente { margin: -4px 0 12px 44px; padding: 8px 12px; border-left: 3px solid var(--gold); border-radius: 0 var(--r-s) var(--r-s) 0; background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--text-2); font-size: .875rem; max-width: 70ch; }
 .trio-marca {
   display: inline-block; width: 18px; height: 18px; margin-right: 10px; vertical-align: -3px; border-radius: 50%;
@@ -980,6 +1068,11 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
   .item-icon { width: 40px; height: 40px; }
   .item-row:has(.item-icon) ~ .spoiler { padding-left: 44px; }
   .item-foot, .spoiler { padding-left: 44px; }
+  .item-row:has(.item-icon) ~ .item-foot { padding-left: 44px; }
+  .item-row:has(.item-icon) ~ .nota-fuente { margin-left: 44px; }
+  .arma-head { grid-template-columns: 64px 1fr 28px; gap: 12px; }
+  .arma-art { width: 64px; height: 64px; }
+  .arma-art img { max-width: 54px; max-height: 54px; }
   .menu-panel { position: fixed; right: 16px; top: 60px; }
 }
 

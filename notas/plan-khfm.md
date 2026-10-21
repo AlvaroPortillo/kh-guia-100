@@ -60,7 +60,7 @@ con filtro por mundo y «ocultar hechos». Revisión con `revisar-diseno` en cad
 ## Entregas
 1. Base del juego + logros + ruta + mundos con cerraduras. Hecha.
 2. Diario de Pepito (Informes Ansem, Dálmatas, marcas Trío, récords). Hecha; los cofres no se listan porque el logro solo pide 100.
-3. Armas y síntesis.
-4. Naves gumi.
+3. Armas y síntesis. Hecha (48 armas con valores de Final Mix; 33 recetas en 6 listas y 34 materiales).
+4. Naves gumi. Hecha (30 misiones, 48 planos con la ruta de cada nave enemiga, nave base de la guía de Steam).
 5. Coliseo y jefes.
 6. Sora (habilidades, magia, invocaciones, build) y dificultad.

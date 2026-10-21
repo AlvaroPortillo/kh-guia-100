@@ -10,6 +10,7 @@ import { JEFES, FASES } from './data/bbs-jefes.js';
 import { LISTAS_COMANDOS, COMANDOS } from './data/bbs-comandos.js';
 import { NEXOS } from './data/bbs-nexos.js';
 import { PEGATINAS_MUNDOS } from './data/bbs-pegatinas.js';
+import { TESOROS } from './data/bbs-tesoros.js';
 import { TABLEROS } from './data/bbs-tableros.js';
 import { TABLEROS_INFO } from './data/bbs-tableros-info.js';
 import { POS_CASILLAS } from './data/bbs-tableros-pos.js';
@@ -21,6 +22,12 @@ import {
 import {
   FUENTES_DIARIO, SECCIONES_DIARIO, INFORMES_ANSEM, DALMATAS, PREMIOS_DALMATAS, TIPOS_TRIO, MARCAS_TRIO, RECORDS, PAGINAS_POOH,
 } from './data/khfm-diario.js';
+import {
+  FUENTES_ARMAS, IMG_ARMAS, ARMAS, FUENTES_ARMAS_LISTA, MATERIALES, LISTAS_SINTESIS, PASOS_SINTESIS, FUENTES_SINTESIS_KHFM,
+} from './data/khfm-armas.js';
+import {
+  FUENTES_GUMI, IMG_GUMI, MISIONES_GUMI, MISIONES_INFO, NAVE_BASE, PLANOS_BASICOS, PLANOS_ENEMIGOS, PLANO_BAHAMUT,
+} from './data/khfm-gumi.js';
 import {
   FUENTES_SINTESIS, DESC_COMANDOS, CRISTALES_ORDEN, TABLA_TIPOS, NOTAS_TABLA, LETRA_TIPO, HABILIDADES_BBS, CRISTALES_EXTRA, LIBROS_RECETAS,
 } from './data/bbs-sintesis.js';
@@ -35,7 +42,7 @@ const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().rep
 const pctFmt = (n) => (n == null ? '' : `${n.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de jugadores en Steam`);
 const logroPorId = Object.fromEntries(BBS.logros.map((l) => [l.id, l]));
 const logroKhfm = Object.fromEntries(KHFM.logros.map((l) => [l.id, l]));
-const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO };
+const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO, ...FUENTES_ARMAS, ...FUENTES_GUMI };
 const PJS = Object.values(PERSONAJES);
 
 const ID = {
@@ -49,6 +56,7 @@ const ID = {
   helado: (id) => `bbs.inf.helado.${id}`,
   pegatina: (pj, pts) => `bbs.peg.${pj}.${pts}`,
   pegMundo: (pj, mundo) => `bbs.peg.mundo.${pj}.${mundo}`,
+  tesoro: (pj, mundo, t) => `bbs.tesoro.${pj}.${mundo}.${t}`,
   tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
   tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
   tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
@@ -57,9 +65,14 @@ const ID = {
   khfmDalmata: (n) => `khfm.dalmata.${n}`,
   khfmTrio: (tipo, i) => `khfm.trio.${tipo}.${i}`,
   khfmRecord: (id) => `khfm.record.${id}`,
+  khfmArma: (id) => `khfm.arma.${id}`,
+  khfmSintesis: (id) => `khfm.sintesis.${id}`,
+  khfmMision: (mundo, n) => `khfm.gumi.mision.${mundo}.${n}`,
+  khfmPlano: (id) => `khfm.gumi.plano.${id}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
+const idsTesoros = (pj) => TESOROS[pj].flatMap((m) => m.tesoros.filter((t) => !t.extra).map((t) => ID.tesoro(pj, m.id, t.id)));
 const logrosPj = (pj) => BBS.logros.filter((l) => l.pj === pj).map((l) => ID.logro(l.id));
 const juegoPj = (pj) => [
   ...INFORMES_XEHANORT.filter((x) => x.pj === pj).map((x) => ID.xeh(x.id)),
@@ -67,6 +80,7 @@ const juegoPj = (pj) => [
   ...ESTILOS[pj].map((e) => ID.estilo(pj, e.nombre)),
   ...PEGATINAS_MUNDOS[pj].map((m) => ID.pegMundo(pj, m.id)),
   ...PEGATINAS[pj].map(([p]) => ID.pegatina(pj, p)),
+  ...idsTesoros(pj),
   ...TABLEROS.map((t) => ID.tablero(pj, t.id)),
   ...exclusivosDeTablero(pj).map((e) => ID.tableroCmd(pj, e.n)),
 ];
@@ -84,9 +98,20 @@ const idsAnsem = () => INFORMES_ANSEM.map((x) => ID.khfmAnsem(x.n));
 const idsDalmatas = () => DALMATAS.map((d) => ID.khfmDalmata(d.n));
 const idsTrio = () => TIPOS_TRIO.flatMap((tp) => triosDe(tp.id).map((_, i) => ID.khfmTrio(tp.id, i + 1)));
 const idsRecords = () => RECORDS.map((r) => ID.khfmRecord(r.id));
-const juegoKHFM = () => [
+const idsArmas = () => ARMAS.flatMap((g) => g.items.map((a) => ID.khfmArma(a.id)));
+// Las armas que se sintetizan comparten la marca de su ficha de arma.
+const idSintesis = (x) => (x.arma ? ID.khfmArma(x.arma) : ID.khfmSintesis(x.id));
+const idsSintesis = () => LISTAS_SINTESIS.flatMap((l) => l.items.map(idSintesis));
+const idsMisiones = () => MISIONES_GUMI.flatMap((w) => w.m.map((_, i) => ID.khfmMision(w.mundo, i + 1)));
+// Los planos que se ganan con una misión III comparten su marca.
+const misionDePlano = Object.fromEntries(MISIONES_GUMI.flatMap((w) => w.m.map((x, i) => [x.plano, ID.khfmMision(w.mundo, i + 1)]).filter(([p]) => p)));
+const idPlano = (id) => misionDePlano[id] ?? ID.khfmPlano(id);
+const idsPlanos = () => [...PLANOS_BASICOS, ...PLANOS_ENEMIGOS].map((p) => idPlano(p.id))
+  .concat(Object.values(misionDePlano), idPlano(PLANO_BAHAMUT.id));
+const juegoKHFM = () => [...new Set([
   ...MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro)), ...idsAnsem(), ...idsDalmatas(), ...idsTrio(), ...idsRecords(),
-];
+  ...idsArmas(), ...idsSintesis(), ...idsMisiones(), ...idsPlanos(),
+])];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
@@ -1117,6 +1142,51 @@ function nexosPj(pj) {
     ${fuentes(['khwikiNexos', 'guiaSteam'])}`;
 }
 
+// --- Tesoros: cofres por mundo y zona ---
+const CAT_COMANDO = { ataque: 'Ataque', magia: 'Magia', movimiento: 'Movimiento', defensa: 'Defensa', contraataque: 'Contraataque', tiro: 'Tiro certero' };
+const TIPO_TESORO = { objeto: 'Objeto', cristal: 'Cristal', receta: 'Receta', mapa: 'Mapa', informe: 'Informe Xehanort' };
+// Cofres sin imagen en KHWiki para BBS: se quedan sin ella.
+const COFRE_SIN_IMG = new Set(['vergel-radiante', 'torre-de-los-misterios']);
+function tipoTesoro(pj, t) {
+  if (t.tipo !== 'comando') return TIPO_TESORO[t.tipo];
+  const cat = Object.entries(LISTAS_COMANDOS[pj]).find(([, l]) => l.includes(t.c))?.[0];
+  return cat ? CAT_COMANDO[cat] : 'Comando';
+}
+
+function tesorosPj(pj) {
+  const mundos = TESOROS[pj].map((m) => {
+    const clave = `pj-${pj}-tes-${m.id}`;
+    const ids = m.tesoros.filter((t) => !t.extra).map((t) => ID.tesoro(pj, m.id, t.id));
+    medidores[clave] = ids;
+    const zonas = [...new Set(m.tesoros.map((t) => t.zona))];
+    const filas = zonas.map((z) => {
+      const t0 = m.tesoros.find((t) => t.zona === z);
+      return `
+      <div class="tes-zona">
+        <h4${t0.zt ? ` class="tes-trad" title="Traducción propia; en inglés: ${esc(t0.zona_en)}"` : ''}>${esc(z)}</h4>
+        <ul class="list list-tight tes-lista">${m.tesoros.filter((t) => t.zona === z).map((t) => item({
+          id: ID.tesoro(pj, m.id, t.id),
+          titulo: t.c,
+          meta: `<span class="chip">${esc(tipoTesoro(pj, t))}</span>${t.extra && !m.extra ? ' <span class="note">Solo en el tutorial; no cuenta en los Informes.</span>' : ''}`,
+        })).join('')}</ul>
+      </div>`;
+    }).join('');
+    return `
+    <details class="tes-mundo"${m.extra ? ' data-extra' : ''}>
+      <summary>
+        ${COFRE_SIN_IMG.has(m.id) ? '<svg class="tes-cofre tes-cofre-gen" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M4 11h16M10 11v3h4v-3"/></svg>' : `<img class="tes-cofre" src="${IMG_BUILD}cofre-${m.id}.webp" alt="" width="56" height="52" loading="lazy">`}
+        <span class="tes-nombre">${esc(m.mundo)}</span>
+        ${ids.length ? `<span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span>` : `<span class="count">${m.tesoros.length} ${m.tesoros.length === 1 ? 'cofre' : 'cofres'}</span>`}
+      </summary>
+      ${m.extra ? '<p class="nota-fuente">Episodio secreto de Final Mix. Según la hoja de seguimiento, estos cofres no cuentan para ningún logro: puedes marcarlos, pero no suman.</p>' : ''}
+      <div class="tes-zonas">${filas}</div>
+    </details>`;
+  }).join('');
+  return `<div class="tes-mundos">${mundos}</div>
+    <p class="hint">Abrirlos todos forma parte de completar los Informes de cada personaje.</p>
+    ${fuentes(['hojaTesoros', 'guiaSteam', 'wikiEsReceta', 'khwikiCofres'])}`;
+}
+
 // --- Página de personaje ---
 
 function vistaPersonaje(pj) {
@@ -1183,7 +1253,7 @@ function vistaPersonaje(pj) {
       <p class="hint">Los mapas y lo que da cada casilla están en <a href="#/bbs" data-ir-seccion="tableros">Birth by Sleep › Tableros</a>.</p>
       ${fuentes(['khwikiTableros', 'wikiEsTableros'])}`;
   const contInformes = () => `
-    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['tableros', 'Tableros'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
+    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['tesoros', 'Tesoros'], ['tableros', 'Tableros'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
     ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
     ${bloque('xehanort', `Informes Xehanort de ${p.nombre}`, `<ul class="list">${xeh.map((x) => item({ id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde })).join('')}</ul>${fuentes(['wikiEsXehanort'])}`, {
@@ -1219,6 +1289,10 @@ function vistaPersonaje(pj) {
       meter: medidor(`pj-${pj}-peg`, [...idsPegMundos, ...idsPegPremios], 'Álbum'),
       lead: 'Las zonas van con su nombre en inglés: no tienen nombre oficial en castellano comprobado.',
     })}
+    ${bloque('tesoros', 'Tesoros', tesorosPj(pj), {
+      meter: medidor(`pj-${pj}-tesoros`, idsTesoros(pj), 'Cofres'),
+      lead: `Los cofres de cada mundo con ${p.nombre}, en el orden de la hoja de seguimiento y con la zona donde está cada uno. Las zonas con un punteado debajo no tienen nombre oficial comprobado en castellano: están traducidas, y al pasar el ratón ves su nombre en inglés.`,
+    })}
     ${bloque('tableros', 'Tableros de comandos', tablerosPj, {
       meter: medidor(`pj-${pj}-tableros`, [...idsTab, ...idsExcl], 'Tableros'),
     })}
@@ -1242,7 +1316,7 @@ function vistaPersonaje(pj) {
       </div>
     </header>
     ${selectorModo(`pj-${pj}-modo-logros`, logrosPj(pj), `pj-${pj}-modo-100`, juegoPj(pj), {
-      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos, pegatinas y tableros',
+      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos, pegatinas, tesoros y tableros',
     })}
     ${m === 'logros' ? contLogros() : contInformes()}
   </section>`;
@@ -1291,6 +1365,139 @@ function grupoKhfm(clave, titulo, ids, filas, intro = '') {
     </div>`;
 }
 
+const armaPorId = Object.fromEntries(ARMAS.flatMap((g) => g.items.map((a) => [a.id, a])));
+const matPorId = Object.fromEntries(MATERIALES.map((m) => [m.id, m]));
+const signo = (n) => (n < 0 ? `−${-n}` : `+${n}`);
+const statsArma = (a) => `Fuerza ${signo(a.fue)}${a.pm ? ` · PM ${signo(a.pm)}` : ''}`;
+const chipFM = (texto = 'FM') => `<span class="chip chip-fm" title="Nuevo en Final Mix">${texto}</span>`;
+
+// Tarjeta marcable con imagen (armas y planos gumi). `sub` y `cuerpo` ya van escapados.
+function tarjetaImg({ id, img, nombre, sub = '', cuerpo = '' }) {
+  const hecho = store.hecho(id);
+  return `
+    <li class="item arma${hecho ? ' is-done' : ''}">
+      <label class="arma-head">
+        <input type="checkbox" class="sr-only check-input" data-id="${esc(id)}"${hecho ? ' checked' : ''}>
+        <span class="arma-art"><img src="${esc(img)}" alt="" loading="lazy"></span>
+        <span class="arma-tit">
+          <span class="item-title">${esc(nombre)}</span>
+          ${sub ? `<span class="arma-stats">${sub}</span>` : ''}
+        </span>
+        <span class="crown">${CORONA}</span>
+      </label>
+      ${cuerpo}
+    </li>`;
+}
+
+function khfmArmas() {
+  const tarjeta = (a) => tarjetaImg({
+    id: ID.khfmArma(a.id),
+    img: `${IMG_ARMAS}${a.id}.webp`,
+    nombre: a.nombre,
+    sub: `${esc(statsArma(a))}${a.fm ? ` ${chipFM('Nueva en FM')}` : ''}`,
+    cuerpo: `${a.desc ? `<p class="arma-desc">${esc(a.desc)}</p>` : ''}
+      <p class="arma-como"><b>Cómo:</b> ${esc(a.como)}</p>
+      ${a.nota ? `<p class="arma-nota">${esc(a.nota)}</p>` : ''}`,
+  });
+  return ARMAS.map((g) => {
+    const clave = `khfm-armas-${g.id}`;
+    const ids = g.items.map((a) => ID.khfmArma(a.id));
+    medidores[clave] = ids;
+    const tienda = g.items.filter((a) => a.como.startsWith('Tienda')).length;
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} de ${esc(g.quien)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span>
+        <span class="chip chip-logro">Logro: ${esc(logroKhfm[g.logro].nombre)}</span></h3>
+      <p class="group-intro">${ids.length} en total${tienda ? `; ${tienda} se compran en la tienda de Juanito, Jaimito y Jorgito (Ciudad de Paso)` : ''}.</p>
+      <ul class="armas">${g.items.map(tarjeta).join('')}</ul>
+    </div>`;
+  }).join('');
+}
+
+const ROMANO = ['I', 'II', 'III'];
+const estrellasDif = (n) => `<span class="stars" aria-label="Dificultad ${n} de 5">${'★'.repeat(n)}<span class="stars-off">${'★'.repeat(5 - n)}</span></span>`;
+
+function khfmGumi() {
+  const misiones = MISIONES_GUMI.map((w) => {
+    const ids = w.m.map((_, i) => ID.khfmMision(w.mundo, i + 1));
+    return grupoKhfm(`khfm-mis-${w.mundo}`, esc(w.nombre), ids, w.m.map((x, i) => item({
+      id: ids[i],
+      titulo: `Misión ${ROMANO[i]}`,
+      desc: x.t,
+      meta: `${estrellasDif(x.e)} <span class="chip${x.plano ? ' chip-fm' : ''}">Premio: ${esc(x.premio)}</span>`,
+    })).join(''));
+  }).join('');
+
+  const grupoPlanos = (clave, titulo, intro, lista) => {
+    const ids = lista.map((p) => p.idMarca);
+    medidores[clave] = ids;
+    return `
+    <div class="group">
+      <h3>${titulo} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">${intro}</p>
+      <ul class="armas planos">${lista.map((p) => tarjetaImg({ id: p.idMarca, img: `${IMG_GUMI}${p.id}.webp`, nombre: p.nombre, cuerpo: p.cuerpo })).join('')}</ul>
+    </div>`;
+  };
+  const como = (t, nota) => `<p class="arma-como"><b>Cómo:</b> ${esc(t)}</p>${nota ? `<p class="arma-nota">${esc(nota)}</p>` : ''}`;
+  const basicos = PLANOS_BASICOS.map((p) => ({ ...p, idMarca: idPlano(p.id), cuerpo: como(p.como, p.nota) }));
+  const enemigos = PLANOS_ENEMIGOS.map((p) => ({
+    ...p, idMarca: idPlano(p.id),
+    cuerpo: `<p class="arma-como"><b>Dónde sale:</b></p><ul class="rutas-gumi">${p.rutas.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>${p.kairi ? '<p class="arma-nota">En algunas de estas rutas solo aparece después de rescatar a Kairi.</p>' : ''}`,
+  }));
+  const deMision = MISIONES_GUMI.flatMap((w) => w.m.filter((x) => x.plano).map((x) => ({
+    id: x.plano, nombre: x.premio.replace('Plano ', ''), idMarca: idPlano(x.plano), cuerpo: como(`Misión III de ${w.nombre}. Se marca a la vez que la misión.`),
+  }))).concat({ ...PLANO_BAHAMUT, idMarca: idPlano(PLANO_BAHAMUT.id), cuerpo: como(PLANO_BAHAMUT.como) });
+
+  return `
+    <h3 class="bx-sub">Misiones gumi</h3>
+    <ul class="sx-pasos bullets">${MISIONES_INFO.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+    <div class="info-card nave-base"><h3>Una nave base para las misiones</h3>
+      <p>La que propone la guía de Steam de 100 %, montada antes de Atlántica:</p>
+      <ol>${NAVE_BASE.map((t) => `<li>${esc(t)}</li>`).join('')}</ol></div>
+    ${misiones}
+    <h3 class="bx-sub" id="khfm-planos">Planos</h3>
+    <p class="group-intro">Hay 48. El logro «${esc(logroKhfm.ACH_045.nombre)}» pide 30: lo más rápido son las misiones III, que además te hacen abatir las naves enemigas de las que caen los demás (un 10 % de las veces).</p>
+    ${grupoPlanos('khfm-pl-basicos', 'De Geppetto y Pinocho', 'En la casa de Geppetto, en Ciudad de Paso, que aparece después de escapar de Monstruo.', basicos)}
+    ${grupoPlanos('khfm-pl-enemigos', 'De naves enemigas', 'Cada nave enemiga suelta su propio plano con un 10 % de probabilidad al abatirla.', enemigos)}
+    ${grupoPlanos('khfm-pl-misiones', 'De misiones', 'Uno por cada misión III, y Bahamut al completar todas.', deMision)}`;
+}
+
+function khfmSintesis() {
+  // Total de cada material para fabricar una vez cada objeto.
+  const total = {};
+  for (const l of LISTAS_SINTESIS) for (const x of l.items) for (const [m, n] of x.receta) total[m] = (total[m] ?? 0) + n;
+  const receta = (r) => `<ul class="receta">${r.map(([m, n]) => `
+    <li><a class="mat-chip${matPorId[m].fm ? ' is-fm' : ''}" href="#mat-${m}" data-goto="mat-${m}"><b>${n}×</b> ${esc(matPorId[m].nombre)}</a></li>`).join('')}</ul>`;
+  const listas = LISTAS_SINTESIS.map((l) => {
+    const ids = l.items.map(idSintesis);
+    const filas = l.items.map((x) => {
+      const arma = x.arma && armaPorId[x.arma];
+      return item({
+        id: idSintesis(x),
+        titulo: x.nombre,
+        desc: arma ? statsArma(arma) : x.efecto,
+        icono: arma ? `${IMG_ARMAS}${x.arma}.webp` : '',
+        meta: `<span class="chip">${esc(x.tipo)}</span>${x.fm || arma?.fm ? ` ${chipFM()}` : ''}`,
+        extra: `<div class="item-foot">${receta(x.receta)}</div>${x.nota ? `<p class="nota-fuente">${esc(x.nota)}</p>` : ''}`,
+      });
+    }).join('');
+    return grupoKhfm(`khfm-sx-${l.n}`, `Lista ${l.n}`, ids, filas, `<p class="group-intro">${esc(l.abre)}</p>`);
+  }).join('');
+  const mats = MATERIALES.map((m) => `
+    <li class="mat${m.fm ? ' is-fm' : ''}" id="mat-${m.id}">
+      <div class="mat-head"><b>${esc(m.nombre)}</b>${m.fm ? chipFM() : ''}<span class="mat-n" title="Para fabricar una vez cada objeto">${total[m.id] ?? 0}</span></div>
+      <p><span>Lo suelta:</span> ${esc(m.de)}</p>
+      <p><span>Dónde:</span> ${esc(m.donde)}</p>
+      ${m.nota ? `<p class="mat-nota">${esc(m.nota)}</p>` : ''}
+    </li>`).join('');
+  return `
+    <ol class="sx-pasos bullets">${PASOS_SINTESIS.map((p) => `<li>${esc(p)}</li>`).join('')}</ol>
+    ${listas}
+    <h3 class="bx-sub" id="khfm-materiales">Materiales</h3>
+    <p class="group-intro">El número es cuántos hacen falta para fabricar una vez cada objeto (Mitrilo y Materia Oscura incluidos como ingredientes). Pulsa un material en una receta para saltar aquí.</p>
+    <ul class="mats">${mats}</ul>`;
+}
+
 function khfmInformes() {
   const idsMundos = MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro));
   const mundos = MUNDOS_KHFM.map((m) => item({
@@ -1332,8 +1539,8 @@ function khfmInformes() {
   })).join('');
 
   return `
-    ${subnav([['mundos', 'Mundos'], ['diario', 'Diario de Pepito'], ['ansem', 'Informes Ansem'], ['dalmatas', 'Dálmatas'], ['trio', 'Marcas Trío'], ['records', 'Récords']])}
-    <p class="mode-note">El 100 % cuenta las cerraduras y lo que pide el diario de Pepito. Las armas, la síntesis y las naves gumi llegan en las próximas entregas.</p>
+    ${subnav([['mundos', 'Mundos'], ['diario', 'Diario de Pepito'], ['ansem', 'Informes Ansem'], ['dalmatas', 'Dálmatas'], ['trio', 'Marcas Trío'], ['records', 'Récords'], ['armas', 'Armas'], ['sintesis', 'Síntesis'], ['gumi', 'Naves gumi']])}
+    <p class="mode-note">El 100 % cuenta las cerraduras, lo que pide el diario de Pepito, las armas, la síntesis y las naves gumi.</p>
     ${bloque('mundos', 'Mundos y cerraduras', `<ul class="list">${mundos}</ul>
       <div class="group"><h3>Páginas arrancadas del libro de Pooh</h3>
         <p class="group-intro">Abren las zonas del Bosque de los Cien Acres; con todas puedes sellar su cerradura. Datos del KH original.</p>
@@ -1365,6 +1572,18 @@ function khfmInformes() {
       ${fuentes(['guiaSteamKhfm', 'wikiEsMinijuegos', 'wikiEsTobogan', 'diMinijuegos'])}`, {
       meter: medidor('khfm-records', idsRecords(), 'Minijuegos'),
       lead: 'Para el logro «Fan de los minijuegos» basta con jugar estos 9 minijuegos; no pide puntuación. Las puntuaciones de los del Bosque son para el premio de Búho.',
+    })}
+    ${bloque('armas', 'Armas', `${khfmArmas()}${fuentes(FUENTES_ARMAS_LISTA)}`, {
+      meter: medidor('khfm-armas', idsArmas(), 'Armas'),
+      lead: 'Las 48 armas de Sora, Donald y Goofy, con su bonificación en Final Mix y el texto del juego. Hay un logro por cada grupo completo.',
+    })}
+    ${bloque('sintesis', 'Síntesis', `${khfmSintesis()}${fuentes(FUENTES_SINTESIS_KHFM)}`, {
+      meter: medidor('khfm-sintesis', idsSintesis(), 'Objetos'),
+      lead: 'Los 33 objetos de la Orfebrería de Ciudad de Paso, en sus 6 listas. Cada lista se abre al fabricar cierto número de objetos distintos.',
+    })}
+    ${bloque('gumi', 'Naves gumi', `${khfmGumi()}${fuentes(['khwikiMisiones', 'diMisiones', 'khwikiPlanos', 'diPlanos', 'khwikiNaves', 'guiaSteamKhfm100', 'guiaSteamKhfm', 'wikiEsTrio'])}`, {
+      meter: medidor('khfm-gumi', [...idsMisiones(), ...idsPlanos()], 'Misiones y planos'),
+      lead: 'Las 30 misiones y los 48 planos, con la nave enemiga y la ruta de cada uno. Las piezas sin nombre oficial en castellano van en inglés entre «».',
     })}`;
 }
 
@@ -1421,7 +1640,11 @@ document.addEventListener('change', (e) => {
   const t = e.target;
   if (t.matches('.check-input')) {
     store.marcar(t.dataset.id, t.checked);
-    t.closest('.item, .marca').classList.toggle('is-done', t.checked);
+    // Una misma marca puede salir dos veces en la página (p. ej., un arma que también es receta).
+    document.querySelectorAll(`.check-input[data-id="${CSS.escape(t.dataset.id)}"]`).forEach((x) => {
+      x.checked = t.checked;
+      x.closest('.item, .marca').classList.toggle('is-done', t.checked);
+    });
   } else if (t.matches('[data-accion="importar"]') && t.files[0]) {
     t.files[0].text().then((txt) => {
       Promise.resolve().then(() => store.importar(txt))
