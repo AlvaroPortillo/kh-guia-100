@@ -763,7 +763,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tb-pj h4 { color: var(--accent); font-size: 1rem; margin: 0 0 8px; }
 .tb-pj ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .tb-pj li { display: grid; gap: 2px; }
-.tb-pj li span { font-size: .875rem; color: var(--text-2); }
+.tb-pj li > span { font-size: .875rem; color: var(--text-2); }
 .tb-pj a { color: var(--text); text-underline-offset: 2px; }
 .tbs { display: grid; gap: 16px; }
 .tb { display: grid; grid-template-columns: minmax(0, 1.25fr) 1fr; gap: 18px; padding: 16px; border-radius: var(--r-l); border: 1px solid var(--line); background: var(--surface); scroll-margin-top: 150px; }
@@ -790,6 +790,34 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .marca.is-done { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
 .tb-pj li > .marca { justify-self: start; padding-right: 14px; }
 .tb-pj .marca b { color: var(--text); }
+
+/* Visor de casillas */
+button.tb-mapa { padding: 0; border: 0; cursor: zoom-in; }
+button.tb-num { border: 0; cursor: pointer; font-family: inherit; transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease); }
+button.tb-num:hover { transform: scale(1.12); box-shadow: 0 0 0 3px color-mix(in srgb, #E0343C 35%, transparent); }
+button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas-nums button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.tb-pista { font-size: .8125rem; color: var(--text-2); }
+.tb-ver { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: 600 .8125rem/1.2 var(--f-ui); cursor: pointer; transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
+.tb-ver:hover { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); }
+.tb-ver svg { width: 15px; height: 15px; fill: none; stroke: var(--gold); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.tb-donde { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tb-extra { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 8px 14px 50px; }
+.cas-dialog { grid-template-rows: auto 1fr; }
+.cas-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.cas-head b { font: 700 1.05rem/1.2 var(--f-display); }
+.cas-nums { display: flex; flex-wrap: wrap; gap: 4px; }
+.cas-nums button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: 800 .8125rem/1 var(--f-ui); cursor: pointer; transition: background var(--t) var(--ease), border-color var(--t) var(--ease); }
+.cas-nums button:hover { border-color: #E0343C; }
+.cas-nums button[aria-pressed="true"] { background: #E0343C; border-color: #E0343C; color: #fff; }
+.cas-cuerpo { display: grid; gap: 12px; padding: 14px; overflow-y: auto; min-height: 0; }
+.cas-premio { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font-size: .9375rem; }
+.cas-premio-vacio { display: block; color: var(--text-2); }
+.cas-scroll { overflow-x: auto; border-radius: var(--r-s); }
+.cas-mapa { position: relative; overflow: hidden; border-radius: var(--r-s); background: #fff; min-width: 680px; }
+.cas-mapa img { display: block; width: 100%; height: 100%; }
+.cas-foco { position: absolute; border-radius: 10px; border: 3px solid var(--gold); box-shadow: 0 0 0 9999px rgba(3, 6, 18, .55), 0 0 18px 4px var(--gold); animation: cas-pulso 1.6s var(--ease) infinite; }
+@keyframes cas-pulso { 50% { box-shadow: 0 0 0 9999px rgba(3, 6, 18, .55), 0 0 4px 1px var(--gold); } }
+@media (prefers-reduced-motion: reduce) { .cas-foco { animation: none; } }
 
 /* ---------- Build: avanzar por la historia ---------- */
 .fight img[src$=".png"] { object-position: top center; }

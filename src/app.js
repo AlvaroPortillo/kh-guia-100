@@ -12,6 +12,7 @@ import { NEXOS } from './data/bbs-nexos.js';
 import { PEGATINAS_MUNDOS } from './data/bbs-pegatinas.js';
 import { TABLEROS } from './data/bbs-tableros.js';
 import { TABLEROS_INFO } from './data/bbs-tableros-info.js';
+import { POS_CASILLAS } from './data/bbs-tableros-pos.js';
 import { AVANCE } from './data/bbs-avance.js';
 import { INFORMES_XEHANORT, MINIJUEGOS, RETOS, HELADOS, PEGATINAS } from './data/bbs-informes.js';
 import { iniciarEstela } from './cursor.js';
@@ -301,19 +302,24 @@ function exclusivosDeTablero(pj) {
   return res;
 }
 
+const nombreCmdTablero = (x) => `${esc(x.n)}${x.pct ? ` <small>${esc(x.pct)} %</small>` : ''}${x.solo ? ` <small>(solo ${x.solo.map((p) => PERSONAJES[p].nombre).join(' y ')})</small>` : ''}`;
+const listaTablero = (xs) => xs.map(nombreCmdTablero).join(' · ');
+const premiosCasilla = (c) => `${listaTablero(c.normal)}${c.limitada.length ? `<br><span class="tb-lim">Mientras no lo tengas: ${listaTablero(c.limitada)}</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${listaTablero(c.coso)}</span>` : ''}`;
+const ICONO_MAPA = '<path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11Z"/><circle cx="12" cy="10" r="2.2"/>';
+// Botón que abre el mapa del tablero en una ventana, con la casilla `num` resaltada (o ninguna).
+const verCasilla = (t, num, texto) => `<button type="button" class="tb-ver" data-casilla="${t.id}${num ? `:${num}` : ''}">${svg(ICONO_MAPA)}<span>${texto}</span></button>`;
+
 function tablerosBloque() {
-  const nombreCmd = (x) => `${esc(x.n)}${x.pct ? ` <small>${esc(x.pct)} %</small>` : ''}${x.solo ? ` <small>(solo ${x.solo.map((p) => PERSONAJES[p].nombre).join(' y ')})</small>` : ''}`;
-  const lista = (xs) => xs.map(nombreCmd).join(' · ');
   const exclusivos = PJS.map((p) => `
     <div class="tb-pj pj-${p.id}">
       <h4>${esc(p.nombre)}</h4>
       <ul>${exclusivosDeTablero(p.id).map((e) => `
-        <li>${marca(ID.tableroCmd(p.id, e.n), `<b>${esc(e.n)}</b>`)}<span>${e.donde.map((d) => `<a href="#tablero-${d.t.id}" data-goto="tablero-${d.t.id}">${esc(d.t.nombre)}, casilla ${d.num}</a>${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}`).join(' · ')}</span></li>`).join('')}</ul>
+        <li>${marca(ID.tableroCmd(p.id, e.n), `<b>${esc(e.n)}</b>`)}<span class="tb-donde">${e.donde.map((d) => `<span>${verCasilla(d.t, d.num, `${esc(d.t.nombre)}, casilla ${d.num}`)}${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}</span>`).join('')}</span></li>`).join('')}</ul>
     </div>`).join('');
   const tableros = TABLEROS.map((t) => `
     <article class="tb" id="tablero-${t.id}">
-      <a class="tb-mapa" href="${IMG_BUILD}tablero-${t.id}.webp" target="_blank" rel="noopener" aria-label="Ver el mapa del ${esc(t.nombre)} a tamaño completo">
-        <img src="${IMG_BUILD}tablero-${t.id}.webp" alt="Mapa del ${esc(t.nombre)} con las casillas bonus numeradas" loading="lazy"></a>
+      <button type="button" class="tb-mapa" data-casilla="${t.id}" aria-label="Ampliar el mapa del ${esc(t.nombre)}">
+        <img src="${IMG_BUILD}tablero-${t.id}.webp" alt="Mapa del ${esc(t.nombre)} con las casillas bonus numeradas" loading="lazy"></button>
       <div class="tb-cuerpo">
         <h3>${esc(t.nombre)}</h3>
         <p><b>Se desbloquea:</b> ${esc(TABLEROS_INFO[t.id].desbloqueo)}</p>
@@ -321,7 +327,8 @@ function tablerosBloque() {
         <div class="tb-marcas"><span class="tb-marcas-t">Ganado con</span>${PJS.map((p) => marca(ID.tablero(p.id, t.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
         <div class="tb-marcas"><span class="tb-marcas-t">En el Coso con</span>${PJS.map((p) => marca(ID.tableroCoso(p.id, t.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
         <ol class="tb-casillas">${t.casillas.map((c) => `
-          <li><span class="tb-num">${c.num}</span><span>${lista(c.normal)}${c.limitada.length ? `<br><span class="tb-lim">Mientras no lo tengas: ${lista(c.limitada)}</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${lista(c.coso)}</span>` : ''}</span></li>`).join('')}</ol>
+          <li><button type="button" class="tb-num" data-casilla="${t.id}:${c.num}" aria-label="Ver la casilla ${c.num} en el mapa">${c.num}</button><span>${premiosCasilla(c)}</span></li>`).join('')}</ol>
+        <p class="tb-pista">Toca un número para ver dónde está la casilla en el mapa.</p>
       </div>
     </article>`).join('');
   const todos = (f) => PJS.flatMap((p) => TABLEROS.map((t) => f(p.id, t.id)));
@@ -404,23 +411,65 @@ function estrategia(est) {
 }
 
 let $dialogo;
-function abrirFicha(p, pj) {
-  const pz = PIEZAS[p];
+function dialogo(etiqueta) {
   if (!$dialogo) {
     $dialogo = document.createElement('dialog');
     $dialogo.className = 'bx-dialog';
-    $dialogo.setAttribute('aria-label', 'Ficha');
     // Clic en el fondo oscuro: cerrar.
     $dialogo.addEventListener('click', (e) => { if (e.target === $dialogo) $dialogo.close(); });
     document.body.append($dialogo);
   }
+  $dialogo.setAttribute('aria-label', etiqueta);
+  return $dialogo;
+}
+const BOTON_CERRAR = `<button type="button" class="tool tool-icon" data-cerrar aria-label="Cerrar">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'}</button>`;
+
+// Visor de casillas: el mapa del tablero con la casilla elegida resaltada y lo que da.
+function abrirCasilla(tId, num) {
+  const t = TABLEROS.find((x) => x.id === tId);
+  const pos = POS_CASILLAS[tId];
+  const cas = t.casillas.find((c) => c.num === num);
+  const d = dialogo(`Mapa del ${t.nombre}`);
+  let foco = '';
+  if (cas) {
+    const [x, y] = pos.c[num];
+    const lado = pos.d * 3.1;
+    const cx = x + pos.d * 0.95, cy = y + pos.d * 0.95;
+    foco = `<span class="cas-foco" style="left:${((cx - lado / 2) / pos.w) * 100}%;top:${((cy - lado / 2) / pos.h) * 100}%;width:${(lado / pos.w) * 100}%;height:${(lado / pos.h) * 100}%"></span>`;
+  }
+  d.innerHTML = `
+    <div class="bx-dialog-in cas-dialog">
+      <div class="bx-dialog-bar">
+        <div class="cas-head"><b>${esc(t.nombre)}</b>
+          <div class="cas-nums" role="group" aria-label="Casilla">${t.casillas.map((c) => `
+            <button type="button" data-casilla="${t.id}:${c.num}" aria-pressed="${c.num === num}">${c.num}</button>`).join('')}</div>
+        </div>
+        ${BOTON_CERRAR}
+      </div>
+      <div class="cas-cuerpo">
+        ${cas ? `<p class="cas-premio"><span class="tb-num">${cas.num}</span><span>${premiosCasilla(cas)}</span></p>` : '<p class="cas-premio cas-premio-vacio">Elige una casilla para ver dónde está y qué da.</p>'}
+        <div class="cas-scroll"><div class="cas-mapa" style="aspect-ratio:${pos.w}/${pos.h}">
+          <img src="${IMG_BUILD}tablero-${t.id}.webp" alt="Mapa del ${esc(t.nombre)}${cas ? `, con la casilla ${cas.num} resaltada` : ''}">
+          ${foco}
+        </div></div>
+        ${fuentes(['khwikiTableros'])}
+      </div>
+    </div>`;
+  if (!d.open) d.showModal();
+  (d.querySelector('.cas-nums [aria-pressed="true"]') ?? d.querySelector('[data-cerrar]')).focus();
+  d.querySelector('.cas-foco')?.scrollIntoView({ block: 'center', inline: 'center' });
+}
+
+function abrirFicha(p, pj) {
+  const pz = PIEZAS[p];
+  dialogo('Ficha');
   const pjs = PJS.filter((o) => !pz.solo || pz.solo.includes(o.id));
   $dialogo.innerHTML = `
     <div class="bx-dialog-in pj-${pj}">
       <div class="bx-dialog-bar">
         <div class="pj-pick" role="group" aria-label="Ver para">${pjs.map((o) => `
           <button type="button" data-ficha="${esc(p)}" data-ficha-pj="${o.id}" aria-pressed="${o.id === pj}">${esc(o.nombre)}</button>`).join('')}</div>
-        <button type="button" class="tool tool-icon" data-cerrar aria-label="Cerrar">${svg('<path d="M6 6l12 12M18 6 6 18"/>')}</button>
+        ${BOTON_CERRAR}
       </div>
       <div class="bx-ficha">${fichaPieza(p, pj)}</div>
     </div>`;
@@ -989,9 +1038,10 @@ function vistaPersonaje(pj) {
       </div>`;
   const tablerosPj = `
       ${grupoTab('Victorias en cada tablero', `pj-${pj}-tab`, idsTab, `Gana una partida en cada tablero jugando con ${p.nombre}.`,
-        TABLEROS.map((t) => item({ id: ID.tablero(pj, t.id), titulo: t.nombre, desc: `Se desbloquea: ${TABLEROS_INFO[t.id].desbloqueo}` })).join(''))}
+        TABLEROS.map((t) => item({ id: ID.tablero(pj, t.id), titulo: t.nombre, desc: `Se desbloquea: ${TABLEROS_INFO[t.id].desbloqueo}`, extra: `<div class="tb-extra">${verCasilla(t, null, 'Ver el tablero')}</div>` })).join(''))}
       ${grupoTab('Comandos que solo salen de un tablero', `pj-${pj}-tabx`, idsExcl, 'No se sintetizan ni salen de cofres o enemigos: hay que caer en esa casilla bonus.',
-        excl.map((e) => item({ id: ID.tableroCmd(pj, e.n), titulo: e.n, desc: e.donde.map((d) => `${d.t.nombre}, casilla ${d.num}${d.tipo === 'limitada' ? ' (mientras no lo tengas)' : ''}`).join(' · ') })).join(''))}
+        excl.map((e) => item({ id: ID.tableroCmd(pj, e.n), titulo: e.n, desc: e.donde.some((d) => d.tipo === 'limitada') ? 'Sale mientras no lo tengas.' : '',
+          extra: `<div class="tb-extra">${e.donde.map((d) => verCasilla(d.t, d.num, `${esc(d.t.nombre)}, casilla ${d.num}`)).join('')}</div>` })).join(''))}
       ${grupoTab('Victorias en el Coso Virtual', `pj-${pj}-tabc`, idsTabCoso, 'Para llevar la cuenta. No suman al 100 %: ninguna fuente dice que hagan falta con cada personaje.',
         TABLEROS.map((t) => item({ id: ID.tableroCoso(pj, t.id), titulo: t.nombre })).join(''))}
       <p class="hint">Los mapas y lo que da cada casilla están en <a href="#/bbs" data-ir-seccion="tableros">Birth by Sleep › Tableros</a>.</p>
@@ -1109,6 +1159,12 @@ document.addEventListener('change', (e) => {
 });
 
 document.addEventListener('click', (e) => {
+  const casilla = e.target.closest('[data-casilla]');
+  if (casilla) {
+    const [t, num] = casilla.dataset.casilla.split(':');
+    abrirCasilla(t, num ? Number(num) : null);
+    return;
+  }
   const goto = e.target.closest('[data-goto]');
   if (goto) {
     e.preventDefault();
