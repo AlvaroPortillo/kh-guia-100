@@ -4,3 +4,7 @@
 node_modules/
 .DS_Store
 Thumbs.db
+datos/
+
+# Ajustes locales de Claude Code
+.claude/settings.local.json

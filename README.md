@@ -7,7 +7,8 @@ con dos progresos separados:
 - **100 % del juego (Informes)**: todo lo que registra el juego (golpes finales, estilos de
   comandos, Coso Virtual…).
 
-Cada conseguible se puede marcar. El progreso se guarda en el navegador (`localStorage`) y se
+Cada conseguible se puede marcar. El progreso se guarda en una base de datos SQLite local
+(`datos/progreso.db`, fuera de git) y, como copia, en el navegador (`localStorage`). También se
 puede exportar/importar como archivo JSON desde «Mi progreso».
 
 ## Estado
@@ -21,13 +22,14 @@ puede exportar/importar como archivo JSON desde «Mi progreso».
 
 ## Arrancar en local
 
-Es una web estática sin dependencias ni compilación. Sirve la carpeta con cualquier servidor:
+Sin dependencias ni compilación; solo Python 3:
 
 ```sh
-python -m http.server 5173
+python server.py
 ```
 
-y abre http://localhost:5173.
+y abre http://127.0.0.1:5173. `server.py` sirve la web y guarda el progreso en `datos/progreso.db`.
+Con cualquier otro servidor estático la web también funciona, pero el progreso queda solo en el navegador.
 
 ## Estructura
 

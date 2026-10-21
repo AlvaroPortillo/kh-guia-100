@@ -1,6 +1,9 @@
 // Datos de Kingdom Hearts Birth by Sleep Final Mix (versión HD 1.5+2.5 ReMIX, Steam).
 // Regla: ningún dato sin fuente. Cada bloque indica de dónde sale.
 import { LOGROS_BBS } from './bbs-logros.js';
+import { FUENTES_BUILD } from './bbs-build.js';
+import { FUENTES_COSO } from './bbs-coso.js';
+import { FUENTES_JEFES } from './bbs-jefes.js';
 
 export const FUENTES = {
   steam: { nombre: 'Steam — logros oficiales (español)', url: 'https://steamcommunity.com/stats/2552430/achievements/?l=spanish' },
@@ -28,6 +31,9 @@ export const FUENTES = {
   wikiEsHilatiempo: { nombre: 'Wiki ES — Hilatiempo', url: 'https://kingdomhearts.fandom.com/es/wiki/Hilatiempo' },
   wikiEsCarga: { nombre: 'Wiki ES — Carga Eléctrica', url: 'https://kingdomhearts.fandom.com/es/wiki/Carga_El%C3%A9ctrica' },
   kh13: { nombre: 'KH13 — hilo «Post your BBS builds»', url: 'https://www.kh13.com/forums/topic/22838-post-your-bbs-builds-here/' },
+  ...FUENTES_BUILD,
+  ...FUENTES_COSO,
+  ...FUENTES_JEFES,
 };
 
 export const PERSONAJES = {
@@ -251,7 +257,8 @@ export const COSO = [
     nivel: 28, premio: { terra: 'VT máx. +15', ventus: 'VT máx. +15', aqua: 'VT máx. +15' }, logro: 'ACH_162',
     nota: 'La Wiki ES indica VT máx. +5 como recompensa.' },
   { id: 'oscuridad-manifiesta', nombre: 'Oscuridad Manifiesta', fm: true, estrellas: 5, rondas: 1, medallas: 1000, rival: 'Noheart',
-    nivel: 30, premio: { terra: 'Corona Eterna', ventus: 'Corona Eterna', aqua: 'Corona Eterna' }, logro: 'ACH_161' },
+    nivel: 30, premio: { terra: 'Corona Eterna', ventus: 'Corona Eterna', aqua: 'Corona Eterna' }, logro: 'ACH_161',
+    nota: 'La Wiki ES indica 999 medallas.' },
 ];
 
 // Consejos por logro (guía de Steam en castellano, salvo indicación).
@@ -280,53 +287,6 @@ export const CONSEJOS = {
   ACH_195: 'Completa todos los combates de 4 estrellas.',
   ACH_196: 'Necesitas nivel 20 del Coso. Para las hordas, comandos de área como Megafulgor o Imán++.',
   ACH_197: 'Necesitas nivel 25 del Coso. Contra los jefes, ataca con Tiro certero.',
-};
-
-// Build recomendada por personaje. Cada línea indica su fuente.
-export const BUILDS = {
-  comun: {
-    llave: [
-      { t: 'Corona Eterna', d: 'Fuerza +8, Magia +7. La más poderosa; recompensa de «Oscuridad Manifiesta» (Noheart).', f: 'wikiEsCorona' },
-      { t: 'Arma Artema (mientras tanto)', d: 'Fuerza +7, Magia +6. Recompensa de «Vil Venganza».', f: 'wikiEsArtema' },
-    ],
-    habilidades: { t: 'Atracción, Electro ↑, Ataque Veloz, Prisa Mágica, Último Estertor y Una vez más', d: 'Desactiva el resto contra los jefes más duros.', f: 'guiaSteam' },
-    defensa: { t: 'Bloqueo Cura (Terra, Ventus) / Coraza Cura (Aqua)', d: 'Contra los superjefes. Contra Noheart y la armadura de Eraqus, Bloqueo/Coraza Tino.', f: 'guiaSteam' },
-  },
-  terra: {
-    ataque: [
-      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido. Síntesis (por ejemplo, Piroembestida + Electro+) o tienda Moguri por 700 platines tras obtenerla una vez.', f: 'guiaSteam' },
-    ],
-    magia: [
-      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++. La primera, en acceso rápido.', f: 'guiaSteam' },
-      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
-    ],
-    tiro: { t: 'Rayo Célere', d: 'Recomendado contra los jefes del Coso.', f: 'guiaSteam' },
-    accion: { t: 'Quítate Impulso Sónico', d: 'Según la guía, molesta más que ayuda.', f: 'guiaSteam' },
-  },
-  ventus: {
-    ataque: [
-      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido.', f: 'guiaSteam' },
-      { t: 'Hilatiempo', d: 'Exclusivo de Ventus y Aqua; en el foro KH13 lo llevan por triplicado. Se obtiene por síntesis.', f: 'kh13' },
-    ],
-    magia: [
-      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++.', f: 'guiaSteam' },
-      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
-    ],
-    tiro: { t: 'Multivórtice', d: 'Su Tiro certero definitivo (recompensa de «Custodios del Coso»).', f: 'guiaSteam' },
-    accion: { t: 'Voltereta', d: 'Más invulnerabilidad al esquivar.', f: 'guiaSteam' },
-  },
-  aqua: {
-    ataque: [
-      { t: 'Carga Eléctrica', d: 'El ataque base contra el desconocido.', f: 'guiaSteam' },
-      { t: 'Hilatiempo', d: 'Exclusivo de Ventus y Aqua. Aqua lo encuentra en un cofre del País de Nunca Jamás.', f: 'wikiEsHilatiempo' },
-    ],
-    magia: [
-      { t: 'Cura (alternada con Carga Eléctrica)', d: 'Cura normal, no Cura++.', f: 'guiaSteam' },
-      { t: 'Megafulgor o Imán++', d: 'Para limpiar grupos de nescientes.', f: 'guiaSteam' },
-    ],
-    tiro: { t: 'Chorro Irisado', d: 'Recomendado contra los jefes del Coso. Alternativa: Fogonazo, su Tiro certero definitivo.', f: 'guiaSteam' },
-    accion: { t: 'Rueda', d: 'Más invulnerabilidad al esquivar.', f: 'guiaSteam' },
-  },
 };
 
 export const BBS = {

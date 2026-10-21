@@ -9,7 +9,7 @@ export const INFORMES_XEHANORT = [
   { id: 'iii', nombre: 'Informe Xehanort III', pj: 'aqua', donde: 'En un cofre de la Casa de Merlín, en Vergel Radiante.' },
   { id: 'iv', nombre: 'Informe Xehanort IV', pj: 'aqua', donde: 'Tras hablar con Yen Sid en la Torre de los Misterios.' },
   { id: 'v', nombre: 'Informe Xehanort V', pj: 'terra', donde: 'Tras completar «Carcelero Implacable» en el Coso Virtual.' },
-  { id: 'vi', nombre: 'Informe Xehanort VI', pj: 'aqua', donde: 'Tras derrotar a Maléfica en Dominio Encantado.' },
+  { id: 'vi', nombre: 'Informe Xehanort VI', pj: 'aqua', donde: 'Tras derrotar a Maléfica en el Reino Encantado.' },
   { id: 'vii', nombre: 'Informe Xehanort VII', pj: 'aqua', donde: 'Tras derrotar a Ventus-Vanitas en la Necrópolis de Llaves Espada.' },
   { id: 'viii', nombre: 'Informe Xehanort VIII', pj: 'terra', donde: 'Tras derrotar al Maestro Eraqus en la Tierra de Partida.' },
   { id: 'ix', nombre: 'Informe Xehanort IX', pj: 'ventus', donde: 'Tras abandonar las Islas del Destino.' },
