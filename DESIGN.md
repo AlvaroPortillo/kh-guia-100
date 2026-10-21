@@ -17,6 +17,7 @@ sobrio: listas tipo menú de KH, superficies translúcidas y mucho aire.
 | `--terra` | `#E7A35E` | `#9A5412` | Acento de Terra |
 | `--ventus` | `#7EE3A0` | `#1E7A43` | Acento de Ventus |
 | `--aqua` | `#63C9FF` | `#0B6EA8` | Acento de Aqua |
+| `--khfm` | `#6FA8FF` | `#1F55B8` | Acento de KH Final Mix: azul del corazón del logo (va con el dorado de la corona) |
 
 Cada página de personaje redefine `--accent` con su color. Máximo dos acentos visibles a la vez
 (`--accent` + `--gold`).

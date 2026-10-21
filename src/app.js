@@ -15,6 +15,15 @@ import { TABLEROS_INFO } from './data/bbs-tableros-info.js';
 import { POS_CASILLAS } from './data/bbs-tableros-pos.js';
 import { AVANCE } from './data/bbs-avance.js';
 import { INFORMES_XEHANORT, MINIJUEGOS, RETOS, HELADOS, PEGATINAS } from './data/bbs-informes.js';
+import {
+  KHFM, FUENTES_KHFM, GRUPOS_LOGROS_KHFM, RUTA_KHFM, CONSEJOS_KHFM, FUENTES_CONSEJOS_KHFM, MUNDOS_KHFM, FUENTES_MUNDOS_KHFM,
+} from './data/khfm.js';
+import {
+  FUENTES_DIARIO, SECCIONES_DIARIO, INFORMES_ANSEM, DALMATAS, PREMIOS_DALMATAS, TIPOS_TRIO, MARCAS_TRIO, RECORDS, PAGINAS_POOH,
+} from './data/khfm-diario.js';
+import {
+  FUENTES_SINTESIS, DESC_COMANDOS, CRISTALES_ORDEN, TABLA_TIPOS, NOTAS_TABLA, LETRA_TIPO, HABILIDADES_BBS, CRISTALES_EXTRA, LIBROS_RECETAS,
+} from './data/bbs-sintesis.js';
 import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
@@ -25,6 +34,8 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const pctFmt = (n) => (n == null ? '' : `${n.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de jugadores en Steam`);
 const logroPorId = Object.fromEntries(BBS.logros.map((l) => [l.id, l]));
+const logroKhfm = Object.fromEntries(KHFM.logros.map((l) => [l.id, l]));
+const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO };
 const PJS = Object.values(PERSONAJES);
 
 const ID = {
@@ -41,6 +52,11 @@ const ID = {
   tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
   tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
   tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
+  khfmLogro: (id) => `khfm.logro.${id}`,
+  khfmAnsem: (n) => `khfm.ansem.${n}`,
+  khfmDalmata: (n) => `khfm.dalmata.${n}`,
+  khfmTrio: (tipo, i) => `khfm.trio.${tipo}.${i}`,
+  khfmRecord: (id) => `khfm.record.${id}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -61,6 +77,20 @@ const juegoComun = () => [
   ...HELADOS.map((h) => ID.helado(h.id)),
 ];
 const juegoBBS = () => [...juegoComun(), ...PJS.flatMap((p) => juegoPj(p.id))];
+// KH Final Mix: las cerraduras son logros, así que el 100 % usa sus mismas marcas.
+const logrosKHFM = () => KHFM.logros.map((l) => ID.khfmLogro(l.id));
+const triosDe = (tipo) => MARCAS_TRIO.filter((m) => m[0] === tipo);
+const idsAnsem = () => INFORMES_ANSEM.map((x) => ID.khfmAnsem(x.n));
+const idsDalmatas = () => DALMATAS.map((d) => ID.khfmDalmata(d.n));
+const idsTrio = () => TIPOS_TRIO.flatMap((tp) => triosDe(tp.id).map((_, i) => ID.khfmTrio(tp.id, i + 1)));
+const idsRecords = () => RECORDS.map((r) => ID.khfmRecord(r.id));
+const juegoKHFM = () => [
+  ...MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro)), ...idsAnsem(), ...idsDalmatas(), ...idsTrio(), ...idsRecords(),
+];
+const PROGRESO = {
+  bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
+  khfm: { logros: logrosKHFM, juego: juegoKHFM },
+};
 const ETQ_LOGROS = 'Logros de Steam';
 const ETQ_JUEGO = '100 % del juego (Informes)';
 
@@ -134,7 +164,7 @@ function vidriera(colores, { porciones = 18, clase = '' } = {}) {
 function fuentes(claves) {
   const unicas = [...new Set(claves)];
   return `<p class="sources">Fuente${unicas.length > 1 ? 's' : ''}: ${unicas
-    .map((k) => `<a href="${esc(FUENTES[k].url)}" target="_blank" rel="noopener">${esc(FUENTES[k].nombre)}</a>`)
+    .map((k) => `<a href="${esc(TODAS_FUENTES[k].url)}" target="_blank" rel="noopener">${esc(TODAS_FUENTES[k].nombre)}</a>`)
     .join(' · ')}</p>`;
 }
 
@@ -170,15 +200,22 @@ function marca(id, texto, clase = '') {
     </label>`;
 }
 
-const itemLogro = (l) => item({
-  id: ID.logro(l.id),
-  titulo: l.nombre,
-  desc: l.desc,
-  meta: esc(pctFmt(l.pct)),
-  icono: `assets/img/bbs/logros/${l.id}.jpg`,
-  spoiler: l.oculto,
-  extra: CONSEJOS[l.id] ? `<details class="tip"><summary>Cómo conseguirlo</summary><p>${esc(CONSEJOS[l.id])}</p></details>` : '',
-});
+const LOGROS_DE = {
+  bbs: { id: ID.logro, carpeta: 'assets/img/bbs/logros', consejos: CONSEJOS },
+  khfm: { id: ID.khfmLogro, carpeta: 'assets/img/khfm/logros', consejos: CONSEJOS_KHFM },
+};
+const itemLogro = (l, juego = 'bbs') => {
+  const { id, carpeta, consejos } = LOGROS_DE[juego];
+  return item({
+    id: id(l.id),
+    titulo: l.nombre,
+    desc: l.desc,
+    meta: esc(pctFmt(l.pct)),
+    icono: `${carpeta}/${l.id}.jpg`,
+    spoiler: l.oculto,
+    extra: consejos[l.id] ? `<details class="tip"><summary>Cómo conseguirlo</summary><p>${esc(consejos[l.id])}</p></details>` : '',
+  });
+};
 
 // ---------- barra superior ----------
 function topbar(migas) {
@@ -242,8 +279,8 @@ function vistaJuegos() {
   topbar([{ t: 'Juegos' }]);
   const tile = (j) => {
     const meta = j.disponible
-      ? `<div class="meters-2">${medidor(`juego-${j.id}-logros`, BBS.logros.map((l) => ID.logro(l.id)), ETQ_LOGROS)}
-         ${medidor(`juego-${j.id}-100`, juegoBBS(), ETQ_JUEGO)}</div>`
+      ? `<div class="meters-2">${medidor(`juego-${j.id}-logros`, PROGRESO[j.id].logros(), ETQ_LOGROS)}
+         ${medidor(`juego-${j.id}-100`, PROGRESO[j.id].juego(), ETQ_JUEGO)}</div>`
       : '<p class="soon">En preparación</p>';
     const inner = `
       <img class="game-logo" src="${j.logo}" alt="" loading="lazy">
@@ -256,7 +293,7 @@ function vistaJuegos() {
   return `
   <section class="page games">
     <h1 class="page-title">Elige un juego</h1>
-    <p class="lead">Empezamos por Birth by Sleep. El resto irá apareciendo según avance la guía.</p>
+    <p class="lead">Birth by Sleep y Kingdom Hearts Final Mix ya están en marcha. El resto irá apareciendo según avance la guía.</p>
     <div class="game-grid">${JUEGOS.map(tile).join('')}</div>
   </section>`;
 }
@@ -390,14 +427,15 @@ function hubLogros() {
   const porPj = PJS.map((p) => `<div class="pj-${p.id}">${grupo(`Logros de ${p.nombre}`, BBS.logros.filter((l) => l.pj === p.id).map((l) => l.id))}</div>`).join('');
 
   return `
-    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje'], ['tableros', 'Tableros']])}
+    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis']])}
     ${bloque('ruta', 'Ruta de logros', `<ol class="steps">${ruta}</ol>`, { lead: 'Lo que conviene saber antes de empezar para no repetir partidas.' })}
     ${bloque('logros', 'Logros comunes', `${comunes}${fuentes(['steam', 'guiaSteam'])}`, {
       meter: medidor('bbs-comunes-logros', GRUPOS_LOGROS.flatMap((g) => g.ids).map(ID.logro), 'Logros comunes'),
       lead: 'Abre «Cómo conseguirlo» para ver el consejo de cada uno.',
     })}
     ${bloque('logros-pj', 'Logros de cada personaje', porPj)}
-    ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}`;
+    ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}
+    ${bloque('sintesis', 'Síntesis de comandos', sintesisBloque(), { lead: 'Cómo funciona, qué habilidad sale con cada tipo de receta y cristal, y de dónde sacar cada cristal.' })}`;
 }
 
 // --- Hub de BBS: modo Informes ---
@@ -550,7 +588,7 @@ function hubInformes() {
   })).join('');
 
   return `
-    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['tableros', 'Tableros'], ['retos', 'Retos'], ['helados', 'Helados']])}
+    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis'], ['retos', 'Retos'], ['helados', 'Helados']])}
     <p class="mode-note">Los golpes finales, estilos de comandos y pegatinas de cada personaje están en su página.</p>
     ${bloque('xehanort', 'Informes Xehanort', `<ul class="list">${xeh}</ul>${fuentes(['wikiEsXehanort', 'guiaSteam'])}`, {
       meter: medidor('inf-xeh', INFORMES_XEHANORT.map((x) => ID.xeh(x.id)), 'Documentos'),
@@ -572,6 +610,7 @@ function hubInformes() {
       meter: medidor('inf-mini', MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))), 'Minijuegos'),
     })}
     ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}
+    ${bloque('sintesis', 'Síntesis de comandos', sintesisBloque(), { lead: 'Cómo funciona, qué habilidad sale con cada tipo de receta y cristal, y de dónde sacar cada cristal.' })}
     ${bloque('retos', 'Retos de los nescientes', `<ul class="list">${retos}</ul>${fuentes(['guiaSteam'])}`, {
       meter: medidor('inf-retos', RETOS.map((r) => ID.reto(r.id)), 'Retos'),
       lead: 'Uno por mundo. Hay que sacar el rango más alto (3) en todos para el logro «Exterminador».',
@@ -868,6 +907,99 @@ const NOMBRE_VIA = { inicial: 'Desde el inicio', cofre: 'Cofre', tienda: 'Tienda
 const PIEZA_POR_NOMBRE = Object.fromEntries(Object.entries(PIEZAS).map(([k, p]) => [p.nombre, k]));
 const PROPIOS = Object.fromEntries(Object.entries(LISTAS_COMANDOS).map(([pj, l]) => [pj, new Set(Object.values(l).flat())]));
 
+// --- Síntesis: qué habilidad sale con cada cristal según el tipo de receta ---
+const colorCristal = (c) => CRISTALES[c].color;
+function habsPorCristal(tipo) {
+  return `<ul class="hab-cristal" aria-label="Habilidad que sale con cada cristal">${TABLA_TIPOS[tipo - 1].map((h, i) => `
+    <li style="--gem:${esc(colorCristal(CRISTALES_ORDEN[i]))}" title="Cristal ${esc(CRISTALES_ORDEN[i])}"><span class="gem"></span><span class="hc-c">${esc(CRISTALES_ORDEN[i].replace('de ', ''))}<span class="sr-only">:</span></span>${esc(h)}${NOTAS_TABLA[`${tipo}|${CRISTALES_ORDEN[i]}`] ? '*' : ''}</li>`).join('')}</ul>`;
+}
+
+const HAB_NOMBRES = [...new Set(TABLA_TIPOS.flat())];
+const habEnTabla = (h) => TABLA_TIPOS.flatMap((f, i) => f.map((x, j) => (x === h ? [i + 1, CRISTALES_ORDEN[j]] : null))).filter(Boolean);
+
+function sintesisBloque() {
+  const cab = CRISTALES_ORDEN.map((c) => `<th scope="col" style="--gem:${esc(colorCristal(c))}"><span class="gem"></span><span>${esc(c)}</span></th>`).join('');
+  const filas = TABLA_TIPOS.map((f, i) => `
+    <tr><th scope="row"><b>${i + 1}</b> <small>${LETRA_TIPO[i]}</small></th>${f.map((h, j) => {
+      const nota = NOTAS_TABLA[`${i + 1}|${CRISTALES_ORDEN[j]}`];
+      return `<td data-hab="${esc(h)}"${nota ? ` title="${esc(nota)}"` : ''}>${esc(h)}${nota ? '<sup>*</sup>' : ''}</td>`;
+    }).join('')}</tr>`).join('');
+  const porCat = {};
+  for (const h of HAB_NOMBRES) (porCat[HABILIDADES_BBS[h]?.cat ?? 'Otras'] ??= []).push(h);
+  const picker = Object.entries(porCat).map(([cat, hs]) => `
+    <div class="sx-grupo"><span class="sx-grupo-t">${esc(cat)}</span>${hs.map((h) => `
+      <button type="button" class="sx-hab" data-sx-hab="${esc(h)}" aria-pressed="false">${esc(h)}</button>`).join('')}</div>`).join('');
+  const cristales = CRISTALES_ORDEN.map((c, j) => {
+    const x = CRISTALES_EXTRA[c] ?? {};
+    const da = [...new Set(TABLA_TIPOS.map((f) => f[j]))];
+    return `
+    <li class="sx-cristal" style="--gem:${esc(colorCristal(c))}">
+      <span class="gem-chip"><span class="gem"></span>Cristal ${esc(c)}</span>
+      ${x.para ? `<p>${esc(x.para)}</p>` : ''}
+      <p><b>Da:</b> ${da.map(esc).join(' · ')}</p>
+      <p><b>Lo sueltan en el Coso Virtual:</b> ${esc(CRISTALES[c].enemigos)}.</p>
+      ${x.caida ? `<p><b>Probabilidad:</b> ${esc(x.caida)}</p>` : ''}
+      ${x.cofres ? `<p><b>Cofres:</b> ${esc(x.cofres)}</p>` : ''}
+      ${x.precio ? `<p><b>Se compra por:</b> ${esc(x.precio)}</p>` : ''}
+    </li>`;
+  }).join('');
+  return `
+    <ol class="bx-steps sx-pasos">
+      <li>Eliges dos comandos (casi siempre dominados, es decir, a su nivel máximo) y, si quieres, un cristal.</li>
+      <li>Cada pareja de comandos tiene un <b>tipo</b> de receta, del 1 al 16. El tipo y el cristal deciden la habilidad del comando nuevo; sin cristal puede salir una al azar.</li>
+      <li>La habilidad funciona mientras ese comando esté en tu baraja. Al dominar el comando, se queda aprendida para siempre.</li>
+      <li>No hace falta tener la receta para sintetizar: ${LIBROS_RECETAS.map(([n, q]) => `la <b>${esc(n)}</b> ${esc(q)}`).join(', ')} para que veas el resultado antes.</li>
+    </ol>
+    <h3 class="bx-sub">Busca una habilidad</h3>
+    <p class="hint">Toca una habilidad para ver qué hace, con qué tipos y cristal sale y qué recetas de cada personaje sirven. El tipo de cada receta también sale en la lista de comandos de cada personaje.</p>
+    <div class="sx-picker">${picker}</div>
+    <div class="sx-ficha" aria-live="polite" hidden></div>
+    <div class="sx-tabla-wrap" tabindex="0" role="region" aria-label="Tabla de habilidades por tipo de receta y cristal">
+      <table class="sx-tabla"><caption class="sr-only">Habilidad que sale según el tipo de receta (filas) y el cristal (columnas)</caption>
+        <thead><tr><th scope="col">Tipo</th>${cab}</tr></thead><tbody>${filas}</tbody></table>
+    </div>
+    <p class="hint">* ${esc(Object.values(NOTAS_TABLA).join(' '))}</p>
+    <h3 class="bx-sub">Los cristales</h3>
+    <ul class="sx-cristales">${cristales}</ul>
+    ${fuentes(['guiaSteamHab', 'wikiEsHabilidadesBBS', 'wikiEsTemporal', 'wikiEsReceta'])}`;
+}
+
+function fichaHabilidad(h) {
+  const d = HABILIDADES_BBS[h] ?? {};
+  const donde = habEnTabla(h);
+  const porCristal = {};
+  for (const [tipo, c] of donde) (porCristal[c] ??= []).push(tipo);
+  const tipos = new Set(donde.map(([tipo]) => String(tipo)));
+  const cristalDe = (tipo) => Object.entries(porCristal).filter(([, ts]) => ts.includes(Number(tipo))).map(([c]) => `Cristal ${c}`).join(' o ');
+  const lista = PJS.map((p) => {
+    const rs = [];
+    for (const n of new Set(Object.values(LISTAS_COMANDOS[p.id]).flat())) {
+      for (const r of COMANDOS[n]?.recetas ?? []) {
+        if (tipos.has(r.tipo) && (!r.excl || r.excl.toLowerCase().includes(p.id))) rs.push({ n, r });
+      }
+    }
+    return `<details class="sx-recetas pj-${p.id}"><summary><span class="pj-link">${esc(p.nombre)}</span> · ${rs.length} recetas</summary>
+      <ul>${rs.map(({ n, r }) => `<li><span>${esc(r.a)} + ${esc(r.b)} → <b>${esc(n)}</b></span><small>tipo ${esc(r.tipo)} · ${esc(cristalDe(r.tipo))}</small></li>`).join('')}</ul></details>`;
+  }).join('');
+  return `
+    <div class="sx-ficha-head"><h4>${esc(h)}</h4>${d.max ? `<span class="hab-max">Se equipa hasta ×${d.max}</span>` : ''}</div>
+    ${d.efecto ? `<p>${esc(d.efecto)}</p>` : '<p class="hint">La Wiki ES no explica qué hace en este juego.</p>'}
+    <p class="sx-donde">${Object.entries(porCristal).map(([c, ts]) => `<span class="gem-chip" style="--gem:${esc(colorCristal(c))}"><span class="gem"></span>Cristal ${esc(c)} · tipo${ts.length > 1 ? 's' : ''} ${ts.join(', ')}</span>`).join(' ')}</p>
+    <div class="sx-recetas-lista">${lista}</div>`;
+}
+
+function elegirHabilidad(boton) {
+  const raiz = boton.closest('.block');
+  const h = boton.dataset.sxHab;
+  const quitar = boton.getAttribute('aria-pressed') === 'true';
+  raiz.querySelectorAll('[data-sx-hab]').forEach((b) => b.setAttribute('aria-pressed', String(!quitar && b === boton)));
+  raiz.querySelectorAll('.sx-tabla td').forEach((td) => td.classList.toggle('is-on', !quitar && td.dataset.hab === h));
+  raiz.querySelector('.sx-tabla').classList.toggle('is-filtrando', !quitar);
+  const ficha = raiz.querySelector('.sx-ficha');
+  ficha.hidden = quitar;
+  ficha.innerHTML = quitar ? '' : fichaHabilidad(h);
+}
+
 function filaComando(n, cat, pj) {
   const c = COMANDOS[n];
   const vias = c.vias.filter((x) => !x.pj || x.pj.includes(pj));
@@ -877,14 +1009,16 @@ function filaComando(n, cat, pj) {
   const ing = (x) => (PROPIOS[pj].has(x)
     ? `<button type="button" class="eq-box cmd-ing" data-ir-cmd="${esc(x)}">${esc(x)}</button>`
     : `<span class="eq-box">${esc(x)}</span>`);
-  const texto = slug([n, ...recetas.flatMap((r) => [r.a, r.b])].join(' ')).replace(/-/g, ' ');
+  const habsDe = (r) => (r.tipo ? TABLA_TIPOS[Number(r.tipo) - 1] ?? [] : []);
+  const texto = slug([n, ...recetas.flatMap((r) => [r.a, r.b, ...habsDe(r)])].join(' ')).replace(/-/g, ' ');
   const pieza = PIEZA_POR_NOMBRE[n];
+  const [frase, paginaEs] = DESC_COMANDOS[n] ?? [];
   return `
     <li class="cmd" data-cat="${cat}" data-vias="${tipos.join(' ')}" data-texto="${esc(texto)}" data-nombre="${esc(n)}">
       <details>
         <summary>
           <img class="cmd-ico" src="${IMG_BUILD}ico-${cat}.webp" alt="" width="24" height="24">
-          <span class="cmd-nombre">${esc(n)}</span>
+          <span class="cmd-nombre">${esc(n)}${frase ? `<span class="cmd-frase">${esc(frase)}</span>` : ''}</span>
           <span class="cmd-datos">${dato('NV máx.', c.nv)}${dato('Ranuras', c.ranuras && c.ranuras !== '1' ? c.ranuras : '')}${dato('Objetivos', c.objetivos)}${c.elem && !['Neutro', 'Físico'].includes(c.elem) ? dato('', c.elem) : ''}</span>
           <span class="cmd-vias">${tipos.map((t) => `<span class="cmd-via" title="${esc(FILTROS_CMD.find(([k]) => k === t)[1])}">${svg(ICONO_VIA[ICONO_FILTRO[t]])}<span class="sr-only">${esc(FILTROS_CMD.find(([k]) => k === t)[1])}</span></span>`).join('')}</span>
         </summary>
@@ -899,10 +1033,12 @@ function filaComando(n, cat, pj) {
               <h4 class="bx-h">Síntesis</h4>
               <ul class="cmd-recetas">${recetas.map((r) => `
                 <li><span class="eq">${ing(r.a)}<span class="eq-op">+</span>${ing(r.b)}</span>
-                  <span class="cmd-receta-meta">${[r.tipo ? `tipo ${esc(r.tipo)}` : '', r.pct ? `<b>${esc(r.pct)} %</b>` : '', r.excl ? `solo ${esc(r.excl.replace('/', ' y '))}` : ''].filter(Boolean).join(' · ')}</span></li>`).join('')}</ul>
+                  <span class="cmd-receta-meta">${[r.tipo ? `tipo ${esc(r.tipo)}` : '', r.pct ? `<b>${esc(r.pct)} %</b>` : '', r.excl ? `solo ${esc(r.excl.replace('/', ' y '))}` : ''].filter(Boolean).join(' · ')}</span>
+                  ${habsDe(r).length ? habsPorCristal(Number(r.tipo)) : ''}</li>`).join('')}</ul>
             </div>` : ''}
           </div>
           <p class="cmd-links">${pieza ? `<button type="button" class="ficha-chip" data-ficha="${pieza}" data-ficha-pj="${pj}">Ver su ficha de la build</button>` : ''}
+            ${paginaEs ? `<a href="https://kingdomhearts.fandom.com/es/wiki/${encodeURIComponent(paginaEs.replace(/ /g, '_'))}" target="_blank" rel="noopener">En la Wiki ES: ${esc(paginaEs)}</a>` : ''}
             ${c.en ? `<a href="https://www.khwiki.com/${encodeURIComponent(c.en.replace(/ /g, '_'))}" target="_blank" rel="noopener">En KHWiki: ${esc(c.en)}</a>` : ''}</p>
         </div>
       </details>
@@ -919,17 +1055,17 @@ function comandosPj(pj) {
           <img src="${IMG_BUILD}ico-${k}.webp" alt="" width="22" height="22"><span>${t}</span><b>${listas[k].length}</b></button>`).join('')}
       </div>
       <div class="cmd-tools">
-        <label class="cmd-buscar"><span class="sr-only">Buscar comando o ingrediente</span>
+        <label class="cmd-buscar"><span class="sr-only">Buscar comando, ingrediente o habilidad</span>
           ${svg('<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>')}
-          <input type="search" placeholder="Buscar comando o ingrediente…" data-cmd-buscar autocomplete="off"></label>
+          <input type="search" placeholder="Comando, ingrediente o habilidad…" data-cmd-buscar autocomplete="off"></label>
         <div class="cmd-filtros" role="group" aria-label="Cómo se consigue">${FILTROS_CMD.map(([k, t]) => `
           <button type="button" class="cmd-filtro" data-cmd-filtro="${k}" aria-pressed="false">${svg(ICONO_VIA[ICONO_FILTRO[k]])}${t}</button>`).join('')}
         </div>
       </div>
       <p class="cmd-resumen" aria-live="polite"></p>
       <ul class="cmd-list">${cats.flatMap(([k], i) => listas[k].map((n) => filaComando(n, k, pj).replace('<li class="cmd"', i ? '<li hidden class="cmd"' : '<li class="cmd"'))).join('')}</ul>
-      <p class="hint cmd-nota">Los ingredientes resaltados llevan a su propio comando. En los Tiros certeros, la guía de Steam da un 10 % a todas sus recetas; según la Wiki ES, ese 10 % es la probabilidad de que salga otro comando. Las zonas entre «» no tienen nombre oficial en castellano comprobado.</p>
-      ${fuentes(['guiaSteam', 'khwikiDeck', 'khwikiShotlock', 'wikiEsTableros', 'khwikiImagenes'])}
+      <p class="hint cmd-nota">Los ingredientes resaltados llevan a su propio comando. Bajo cada receta ves qué habilidad sale con cada cristal; busca una habilidad (p. ej. «Atracción») para ver qué recetas pueden darla. En los Tiros certeros, la guía de Steam da un 10 % a todas sus recetas; según la Wiki ES, ese 10 % es la probabilidad de que salga otro comando. Las zonas entre «» no tienen nombre oficial en castellano comprobado.</p>
+      ${fuentes(['guiaSteam', 'guiaSteamHab', 'wikiEsComandosBBS', 'khwikiDeck', 'khwikiShotlock', 'wikiEsTableros', 'khwikiImagenes'])}
     </div>`;
 }
 
@@ -1112,6 +1248,142 @@ function vistaPersonaje(pj) {
   </section>`;
 }
 
+// ---------- Kingdom Hearts Final Mix ----------
+function rutaPasos(ruta, logros) {
+  return ruta.map((r, i) => `
+    <li class="step">
+      <span class="step-n" aria-hidden="true">${i + 1}</span>
+      <div class="step-body">
+        <h3>${esc(r.titulo)}</h3>
+        <p>${esc(r.texto)}</p>
+        ${r.logros.length ? `<div class="item-foot">${r.logros.map((id) => `<span class="chip">${esc(logros[id].nombre)}</span>`).join('')}</div>` : ''}
+        ${fuentes(r.fuentes)}
+      </div>
+    </li>`).join('');
+}
+
+function khfmLogros() {
+  const grupo = (g) => {
+    const ids = g.ids.map(ID.khfmLogro);
+    medidores[`khfm-g-${g.id}`] = ids;
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="khfm-g-${g.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list">${g.ids.map((id) => itemLogro(logroKhfm[id], 'khfm')).join('')}</ul>
+    </div>`;
+  };
+  return `
+    ${subnav([['ruta', 'Ruta'], ['logros', 'Logros']])}
+    ${bloque('ruta', 'Antes de empezar', `<ol class="steps">${rutaPasos(RUTA_KHFM, logroKhfm)}</ol>`, { lead: 'Lo que conviene saber antes de la primera partida para no repetirla.' })}
+    ${bloque('logros', 'Los 55 logros', `${GRUPOS_LOGROS_KHFM.map(grupo).join('')}${fuentes(FUENTES_CONSEJOS_KHFM)}`, {
+      meter: medidor('khfm-logros-lista', logrosKHFM(), 'Logros'),
+      lead: 'Abre «Cómo conseguirlo» donde lo haya. Los logros ocultos esconden su descripción hasta que la abras.',
+    })}`;
+}
+
+function grupoKhfm(clave, titulo, ids, filas, intro = '') {
+  medidores[clave] = ids;
+  return `
+    <div class="group">
+      <h3>${titulo} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      ${intro}
+      <ul class="list">${filas}</ul>
+    </div>`;
+}
+
+function khfmInformes() {
+  const idsMundos = MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro));
+  const mundos = MUNDOS_KHFM.map((m) => item({
+    id: ID.khfmLogro(m.logro), titulo: m.nombre, desc: m.cerradura,
+    meta: `<span class="chip">Logro: ${esc(logroKhfm[m.logro].nombre)}</span>`,
+  })).join('');
+
+  const secciones = SECCIONES_DIARIO.map((s) => `
+    <div class="info-card"><h3>${esc(s.titulo)}</h3><p>${esc(s.texto)}</p>
+      <p class="info-logro"><span class="chip chip-logro">Logro: ${esc(logroKhfm[s.logro].nombre)}</span></p></div>`).join('');
+
+  const ansem = INFORMES_ANSEM.map((x) => item({
+    id: ID.khfmAnsem(x.n), titulo: `Informe Ansem ${x.n}`, desc: x.como,
+    meta: x.fm ? '<span class="chip">Nuevo en Final Mix</span>' : '',
+  })).join('');
+
+  const mundosDalm = [...new Set(DALMATAS.map((d) => d.mundo))];
+  const dalmatas = mundosDalm.map((mu) => {
+    const ds = DALMATAS.filter((d) => d.mundo === mu);
+    return grupoKhfm(`khfm-dalm-${slug(mu)}`, esc(mu), ds.map((d) => ID.khfmDalmata(d.n)), ds.map((d) => item({
+      id: ID.khfmDalmata(d.n), titulo: `Cachorros ${d.n}-${d.n + 2}`, desc: d.donde,
+      extra: d.nota ? `<p class="nota-fuente">${esc(d.nota)}</p>` : '',
+    })).join(''));
+  }).join('');
+
+  const trios = TIPOS_TRIO.map((tp) => {
+    const ms = triosDe(tp.id);
+    return `<div class="trio-tipo" style="--trio:${tp.color}">${grupoKhfm(`khfm-trio-${tp.id}`, `<span class="trio-marca" aria-hidden="true"></span>${esc(tp.nombre)}`,
+      ms.map((_, i) => ID.khfmTrio(tp.id, i + 1)), ms.map(([, mundo, zona, donde, efecto, nota], i) => item({
+        id: ID.khfmTrio(tp.id, i + 1), titulo: `${mundo} · ${zona}`, desc: donde,
+        meta: efecto ? `<span>${esc(efecto)}</span>` : '',
+        extra: nota ? `<p class="nota-fuente">${esc(nota)}</p>` : '',
+      })).join(''), `<p class="group-intro">Cuándo se aprende: ${esc(tp.aprende.charAt(0).toLowerCase() + tp.aprende.slice(1))}</p>`)}</div>`;
+  }).join('');
+
+  const records = RECORDS.map((r) => item({
+    id: ID.khfmRecord(r.id), titulo: r.nombre, desc: r.como ?? '',
+    meta: `<span class="chip">${esc(r.mundo)}</span>${r.meta ? ` <span>${esc(r.meta)}</span>` : ''}`,
+  })).join('');
+
+  return `
+    ${subnav([['mundos', 'Mundos'], ['diario', 'Diario de Pepito'], ['ansem', 'Informes Ansem'], ['dalmatas', 'Dálmatas'], ['trio', 'Marcas Trío'], ['records', 'Récords']])}
+    <p class="mode-note">El 100 % cuenta las cerraduras y lo que pide el diario de Pepito. Las armas, la síntesis y las naves gumi llegan en las próximas entregas.</p>
+    ${bloque('mundos', 'Mundos y cerraduras', `<ul class="list">${mundos}</ul>
+      <div class="group"><h3>Páginas arrancadas del libro de Pooh</h3>
+        <p class="group-intro">Abren las zonas del Bosque de los Cien Acres; con todas puedes sellar su cerradura. Datos del KH original.</p>
+        <ul class="bullets">${PAGINAS_POOH.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+      ${fuentes([...FUENTES_MUNDOS_KHFM, 'wikiEsBosque'])}`, {
+      meter: medidor('khfm-mundos', idsMundos, 'Cerraduras'),
+      lead: 'En el orden de sus logros. Marcar una cerradura aquí también marca su logro, y al revés.',
+    })}
+    ${bloque('diario', 'Diario de Pepito', `<div class="info-cards">${secciones}</div>${fuentes(['wikiEsDiario', 'guiaSteamKhfm', 'steamKhfm'])}`, {
+      lead: 'Completarlo entero da «Ayudante de Pepito» y, en Normal, el final secreto «[Deep Dive]». Cada sección tiene su propio logro.',
+    })}
+    ${bloque('ansem', 'Informes Ansem', `<ul class="list">${ansem}</ul>${fuentes(['wikiEsAnsem', 'khwikiAnsem'])}`, {
+      meter: medidor('khfm-ansem', idsAnsem(), 'Informes'),
+      lead: 'Los 10 primeros salen como en el KH original; Final Mix añade del 11 al 13.',
+    })}
+    ${bloque('dalmatas', '99 dálmatas', `
+      <h3 class="bx-sub">Premios de Pongo y Perdita</h3>
+      <ul class="premios-dalm">${PREMIOS_DALMATAS.map(([n, p]) => `<li><b>${esc(n)}</b><span>${esc(p)}</span></li>`).join('')}</ul>
+      <p class="hint">Hay que volver a su casa del Callejón de Ciudad de Paso para recoger cada premio. Con los 99, las cerraduras y la copa Hades en Normal se desbloquea «Another Side, Another Story...».</p>
+      ${dalmatas}${fuentes(['diDalmatas', 'fandomEnPuppies', 'wikiEsDalmatas', 'guiaSteamDalmatas', 'khwikiKhfm'])}`, {
+      meter: medidor('khfm-dalmatas', idsDalmatas(), 'Cofres'),
+      lead: 'Van de tres en tres en 33 cofres. Ubicaciones de Final Mix (varias cambian respecto al KH original). El diario de Pepito te dice cuántos te quedan en cada mundo pulsando Triángulo.',
+    })}
+    ${bloque('trio', 'Marcas Trío', `${trios}${fuentes(['wikiEsTrio', 'khwikiTrinity', 'diTrinity'])}`, {
+      meter: medidor('khfm-trio', idsTrio(), 'Marcas'),
+      lead: 'Solo funcionan con Sora, Donald y Goofy en el grupo. Cada color se aprende en un momento de la historia; vuelve a los mundos cuando lo tengas.',
+    })}
+    ${bloque('records', 'Récords', `<ul class="list">${records}</ul>
+      ${fuentes(['guiaSteamKhfm', 'wikiEsMinijuegos', 'wikiEsTobogan', 'diMinijuegos'])}`, {
+      meter: medidor('khfm-records', idsRecords(), 'Minijuegos'),
+      lead: 'Para el logro «Fan de los minijuegos» basta con jugar estos 9 minijuegos; no pide puntuación. Las puntuaciones de los del Bosque son para el premio de Búho.',
+    })}`;
+}
+
+function vistaKHFM() {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: 'Kingdom Hearts Final Mix' }]);
+  return `
+  <section class="page juego-khfm" data-modo="${modo()}">
+    <header class="game-hero">
+      <img class="game-hero-logo" src="${KHFM.logo}" alt="Kingdom Hearts Final Mix" width="704" height="478">
+      <div class="game-hero-stats">
+        ${medidor('khfm-logros', logrosKHFM(), ETQ_LOGROS)}
+        ${medidor('khfm-100', juegoKHFM(), ETQ_JUEGO)}
+      </div>
+    </header>
+    ${selectorModo('khfm-modo-logros', logrosKHFM(), 'khfm-modo-100', juegoKHFM(), { subLogros: 'Los 55 logros oficiales', subJuego: 'Lo que registra el juego' })}
+    ${modo() === 'logros' ? khfmLogros() : khfmInformes()}
+  </section>`;
+}
+
 function vista404() {
   topbar([{ t: 'Juegos', href: '#/juegos' }, { t: 'No encontrado' }]);
   return `<section class="page"><h1 class="page-title">Esta página no existe</h1><p class="lead"><a href="#/juegos">Vuelve a la elección de juego</a>.</p></section>`;
@@ -1130,6 +1402,7 @@ function render({ conservarScroll = false } = {}) {
   else if (ruta[0] === 'juegos') html = vistaJuegos();
   else if (ruta[0] === 'bbs' && !ruta[1]) html = vistaBBS();
   else if (ruta[0] === 'bbs' && PERSONAJES[ruta[1]]) html = vistaPersonaje(ruta[1]);
+  else if (ruta[0] === 'khfm' && !ruta[1]) html = vistaKHFM();
   else html = vista404();
   document.body.dataset.view = ruta[0] || 'titulo';
   $main.innerHTML = html;
@@ -1172,6 +1445,8 @@ document.addEventListener('click', (e) => {
     el?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     return;
   }
+  const sxHab = e.target.closest('[data-sx-hab]');
+  if (sxHab) { elegirHabilidad(sxHab); return; }
   const catCmd = e.target.closest('[data-cmd-cat]');
   if (catCmd) { elegirCategoria(catCmd); return; }
   const filtro = e.target.closest('[data-cmd-filtro]');

@@ -45,6 +45,14 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
 - `src/data/bbs-avance.js`: build «Avanzar por la historia» (grupos, jefes y curación por personaje).
 - `src/data/bbs-comandos.js`: **generado** (scripts en `notas/herramientas/`): comandos de cada personaje con ficha,
   vías de obtención y recetas. No editar a mano.
+- `src/data/bbs-sintesis.js`: a mano. Frase de qué hace cada comando (Wiki ES), tabla tipo de receta × cristal → habilidad
+  (guía de Steam; una discrepancia con la Wiki ES en `NOTAS_TABLA`), efecto de cada habilidad y datos de cristales.
+  Se usa en la lista de comandos de cada personaje y en la sección «Síntesis» del hub de BBS.
+- `src/data/khfm-logros.js`: **generado** (`notas/herramientas/genera_khfm_logros.py`): logros ACH_001…ACH_055 de KH FM
+  (ids con tres cifras). `src/data/khfm.js`: fuentes, grupos de logros, ruta, consejos y mundos con su cerradura.
+  Ids: `khfm.logro.ACH_xxx`; las cerraduras del 100 % reutilizan el id de su logro (una sola marca).
+- `src/data/khfm-diario.js`: a mano. Informes Ansem, 99 dálmatas (33 cofres), 46 marcas Trío, récords y páginas de Pooh.
+  Ids: `khfm.ansem.<n>`, `khfm.dalmata.<primer cachorro>`, `khfm.trio.<tipo>.<n>`, `khfm.record.<id>`.
 - `DESIGN.md`: sistema de diseño (vidriera como elemento distintivo, tokens en `:root`).
 
 **No cambiar los ids de conseguibles** (`bbs.logro.ACH_xxx`, `bbs.golpe.<pj>.<slug>`, `bbs.coso.<id>`,
@@ -72,4 +80,18 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
    (`src/data/bbs-nexos.js`); el usuario no quiere la lista de comandos de cada Nexo. Si no hay datos, no se pone nada.
 2. **Pegatinas por mundo hechas** (`src/data/bbs-pegatinas.js`, generado; ids `bbs.peg.mundo.<pj>.<mundo>`, cuentan para el
    100 %). El usuario las quiere simples: mundo, número y zona; sin imágenes.
-3. Siguientes juegos: KH Final Mix, Re:Chain of Memories, KH II Final Mix (allí sí hay «Informes Ansem»).
+3. Siguientes juegos: KH Final Mix, Re:Chain of Memories, KH II Final Mix (KH FM y KH II FM tienen «Informes Ansem»).
+   **KH Final Mix: plan en `notas/plan-khfm.md`.** Entregas 1 y 2 hechas el 21-10-2026 (pendientes de revisión): `#/khfm` con logros,
+   ruta, mundos/cerraduras y diario de Pepito; acento `--khfm` (azul del corazón del logo). Cofres: no se listan (el logro
+   solo pide 100). Dálmatas con ubicaciones de Final Mix (Destiny Islands + wiki inglesa, filas «FM»); «Los récords» = jugar 9
+   minijuegos, sin puntuación (guía de Steam en castellano). **Siguiente: entrega 3 (armas y síntesis)**, en otra sesión.
+   **Fuentes de KH FM (mejor que la Wiki ES, que a menudo da el KH original sin los cambios de Final Mix):**
+   - Guía de logros de KH1 en castellano (Steam 3293246581): perdibles, consejos, dónde sale cada llave espada, bastón y escudo,
+     materiales de síntesis y sus sincorazón, planos gumi. Otras guías de Steam: 3279160251 (síntesis y materiales),
+     3277287477 (100 % paso a paso, inglés), 3267866514 (dálmatas, castellano, ubicaciones del original).
+     Buscar más con `steamcommunity.com/app/2552430/guides/?searchText=...` y pasarlas a texto como la de BBS.
+   - Destiny Islands (`destinyislands.com/kh-fm/`: weapons, synthesis, accessories, gummi-ship, collectables/treasure-chests…),
+     específica de Final Mix. curl da 406: usar WebFetch.
+   - Wiki inglesa de Fandom (`kingdomhearts.fandom.com/api.php`, misma API): marca las filas «(FM)».
+   - KHWiki: la API daba 503; `notas/herramientas/khtexto.py` baja las páginas en HTML (solo funcionan las que están en caché).
+   358/2 Days y Re:coded no van: en la colección son solo películas.
