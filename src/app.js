@@ -37,6 +37,9 @@ const ID = {
   helado: (id) => `bbs.inf.helado.${id}`,
   pegatina: (pj, pts) => `bbs.peg.${pj}.${pts}`,
   pegMundo: (pj, mundo) => `bbs.peg.mundo.${pj}.${mundo}`,
+  tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
+  tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
+  tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -47,6 +50,8 @@ const juegoPj = (pj) => [
   ...ESTILOS[pj].map((e) => ID.estilo(pj, e.nombre)),
   ...PEGATINAS_MUNDOS[pj].map((m) => ID.pegMundo(pj, m.id)),
   ...PEGATINAS[pj].map(([p]) => ID.pegatina(pj, p)),
+  ...TABLEROS.map((t) => ID.tablero(pj, t.id)),
+  ...exclusivosDeTablero(pj).map((e) => ID.tableroCmd(pj, e.n)),
 ];
 const juegoComun = () => [
   ...COSO.map((c) => ID.coso(c.id)),
@@ -152,6 +157,16 @@ function item({ id, titulo, desc, meta = '', icono = '', spoiler = false, extra 
     ${spoiler ? `<details class="spoiler"><summary>Logro oculto · ver descripción</summary><p>${esc(desc)}</p></details>` : ''}
     ${extra}
   </li>`;
+}
+
+// Casilla compacta con el mismo guardado que item(); `texto` ya va escapado.
+function marca(id, texto, clase = '') {
+  const hecho = store.hecho(id);
+  return `
+    <label class="marca ${clase}${hecho ? ' is-done' : ''}">
+      <input type="checkbox" class="sr-only check-input" data-id="${esc(id)}"${hecho ? ' checked' : ''}>
+      <span class="crown">${CORONA}</span><span>${texto}</span>
+    </label>`;
 }
 
 const itemLogro = (l) => item({
@@ -293,7 +308,7 @@ function tablerosBloque() {
     <div class="tb-pj pj-${p.id}">
       <h4>${esc(p.nombre)}</h4>
       <ul>${exclusivosDeTablero(p.id).map((e) => `
-        <li><b>${esc(e.n)}</b><span>${e.donde.map((d) => `<a href="#tablero-${d.t.id}" data-goto="tablero-${d.t.id}">${esc(d.t.nombre)}, casilla ${d.num}</a>${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}`).join(' · ')}</span></li>`).join('')}</ul>
+        <li>${marca(ID.tableroCmd(p.id, e.n), `<b>${esc(e.n)}</b>`)}<span>${e.donde.map((d) => `<a href="#tablero-${d.t.id}" data-goto="tablero-${d.t.id}">${esc(d.t.nombre)}, casilla ${d.num}</a>${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}`).join(' · ')}</span></li>`).join('')}</ul>
     </div>`).join('');
   const tableros = TABLEROS.map((t) => `
     <article class="tb" id="tablero-${t.id}">
@@ -303,11 +318,20 @@ function tablerosBloque() {
         <h3>${esc(t.nombre)}</h3>
         <p><b>Se desbloquea:</b> ${esc(TABLEROS_INFO[t.id].desbloqueo)}</p>
         <p><b>Rivales:</b> ${esc(TABLEROS_INFO[t.id].rivales)}</p>
+        <div class="tb-marcas"><span class="tb-marcas-t">Ganado con</span>${PJS.map((p) => marca(ID.tablero(p.id, t.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
+        <div class="tb-marcas"><span class="tb-marcas-t">En el Coso con</span>${PJS.map((p) => marca(ID.tableroCoso(p.id, t.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
         <ol class="tb-casillas">${t.casillas.map((c) => `
           <li><span class="tb-num">${c.num}</span><span>${lista(c.normal)}${c.limitada.length ? `<br><span class="tb-lim">Mientras no lo tengas: ${lista(c.limitada)}</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${lista(c.coso)}</span>` : ''}</span></li>`).join('')}</ol>
       </div>
     </article>`).join('');
+  const todos = (f) => PJS.flatMap((p) => TABLEROS.map((t) => f(p.id, t.id)));
   return `
+    <div class="tb-medidores">
+      ${medidor('tb-victorias', todos(ID.tablero), 'Victorias (tablero × personaje)')}
+      ${medidor('tb-coso', todos(ID.tableroCoso), 'Victorias en el Coso')}
+      ${medidor('tb-excl', PJS.flatMap((p) => exclusivosDeTablero(p.id).map((e) => ID.tableroCmd(p.id, e.n))), 'Comandos solo de tablero')}
+    </div>
+    <p class="hint">Marca cada tablero cuando lo ganes con ese personaje. Se guarda igual que el resto y también se puede marcar en la página de cada personaje.</p>
     <div class="tb-claves">
       <div class="info-card"><h3>Logro «${esc(logroPorId.ACH_179.nombre)}»</h3>
         <p>«${esc(logroPorId.ACH_179.desc)}» (en inglés, «Win each playable Command Board»): <b>una victoria en cada uno de los 7 tableros, con cualquier personaje</b>. La guía de Steam dice que bastan 7 victorias en el Coso Virtual; para ir sobre seguro, gana una vez en cada tablero.</p></div>
@@ -950,8 +974,30 @@ function vistaPersonaje(pj) {
   const idsPegPremios = PEGATINAS[pj].map(([pts]) => ID.pegatina(pj, pts));
   medidores[`pj-${pj}-pegm`] = idsPegMundos;
   medidores[`pj-${pj}-pegr`] = idsPegPremios;
+  const idsTab = TABLEROS.map((t) => ID.tablero(pj, t.id));
+  const idsTabCoso = TABLEROS.map((t) => ID.tableroCoso(pj, t.id));
+  const excl = exclusivosDeTablero(pj);
+  const idsExcl = excl.map((e) => ID.tableroCmd(pj, e.n));
+  medidores[`pj-${pj}-tab`] = idsTab;
+  medidores[`pj-${pj}-tabc`] = idsTabCoso;
+  medidores[`pj-${pj}-tabx`] = idsExcl;
+  const grupoTab = (titulo, clave, ids, intro, lista) => `
+      <div class="group">
+        <h3>${titulo} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+        <p class="group-intro">${intro}</p>
+        <ul class="list">${lista}</ul>
+      </div>`;
+  const tablerosPj = `
+      ${grupoTab('Victorias en cada tablero', `pj-${pj}-tab`, idsTab, `Gana una partida en cada tablero jugando con ${p.nombre}.`,
+        TABLEROS.map((t) => item({ id: ID.tablero(pj, t.id), titulo: t.nombre, desc: `Se desbloquea: ${TABLEROS_INFO[t.id].desbloqueo}` })).join(''))}
+      ${grupoTab('Comandos que solo salen de un tablero', `pj-${pj}-tabx`, idsExcl, 'No se sintetizan ni salen de cofres o enemigos: hay que caer en esa casilla bonus.',
+        excl.map((e) => item({ id: ID.tableroCmd(pj, e.n), titulo: e.n, desc: e.donde.map((d) => `${d.t.nombre}, casilla ${d.num}${d.tipo === 'limitada' ? ' (mientras no lo tengas)' : ''}`).join(' · ') })).join(''))}
+      ${grupoTab('Victorias en el Coso Virtual', `pj-${pj}-tabc`, idsTabCoso, 'Para llevar la cuenta. No suman al 100 %: ninguna fuente dice que hagan falta con cada personaje.',
+        TABLEROS.map((t) => item({ id: ID.tableroCoso(pj, t.id), titulo: t.nombre })).join(''))}
+      <p class="hint">Los mapas y lo que da cada casilla están en <a href="#/bbs" data-ir-seccion="tableros">Birth by Sleep › Tableros</a>.</p>
+      ${fuentes(['khwikiTableros', 'wikiEsTableros'])}`;
   const contInformes = () => `
-    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
+    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['tableros', 'Tableros'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
     ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
     ${bloque('xehanort', `Informes Xehanort de ${p.nombre}`, `<ul class="list">${xeh.map((x) => item({ id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde })).join('')}</ul>${fuentes(['wikiEsXehanort'])}`, {
@@ -987,6 +1033,9 @@ function vistaPersonaje(pj) {
       meter: medidor(`pj-${pj}-peg`, [...idsPegMundos, ...idsPegPremios], 'Álbum'),
       lead: 'Las zonas van con su nombre en inglés: no tienen nombre oficial en castellano comprobado.',
     })}
+    ${bloque('tableros', 'Tableros de comandos', tablerosPj, {
+      meter: medidor(`pj-${pj}-tableros`, [...idsTab, ...idsExcl], 'Tableros'),
+    })}
     ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), { lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Busca por nombre o ingrediente, o filtra por cómo se obtienen.' })}
     ${bloque('nexos', 'Nexos-D', nexosPj(pj), { lead: `Los Nexos-D que puede usar ${p.nombre} y cómo se consigue cada uno.` })}`;
 
@@ -1007,7 +1056,7 @@ function vistaPersonaje(pj) {
       </div>
     </header>
     ${selectorModo(`pj-${pj}-modo-logros`, logrosPj(pj), `pj-${pj}-modo-100`, juegoPj(pj), {
-      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos y pegatinas',
+      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos, pegatinas y tableros',
     })}
     ${m === 'logros' ? contLogros() : contInformes()}
   </section>`;
@@ -1049,7 +1098,7 @@ document.addEventListener('change', (e) => {
   const t = e.target;
   if (t.matches('.check-input')) {
     store.marcar(t.dataset.id, t.checked);
-    t.closest('.item').classList.toggle('is-done', t.checked);
+    t.closest('.item, .marca').classList.toggle('is-done', t.checked);
   } else if (t.matches('[data-accion="importar"]') && t.files[0]) {
     t.files[0].text().then((txt) => {
       Promise.resolve().then(() => store.importar(txt))
@@ -1076,6 +1125,8 @@ document.addEventListener('click', (e) => {
   const ficha = e.target.closest('[data-ficha]');
   if (ficha) { abrirFicha(ficha.dataset.ficha, ficha.dataset.fichaPj); return; }
   if (e.target.closest('[data-cerrar]')) { $dialogo?.close(); return; }
+  const irSec = e.target.closest('[data-ir-seccion]');
+  if (irSec) { irA = irSec.dataset.irSeccion; return; }
   const irBuild = e.target.closest('[data-ir-build]');
   if (irBuild) {
     // Abre la página del personaje con ese combate elegido en la build y baja hasta ella.

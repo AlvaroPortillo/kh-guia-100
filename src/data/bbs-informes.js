@@ -21,20 +21,6 @@ export const INFORMES_XEHANORT = [
 // Minijuegos (guía de Steam en castellano).
 export const MINIJUEGOS = [
   {
-    id: 'tableros',
-    titulo: 'Tableros de comandos',
-    intro: 'Para el logro hay que ganar 7 veces; vale con hacerlo en el Coso Virtual. Para el menú Informes, gana al menos una vez en cada tablero.',
-    items: [
-      { id: 'llave-espada', nombre: 'Tablero Llave Espada', desc: 'El más fácil y rápido. Usa las cartas de magia para lanzar 3 dados a la vez.' },
-      { id: 'real', nombre: 'Tablero Real', desc: 'Se desbloquea al completar la historia del Castillo de los Sueños.' },
-      { id: 'espacial', nombre: 'Tablero Espacial', desc: 'Se desbloquea al completar la historia de Espacio Profundo.' },
-      { id: 'animado', nombre: 'Tablero Animado', desc: 'Se desbloquea al completar la historia de Ciudad Disney.' },
-      { id: 'calavera', nombre: 'Tablero Calavera', desc: 'Se desbloquea al completar la historia del País de Nunca Jamás.' },
-      { id: 'miel', nombre: 'Tablero de Miel', desc: 'Investiga el libro del Bosque de los 100 Acres en la Casa de Merlín (Vergel Radiante).' },
-      { id: 'secreto', nombre: 'Tablero Secreto', desc: 'Se desbloquea al completar los tableros anteriores.' },
-    ],
-  },
-  {
     id: 'ritmo',
     titulo: 'Ritmo helado',
     intro: 'Para desbloquear canciones hay que sacar al menos «Genial» (salvo la última en Experto). Para el logro, «Fantástico» en todas: puntuación mínima Principiante / Experto. Basta con un personaje. Guarda tras cada canción: el juego puede bloquearse al elegir una.',

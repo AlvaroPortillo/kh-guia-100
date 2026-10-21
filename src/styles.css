@@ -780,6 +780,16 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tb-casillas small, .tb-pj small { color: var(--text-2); }
 .tb-lim { color: var(--gold); font-size: .875rem; }
 .tb-coso { color: var(--text-2); font-size: .8125rem; }
+.tb-medidores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+.tb-marcas { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tb-marcas-t { font-size: .875rem; color: var(--text-2); min-width: 7.5em; }
+.marca { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: .875rem; font-weight: 600; transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
+.marca .crown { width: 24px; height: 24px; padding: 3px; border-radius: 50%; }
+.marca:hover { border-color: color-mix(in srgb, var(--accent, var(--gold)) 55%, var(--line)); }
+.marca:has(.check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 2px; }
+.marca.is-done { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+.tb-pj li > .marca { justify-self: start; padding-right: 14px; }
+.tb-pj .marca b { color: var(--text); }
 
 /* ---------- Build: avanzar por la historia ---------- */
 .fight img[src$=".png"] { object-position: top center; }
@@ -813,7 +823,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
   .hero-name { text-align: left; align-self: end; }
   .pj-hero { grid-template-columns: 1fr; }
   .info-cards { grid-template-columns: 1fr 1fr; }
-  .tb-claves, .tb-exclusivos { grid-template-columns: 1fr; }
+  .tb-claves, .tb-exclusivos, .tb-medidores { grid-template-columns: 1fr; }
   .tb { grid-template-columns: 1fr; }
   .tb-intro { grid-template-columns: 1fr; }
   .fights { grid-template-columns: 1fr 1fr; }
@@ -825,6 +835,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
   .stage-lg { height: 420px; }
 }
 @media (max-width: 560px) {
+  .tb-marcas-t { flex-basis: 100%; }
   .crumbs { display: none; }
   .tool { padding: 9px 11px; }
   .topbar { gap: 10px; }
