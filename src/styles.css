@@ -68,6 +68,8 @@ h1, h2, h3 { line-height: 1.15; margin: 0; }
 h2 { font-weight: 800; font-size: 1.563rem; letter-spacing: -.01em; }
 h3 { font-weight: 600; font-size: 1.05rem; }
 p { margin: 0; }
+/* `hidden` siempre oculta, aunque la clase del elemento le dé display (p. ej. `.cmd { display: grid }`) */
+[hidden] { display: none !important; }
 
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
