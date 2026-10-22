@@ -340,7 +340,10 @@ function vistaTitulo() {
   <section class="title-screen">
     <div class="title-glass">${vidriera(['var(--aqua)', 'var(--ventus)', 'var(--terra)'], { porciones: 18, clase: 'spin' })}</div>
     <div class="title-copy">
-      <img class="title-logo" src="assets/img/logos/remix.png" alt="Kingdom Hearts HD 1.5+2.5 ReMIX" width="699" height="491">
+      <div class="title-logos">
+        <img class="title-logo" src="assets/img/logos/remix.png" alt="Kingdom Hearts HD 1.5+2.5 ReMIX" width="699" height="491">
+        <img class="title-logo" src="assets/img/logos/kh3-remind.webp" alt="Kingdom Hearts III Re Mind" width="720" height="460">
+      </div>
       <h1 class="title-word">Guía al 100 %</h1>
       <p class="title-sub">Logros de Steam, coleccionables y comandos de cada juego, en castellano. Marca lo que consigas y lleva tu propio registro.</p>
       <a class="btn-start" href="#/juegos">Empezar</a>
