@@ -351,10 +351,10 @@ function vistaTitulo() {
 function vistaJuegos() {
   topbar([{ t: 'Juegos' }]);
   const tile = (j) => {
-    const meta = j.disponible
-      ? `<div class="meters-2">${medidor(`juego-${j.id}-logros`, PROGRESO[j.id].logros(), ETQ_LOGROS)}
-         ${medidor(`juego-${j.id}-100`, PROGRESO[j.id].juego(), ETQ_JUEGO)}</div>`
-      : '<p class="soon">En preparación</p>';
+    const meta = j.etiqueta
+      ? `<p class="soon">${esc(j.etiqueta)}</p>`
+      : `<div class="meters-2">${medidor(`juego-${j.id}-logros`, PROGRESO[j.id].logros(), ETQ_LOGROS)}
+         ${medidor(`juego-${j.id}-100`, PROGRESO[j.id].juego(), ETQ_JUEGO)}</div>`;
     const inner = `
       <img class="game-logo" src="${j.logo}" alt="" loading="lazy">
       <span class="game-name">${esc(j.nombre)}</span>
@@ -366,7 +366,7 @@ function vistaJuegos() {
   return `
   <section class="page games">
     <h1 class="page-title">Elige un juego</h1>
-    <p class="lead">Birth by Sleep, Kingdom Hearts Final Mix y Kingdom Hearts III ya están en marcha. El resto irá apareciendo según avance la guía.</p>
+    <p class="lead">Birth by Sleep y Kingdom Hearts Final Mix ya están en marcha. Kingdom Hearts III está en preparación, y el resto irá apareciendo según avance la guía.</p>
     <div class="game-grid">${JUEGOS.map(tile).join('')}</div>
   </section>`;
 }
