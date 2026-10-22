@@ -29,6 +29,12 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
 **Al probar con Playwright:** usar otro puerto (`python server.py 5174`; el 5173 es el del usuario), guardar antes
 `GET /api/estado` y restaurarlo después con `PUT /api/estado`. Nunca vaciar la BD: puede tener progreso real.
 
+**Publicada** en https://alvaroportillo.github.io/kh-guia-100/ (GitHub Pages desde `main`; repo público). Allí no hay
+`server.py`: el progreso queda solo en el `localStorage` del navegador. Pages cachea 10 min; si tras un push no se
+publica, `gh api -X POST repos/AlvaroPortillo/kh-guia-100/pages/builds`. Portada de proyectos en el repo
+`alvaroportillo.github.io` (carpeta hermana `../alvaroportillo.github.io`).
+Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una clase con `display` lo pisaba).
+
 ## Estructura
 - `src/app.js`: router por hash (`#/`, `#/juegos`, `#/bbs`, `#/bbs/<pj>`, `#/khfm`, `#/khfm/<sección>`) y vistas como
   plantillas de texto. Todo texto dinámico pasa por `esc()`. KH FM: la portada (`#/khfm`) muestra en «Logros» la ruta y los

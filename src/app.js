@@ -291,6 +291,10 @@ const itemLogro = (l, juego = 'bbs') => {
 };
 
 // ---------- barra superior ----------
+// Portada con el resto de proyectos (repo alvaroportillo.github.io)
+const PORTADA = 'https://alvaroportillo.github.io/';
+const ICONO_PROYECTOS = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>';
+
 function topbar(migas) {
   const ocultar = store.ajuste('ocultarHechos', false);
   const tema = document.documentElement.dataset.theme;
@@ -301,6 +305,7 @@ function topbar(migas) {
       ? `<a href="${m.href}">${esc(m.t)}</a><span aria-hidden="true">/</span>`
       : `<span aria-current="page">${esc(m.t)}</span>`)).join('')}</nav>
     <div class="tools">
+      <a class="tool tool-proyectos" href="${PORTADA}" aria-label="Mis proyectos">${ICONO_PROYECTOS}<span class="t-long">Mis proyectos</span></a>
       <button class="tool" type="button" data-accion="ocultar" aria-pressed="${ocultar}"><span class="t-long">Ocultar conseguidos</span><span class="t-short">Ocultar</span></button>
       <button class="tool tool-icon" type="button" data-accion="tema" aria-label="Cambiar a tema ${tema === 'dark' ? 'claro' : 'oscuro'}">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg></button>
@@ -347,6 +352,7 @@ function vistaTitulo() {
       <h1 class="title-word">Guía al 100 %</h1>
       <p class="title-sub">Logros de Steam, coleccionables y comandos de cada juego, en castellano. Marca lo que consigas y lleva tu propio registro.</p>
       <a class="btn-start" href="#/juegos">Empezar</a>
+      <a class="title-proyectos" href="${PORTADA}">${ICONO_PROYECTOS}Mis proyectos</a>
     </div>
   </section>`;
 }

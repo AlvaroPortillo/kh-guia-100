@@ -93,6 +93,15 @@ body[data-view="juegos"] .sky { opacity: .9; }
 /* ---------- barra superior ---------- */
 .topbar[hidden] { display: none; }
 .t-short { display: none; }
+/* Enlace a la portada de proyectos (barra superior y pantalla de título) */
+.tool-proyectos { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+.tool-proyectos svg, .title-proyectos svg { width: 15px; height: 15px; fill: currentColor; flex: none; }
+.title-proyectos {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
+  color: var(--text-2); font-weight: 600; font-size: .875rem; text-decoration: none;
+  transition: color var(--t) var(--ease); animation: rise 900ms 420ms var(--ease) both;
+}
+.title-proyectos:hover { color: var(--text); text-decoration: underline; }
 .topbar {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; gap: 16px;
