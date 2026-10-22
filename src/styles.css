@@ -13,6 +13,7 @@
   --ventus: #7EE3A0;
   --aqua: #63C9FF;
   --khfm: #6FA8FF;
+  --kh3: #B9ABFF;
   --danger: #FF8A8A;
   --lead: #050816;
   --accent: var(--gold);
@@ -44,6 +45,7 @@
   --ventus: #1E7A43;
   --aqua: #0B6EA8;
   --khfm: #1F55B8;
+  --kh3: #5A3DB8;
   --danger: #B42323;
   --lead: #FFFFFF;
   color-scheme: light;
@@ -83,6 +85,7 @@ p { margin: 0; }
 }
 body[data-view="bbs"] .sky,
 body[data-view="khfm"] .sky,
+body[data-view="kh3"] .sky,
 body[data-view="juegos"] .sky { opacity: .9; }
 
 /* ---------- barra superior ---------- */
@@ -516,6 +519,93 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .rutas-gumi { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .rutas-gumi li { padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); font-size: .75rem; font-weight: 600; }
 
+/* KH FM · Coliseo: una tarjeta por copa con su trofeo y una casilla por modo */
+.copas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: 16px; margin-top: 18px; }
+.copa { display: grid; gap: 12px; align-content: start; padding: 18px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.copa-head { display: grid; grid-template-columns: 84px 1fr; gap: 16px; align-items: center; }
+.copa-trofeo { width: 84px; height: 96px; object-fit: contain; filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--gold) 25%, transparent)); transition: transform var(--t) var(--ease); }
+.copa:hover .copa-trofeo { transform: translateY(-3px) rotate(-3deg); }
+.copa h3 { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 800; }
+.copa-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 4px; color: var(--text-2); font-size: .875rem; }
+.copa-abre { margin-top: 6px; font-size: .875rem; color: var(--text-2); }
+.copa-abre b, .boss-abre b { color: var(--text); }
+.copa-modos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.copa-modo { align-items: start; }
+.copa-modo > span:last-child { display: grid; gap: 2px; }
+.copa-modo small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.copa-rivales summary { cursor: pointer; font-weight: 600; font-size: .9375rem; width: fit-content; }
+.copa-rivales ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.copa-rivales li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; font-size: .875rem; }
+.copa-rivales img { width: 56px; height: 56px; object-fit: contain; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
+.copa-rivales p { color: var(--text-2); margin-top: 2px; }
+.copa-sub { margin-top: 40px; }
+.boss-khfm .boss-abre { margin-top: 8px; font-size: .875rem; color: var(--text-2); }
+.boss-khfm .boss-marca { margin-top: 12px; width: fit-content; }
+.boss-khfm .boss-main.sin-art { grid-template-columns: 1fr; margin-top: 0; }
+@media (max-width: 560px) {
+  .copa-modos { grid-template-columns: 1fr; }
+  .copa-head { grid-template-columns: 64px 1fr; gap: 12px; }
+  .copa-trofeo { width: 64px; height: 74px; }
+}
+
+/* KH FM · portada con una tarjeta por sección y página de cada sección */
+.secciones-khfm { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; margin-top: 24px; }
+.seccion-khfm {
+  display: grid; grid-template-columns: 76px 1fr; gap: 16px; align-items: center; padding: 16px 18px;
+  border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); color: var(--text); text-decoration: none;
+  transition: border-color var(--t) var(--ease), transform var(--t) var(--ease), background var(--t) var(--ease);
+}
+.seccion-khfm:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); background: var(--surface-2); transform: translateY(-3px); }
+.seccion-khfm:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.seccion-art { width: 76px; height: 76px; display: grid; place-items: center; border-radius: 16px; border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 70%), var(--surface-2); overflow: hidden; }
+.seccion-art img { max-width: 64px; max-height: 64px; object-fit: contain; border-radius: 10px; transition: transform var(--t) var(--ease); }
+.seccion-khfm:hover .seccion-art img { transform: scale(1.06) rotate(-4deg); }
+.seccion-cuerpo { display: grid; gap: 4px; min-width: 0; }
+.seccion-titulo { font-size: 1.125rem; font-weight: 800; }
+.seccion-desc { color: var(--text-2); font-size: .875rem; }
+.seccion-cuerpo .meter { margin-top: 6px; }
+.seccion-head { display: grid; grid-template-columns: 72px 1fr minmax(200px, 280px); gap: 18px; align-items: center; margin-top: 12px; }
+.seccion-head-art { width: 72px; height: 72px; object-fit: contain; border-radius: 16px; border: 1px solid var(--line); background: var(--surface-2); padding: 6px; }
+.seccion-head .page-title { margin: 2px 0 0; }
+.seccion-juego { font-size: .8125rem; color: var(--text-2); }
+.seccion-juego a { color: var(--accent); }
+.seccion-lead { margin-top: 24px; }
+.seccion-pagina > .subnav { margin-top: 24px; }
+.seccion-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 64px; }
+.seccion-nav a { display: grid; gap: 2px; padding: 14px 18px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
+  color: var(--text); text-decoration: none; transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
+.seccion-nav a:hover { border-color: var(--accent); background: var(--surface-2); }
+.seccion-nav small { color: var(--text-2); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+.seccion-nav .seccion-sig { text-align: right; }
+.ir-seccion { margin-left: auto; font-size: .8125rem; font-weight: 600; color: var(--accent); }
+@media (max-width: 560px) {
+  .seccion-head { grid-template-columns: 56px 1fr; }
+  .seccion-head-art { width: 56px; height: 56px; }
+  .seccion-head .meter { grid-column: 1 / -1; }
+  .seccion-nav { grid-template-columns: 1fr; }
+  .seccion-khfm { grid-template-columns: 60px 1fr; padding: 14px; }
+  .seccion-art { width: 60px; height: 60px; }
+  .ir-seccion { margin-left: 0; width: 100%; }
+}
+
+/* KH FM · Sora: elección inicial, ritmos y magias */
+.sora-tabla { margin: 8px 0 14px; max-width: 760px; }
+.sora-tabla .sx-tabla { min-width: 560px; }
+.sora-tabla td, .sora-tabla thead th:nth-child(n+3) { text-align: center; font-variant-numeric: tabular-nums; }
+.sora-tabla tr.is-rec th, .sora-tabla tr.is-rec td { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.sora-resp { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 3px; color: var(--text-2); font-size: .875rem; }
+.sora-ritmos { margin-top: 12px; }
+.sora-ritmos p + p { margin-top: 6px; }
+.sora-nota { margin-top: 10px; max-width: 75ch; }
+.magias { grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.magia h3 { flex-wrap: wrap; font-size: 1.125rem; }
+.magia-coste { font-size: .8125rem; font-weight: 500; color: var(--text-2); margin-left: auto; }
+.magia-niveles { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.magia-nivel .crown { flex: none; }
+.magia-niveles li { display: grid; grid-template-columns: 136px 1fr; gap: 10px; align-items: start; font-size: .875rem; color: var(--text-2); }
+.magia-nivel { width: 100%; }
+
 /* KH FM · síntesis: recetas con enlace a cada material y fichas de materiales */
 .item-row:has(.item-icon) ~ .item-foot { padding-left: 112px; }
 .item-row:has(.item-icon) ~ .nota-fuente { margin-left: 106px; }
@@ -819,6 +909,15 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .cmd:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
 .cmd.is-destacado { animation: cmd-brillo 1200ms var(--ease); }
 .cmd summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 14px; cursor: pointer; list-style: none; }
+/* Casilla de cada comando, fuera del desplegable para no abrirlo al marcar */
+.cmd { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+.cmd > details { min-width: 0; }
+.cmd-marca.marca { align-self: start; min-height: 48px; padding: 0 0 0 12px; border: 0; background: none; border-radius: var(--r-s) 0 0 var(--r-s); }
+.cmd-marca.marca.is-done { background: none; }
+.cmd:has(.cmd-marca.is-done) { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.cmd:has(.cmd-marca.is-done) .cmd-nombre { color: var(--text-2); }
+.cmd:has(.cmd-marca .check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 2px; }
+.hide-done .cmd:has(.cmd-marca.is-done) { display: none; }
 .cmd summary::-webkit-details-marker { display: none; }
 .cmd summary::after { content: ''; width: 8px; height: 8px; margin-left: 4px; border-right: 2px solid var(--text-2); border-bottom: 2px solid var(--text-2); transform: rotate(45deg); transition: transform var(--t) var(--ease); flex: none; }
 .cmd details[open] > summary::after { transform: rotate(-135deg); }
@@ -938,6 +1037,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tb-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #E0343C; color: #fff; font-weight: 800; font-size: .8125rem; }
 .tb-casillas small, .tb-pj small { color: var(--text-2); }
 .tb-lim { color: var(--gold); font-size: .875rem; }
+.tb-sin { color: var(--text-2); font-size: .8125rem; }
 .tb-coso { color: var(--text-2); font-size: .8125rem; }
 .tb-medidores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
 .tb-marcas { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -1049,6 +1149,13 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
   .boss-vs + .boss-main { margin-top: -36px; }
   .cmd summary { flex-wrap: wrap; gap: 8px 10px; }
   .cmd-datos { order: 3; width: 100%; justify-content: flex-start; padding-left: 34px; }
+  .cmd summary { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; }
+  .cmd summary::after { grid-column: 3; grid-row: 1; }
+  .cmd .cmd-nombre { grid-column: 2; grid-row: 1; }
+  .cmd .cmd-datos, .cmd .cmd-vias { grid-column: 2 / -1; width: auto; padding-left: 0; margin-left: 0; justify-content: flex-start; }
+  .cmd .cmd-datos:empty { display: none; }
+  .cmd summary { padding: 8px 10px; }
+  .cmd-marca.marca { padding-left: 8px; }
   .cmd-vias { margin-left: auto; }
   .cmd-cols .vias li { grid-template-columns: 1fr; gap: 4px; }
   .cmd-tab { padding: 6px 12px 6px 8px; }
@@ -1079,3 +1186,87 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* KH III: lila plateado del trazo del logo */
+.juego-kh3 { --accent: var(--kh3); --pj: var(--kh3); }
+/* Arma Artema: el anillo de los 7 Orichalcum+ alrededor de la llave espada */
+.forja { display: grid; grid-template-columns: minmax(260px, 380px) 1fr; gap: 32px; align-items: center; margin-top: 28px; }
+.anillo { position: relative; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%), var(--surface); }
+.anillo-arma { position: absolute; inset: 22%; width: 56%; height: 56%; object-fit: contain; filter: drop-shadow(0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent)); }
+.gema {
+  --a: calc(360deg / var(--n) * var(--i) - 90deg);
+  position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px; display: grid; place-items: center;
+  transform: rotate(var(--a)) translate(clamp(110px, 16vw, 152px)) rotate(calc(-1 * var(--a)));
+  border-radius: 50%; border: 1px solid var(--line); background: var(--bg-2);
+  transition: border-color var(--t) var(--ease), box-shadow var(--t) var(--ease), background var(--t) var(--ease);
+}
+.gema img { width: 34px; height: auto; filter: grayscale(1) brightness(.55); transition: filter var(--t) var(--ease); }
+.gema.is-on { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 14%, var(--bg-2)); box-shadow: 0 0 18px color-mix(in srgb, var(--gold) 45%, transparent); }
+.gema.is-on img { filter: none; }
+.gema:hover { border-color: var(--accent); }
+.forja-txt { display: grid; gap: 14px; min-width: 0; }
+.forja-n { font-size: 1.125rem; color: var(--text-2); }
+.forja-n b { font-size: 2rem; font-weight: 800; color: var(--gold); margin-right: 6px; font-variant-numeric: tabular-nums; }
+.forja-receta img { width: 22px; height: 22px; object-fit: contain; align-self: center; }
+.forja-receta .mat-chip { align-items: center; }
+.forja .nota-fuente { margin: 0; }
+.forja-pasos { display: grid; gap: 8px; }
+.flan { display: inline-flex; align-items: center; gap: 8px; }
+.flan img { width: 32px; height: 32px; object-fit: contain; }
+.flan-nota { display: block; white-space: normal; color: var(--text-2); max-width: 28ch; }
+.list .item .sx-tabla-wrap { margin: 0 8px 14px 112px; }
+.cristales { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+.cristal { display: grid; gap: 12px; align-content: start; padding: 16px 18px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.cristal-head { display: flex; align-items: center; gap: 12px; }
+.cristal-head img { width: 48px; height: 48px; object-fit: contain; }
+.cristal-en { font-size: .8125rem; color: var(--text-2); }
+.caidas { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.caidas li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; font-size: .875rem; }
+.caidas img { width: 44px; height: 44px; object-fit: contain; }
+.caidas small { display: block; color: var(--text-2); }
+.pct { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.cristal-receta { font-size: .875rem; color: var(--text-2); padding-top: 10px; border-top: 1px solid var(--line); }
+.cristal-receta b { color: var(--text); }
+.mejoras { min-width: 560px; }
+.mejoras td:nth-child(2), .mejoras td:nth-child(3) { font-variant-numeric: tabular-nums; }
+.ficha-artema { display: grid; grid-template-columns: minmax(0, 360px) 1fr; gap: 24px; align-items: center; }
+.ficha-artema img { border-radius: var(--r-m); }
+.ficha-artema p + p { margin-top: 10px; }
+.ficha-artema p { color: var(--text-2); max-width: 70ch; }
+.ficha-artema b { color: var(--text); }
+@media (max-width: 760px) {
+  .forja, .ficha-artema { grid-template-columns: 1fr; }
+  .anillo { width: min(100%, 340px); margin-inline: auto; }
+  .gema { width: 44px; height: 44px; margin: -22px; transform: rotate(var(--a)) translate(min(38vw, 138px)) rotate(calc(-1 * var(--a))); }
+  .gema img { width: 28px; }
+  .list .item .sx-tabla-wrap { margin-left: 8px; }
+}
+
+/* KH III · portafortuna: premios por número y tarjetas con la captura */
+.hitos-tit { margin-top: 28px; display: flex; align-items: center; gap: 10px; font-size: 1.25rem; }
+.hitos { list-style: none; margin: 12px 0 8px; padding: 0 0 6px; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; }
+.hito { flex: none; scroll-snap-align: start; display: grid; gap: 2px; min-width: 116px; padding: 10px 12px; border-radius: var(--r-s);
+  border: 1px solid var(--line); background: var(--surface); font-size: .8125rem; color: var(--text-2); transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
+.hito b { font-size: 1.125rem; color: var(--text); font-variant-numeric: tabular-nums; }
+.hito.is-on { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); color: var(--text); }
+.hito.is-on b { color: var(--gold); }
+.hito-ori { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+.pfs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; }
+.item.pf { border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface); overflow: hidden; transition: border-color var(--t) var(--ease), transform var(--t) var(--ease); }
+.item.pf:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); transform: translateY(-2px); }
+.item.pf.is-done { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); }
+.pf-label { display: grid; cursor: pointer; }
+.pf-label:has(.check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: -2px; border-radius: var(--r-m); }
+.pf-foto { position: relative; display: block; aspect-ratio: 16 / 9; background: var(--bg-2); }
+.pf-foto img { width: 100%; height: 100%; object-fit: cover; transition: filter var(--t) var(--ease); }
+.pf.is-done .pf-foto img { filter: saturate(.5) brightness(.7); }
+.pf-n { position: absolute; left: 10px; top: 10px; min-width: 30px; height: 30px; padding: 0 8px; display: grid; place-items: center; border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent); border: 1px solid var(--line); font-weight: 800; font-variant-numeric: tabular-nums; }
+.pf-foto .crown { position: absolute; right: 10px; top: 10px; }
+.pf:not(.is-done) .pf-foto .crown { background: color-mix(in srgb, var(--bg) 82%, transparent); }
+.pf-txt { display: grid; gap: 4px; padding: 12px 14px 14px; }
+.pf-zona { font-weight: 700; color: var(--accent); font-size: .875rem; }
+.pf-nota { font-size: .875rem; color: var(--text-2); }
+@media (prefers-reduced-motion: reduce) { .item.pf, .item.pf:hover { transition: none; transform: none; } }
+.pfs + .nota-fuente, .block > .nota-fuente { margin-left: 0; }

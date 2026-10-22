@@ -62,5 +62,9 @@ con filtro por mundo y «ocultar hechos». Revisión con `revisar-diseno` en cad
 2. Diario de Pepito (Informes Ansem, Dálmatas, marcas Trío, récords). Hecha; los cofres no se listan porque el logro solo pide 100.
 3. Armas y síntesis. Hecha (48 armas con valores de Final Mix; 33 recetas en 6 listas y 34 materiales).
 4. Naves gumi. Hecha (30 misiones, 48 planos con la ruta de cada nave enemiga, nave base de la guía de Steam).
-5. Coliseo y jefes.
-6. Sora (habilidades, magia, invocaciones, build) y dificultad.
+5. Coliseo y jefes. Hecha la parte del Coliseo (4 copas × 3 modos, combates de oro y platino) y los 3 jefes secretos;
+   los jefes de la historia, hechos después (22, en `khfm-jefes.js`).
+7. Organización: portada `#/khfm` con una tarjeta por sección y una página por sección (`#/khfm/<id>`). Hecha.
+6. Sora (habilidades, magia, invocaciones, build) y dificultad. Hecha: dos partidas, elección inicial (estadísticas),
+   preguntas y ritmos, 21 niveles de magia, 6 invocaciones y nivel 100. Sin datos con fuente para las habilidades por
+   nivel de cada elección ni para una build: no se ponen.

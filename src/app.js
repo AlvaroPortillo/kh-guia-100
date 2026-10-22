@@ -29,8 +29,20 @@ import {
   FUENTES_GUMI, IMG_GUMI, MISIONES_GUMI, MISIONES_INFO, NAVE_BASE, PLANOS_BASICOS, PLANOS_ENEMIGOS, PLANO_BAHAMUT,
 } from './data/khfm-gumi.js';
 import {
+  FUENTES_COLISEO, IMG_COLISEO, COPAS, COMBATES_COLISEO, NOTAS_COLISEO, JEFES_SECRETOS, FUENTES_COLISEO_LISTA, FUENTES_JEFES_LISTA,
+} from './data/khfm-coliseo.js';
+import {
+  FUENTES_SORA, ELECCION, ELECCION_CONSEJO, PREGUNTAS, RITMOS, NOTA_RITMOS, MAGIAS, NOTA_MAGIAS, INVOCACIONES, NOTA_INVOC, NIVEL_100, PARTIDAS,
+} from './data/khfm-sora.js';
+import { FUENTES_JEFES_HISTORIA, JEFES_HISTORIA } from './data/khfm-jefes.js';
+import {
   FUENTES_SINTESIS, DESC_COMANDOS, CRISTALES_ORDEN, TABLA_TIPOS, NOTAS_TABLA, LETRA_TIPO, HABILIDADES_BBS, CRISTALES_EXTRA, LIBROS_RECETAS,
 } from './data/bbs-sintesis.js';
+import { FUENTES_KH3, KH3, GRUPOS_LOGROS_KH3, RUTA_KH3, CONSEJOS_KH3, FUENTES_CONSEJOS_KH3, NOTA_RANGO_A } from './data/kh3.js';
+import {
+  IMG_ARTEMA, REQUISITO_ARTEMA, RECETA_ARTEMA, NOTA_RECETA, ORICALCOS, FLANES, CRISTALES_ARTEMA, MEJORAS_ARTEMA, NOTA_MEJORAS, FICHA_ARTEMA, FUENTES_ARTEMA,
+} from './data/kh3-artema.js';
+import { IMG_PF, MUNDOS_PF, PREMIOS_PF, INTRO_PF, FUENTES_PF } from './data/kh3-portafortuna.js';
 import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
@@ -42,7 +54,9 @@ const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().rep
 const pctFmt = (n) => (n == null ? '' : `${n.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de jugadores en Steam`);
 const logroPorId = Object.fromEntries(BBS.logros.map((l) => [l.id, l]));
 const logroKhfm = Object.fromEntries(KHFM.logros.map((l) => [l.id, l]));
-const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO, ...FUENTES_ARMAS, ...FUENTES_GUMI };
+const logroKh3 = Object.fromEntries(KH3.logros.map((l) => [l.id, l]));
+const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO, ...FUENTES_ARMAS, ...FUENTES_GUMI, ...FUENTES_COLISEO, ...FUENTES_SORA, ...FUENTES_JEFES_HISTORIA, ...FUENTES_KH3 };
+const IMG_JEFES = 'assets/img/khfm/coliseo/jefe-';
 const PJS = Object.values(PERSONAJES);
 
 const ID = {
@@ -60,6 +74,7 @@ const ID = {
   tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
   tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
   tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
+  cmd: (pj, n) => `bbs.cmd.${pj}.${slug(n)}`,
   khfmLogro: (id) => `khfm.logro.${id}`,
   khfmAnsem: (n) => `khfm.ansem.${n}`,
   khfmDalmata: (n) => `khfm.dalmata.${n}`,
@@ -69,6 +84,14 @@ const ID = {
   khfmSintesis: (id) => `khfm.sintesis.${id}`,
   khfmMision: (mundo, n) => `khfm.gumi.mision.${mundo}.${n}`,
   khfmPlano: (id) => `khfm.gumi.plano.${id}`,
+  khfmCopa: (copa, modo) => `khfm.coliseo.${copa}.${modo}`,
+  khfmJefe: (id) => `khfm.jefe.${id}`,
+  khfmMagia: (id, n) => `khfm.magia.${id}.${n}`,
+  khfmInvoc: (id) => `khfm.invoc.${id}`,
+  kh3Logro: (id) => `kh3.logro.${id}`,
+  kh3Oricalco: (id) => `kh3.oricalco.${id}`,
+  kh3Artema: (paso) => `kh3.artema.${paso}`,
+  kh3Pf: (mundo, n) => `kh3.portafortuna.${mundo}.${n}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -83,7 +106,12 @@ const juegoPj = (pj) => [
   ...idsTesoros(pj),
   ...TABLEROS.map((t) => ID.tablero(pj, t.id)),
   ...exclusivosDeTablero(pj).map((e) => ID.tableroCmd(pj, e.n)),
+  ...idsComandos(pj),
 ];
+// Comandos marcables; los que solo salen de un tablero comparten la marca de la sección Tableros.
+const EXCL_TABLERO = {};
+const idComando = (pj, n) => ((EXCL_TABLERO[pj] ??= new Set(exclusivosDeTablero(pj).map((e) => e.n))).has(n) ? ID.tableroCmd(pj, n) : ID.cmd(pj, n));
+const idsComandos = (pj, cat) => (cat ? LISTAS_COMANDOS[pj][cat] : Object.values(LISTAS_COMANDOS[pj]).flat()).map((n) => idComando(pj, n));
 const juegoComun = () => [
   ...COSO.map((c) => ID.coso(c.id)),
   ...MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))),
@@ -108,13 +136,30 @@ const misionDePlano = Object.fromEntries(MISIONES_GUMI.flatMap((w) => w.m.map((x
 const idPlano = (id) => misionDePlano[id] ?? ID.khfmPlano(id);
 const idsPlanos = () => [...PLANOS_BASICOS, ...PLANOS_ENEMIGOS].map((p) => idPlano(p.id))
   .concat(Object.values(misionDePlano), idPlano(PLANO_BAHAMUT.id));
+const MODOS_COPA = [['normal', 'Normal'], ['solo', 'En solitario'], ['contrarreloj', 'Contrarreloj']];
+const idsColiseo = () => [...COPAS.flatMap((c) => MODOS_COPA.map(([m]) => ID.khfmCopa(c.id, m))), ...COMBATES_COLISEO.map((c) => ID.khfmJefe(c.id))];
+const idsJefesSecretos = () => JEFES_SECRETOS.map((j) => ID.khfmJefe(j.id));
+const idsJefesHistoria = () => JEFES_HISTORIA.map((j) => ID.khfmJefe(j.id));
+const idsMagias = () => MAGIAS.flatMap((m) => m.niveles.map((_, i) => ID.khfmMagia(m.id, i + 1)));
+const idsInvoc = () => INVOCACIONES.map((x) => ID.khfmInvoc(x.id));
 const juegoKHFM = () => [...new Set([
   ...MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro)), ...idsAnsem(), ...idsDalmatas(), ...idsTrio(), ...idsRecords(),
-  ...idsArmas(), ...idsSintesis(), ...idsMisiones(), ...idsPlanos(),
+  ...idsArmas(), ...idsSintesis(), ...idsMisiones(), ...idsPlanos(), ...idsColiseo(), ...idsJefesSecretos(), ...idsJefesHistoria(), ...idsMagias(), ...idsInvoc(),
 ])];
+// KH III: por ahora el 100 % cuenta la preparación del Arma Artema (se ampliará con cada entrega).
+const logrosKH3 = () => KH3.logros.map((l) => ID.kh3Logro(l.id));
+const PASOS_ARTEMA = [
+  { id: 'materiales', t: 'Registrar 58 materiales distintos (abre la receta)' },
+  ...CRISTALES_ARTEMA.map((c) => ({ id: c.id, t: `Tener ${c.falta} ${c.nombre.replace('Cristal', 'Cristales')}` })),
+  { id: 'nivel10', t: 'Mejorarla hasta el nivel 10' },
+];
+const idsArtema = () => [...ORICALCOS.map((o) => ID.kh3Oricalco(o.id)), ...PASOS_ARTEMA.map((p) => ID.kh3Artema(p.id)), ID.kh3Logro('ACH_44')];
+const idsPf = (m) => (m ? [m] : MUNDOS_PF).flatMap((w) => w.pf.map((_, i) => ID.kh3Pf(w.id, i + 1)));
+const juegoKH3 = () => [...idsPf(), ...idsArtema()];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
+  kh3: { logros: () => logrosKH3(), juego: () => juegoKH3() },
 };
 const ETQ_LOGROS = 'Logros de Steam';
 const ETQ_JUEGO = '100 % del juego (Informes)';
@@ -145,6 +190,8 @@ function refrescarMedidores() {
     el.querySelector('.meter-fill').style.setProperty('--p', ids.length ? n / ids.length : 0);
     el.classList.toggle('is-full', n === ids.length);
   });
+  document.querySelectorAll('[data-hito]').forEach((el) => el.classList.toggle('is-on', store.contar(idsPf()) >= Number(el.dataset.hito)));
+  document.querySelectorAll('[data-gema]').forEach((el) => el.classList.toggle('is-on', store.hecho(el.dataset.gema)));
   document.querySelectorAll('[data-count]').forEach((el) => {
     const ids = medidores[el.dataset.count];
     if (ids) el.textContent = `${store.contar(ids)}/${ids.length}`;
@@ -228,6 +275,7 @@ function marca(id, texto, clase = '') {
 const LOGROS_DE = {
   bbs: { id: ID.logro, carpeta: 'assets/img/bbs/logros', consejos: CONSEJOS },
   khfm: { id: ID.khfmLogro, carpeta: 'assets/img/khfm/logros', consejos: CONSEJOS_KHFM },
+  kh3: { id: ID.kh3Logro, carpeta: 'assets/img/kh3/logros', consejos: CONSEJOS_KH3 },
 };
 const itemLogro = (l, juego = 'bbs') => {
   const { id, carpeta, consejos } = LOGROS_DE[juego];
@@ -318,7 +366,7 @@ function vistaJuegos() {
   return `
   <section class="page games">
     <h1 class="page-title">Elige un juego</h1>
-    <p class="lead">Birth by Sleep y Kingdom Hearts Final Mix ya están en marcha. El resto irá apareciendo según avance la guía.</p>
+    <p class="lead">Birth by Sleep, Kingdom Hearts Final Mix y Kingdom Hearts III ya están en marcha. El resto irá apareciendo según avance la guía.</p>
     <div class="game-grid">${JUEGOS.map(tile).join('')}</div>
   </section>`;
 }
@@ -366,7 +414,14 @@ function exclusivosDeTablero(pj) {
 
 const nombreCmdTablero = (x) => `${esc(x.n)}${x.pct ? ` <small>${esc(x.pct)} %</small>` : ''}${x.solo ? ` <small>(solo ${x.solo.map((p) => PERSONAJES[p].nombre).join(' y ')})</small>` : ''}`;
 const listaTablero = (xs) => xs.map(nombreCmdTablero).join(' · ');
-const premiosCasilla = (c) => `${listaTablero(c.normal)}${c.limitada.length ? `<br><span class="tb-lim">Mientras no lo tengas: ${listaTablero(c.limitada)}</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${listaTablero(c.coso)}</span>` : ''}`;
+// Premio «limitado» (KHWiki — Command Board): sale solo si ese comando no está en tu lista (baraja o reserva); si lo
+// tienes, la casilla da el premio normal. Si para ese personaje no hay premio normal, la casilla deja de ser bonus.
+const sinPremioNormal = (c) => PJS.filter((p) => c.limitada.some((x) => !x.solo || x.solo.includes(p.id))
+  && !c.normal.some((x) => !x.solo || x.solo.includes(p.id))).map((p) => p.nombre);
+const premiosCasilla = (c) => {
+  const sin = c.limitada.length ? sinPremioNormal(c) : [];
+  return `${c.normal.length ? listaTablero(c.normal) : ''}${c.limitada.length ? `${c.normal.length ? '<br>' : ''}<span class="tb-lim">Solo si aún no lo tienes: ${listaTablero(c.limitada)}</span>` : ''}${sin.length ? `<br><span class="tb-sin">Si ya lo tienes, para ${sin.join(' y ')} esta casilla deja de ser bonus: no tiene estrella ni da nada.</span>` : ''}${c.coso.length ? `<br><span class="tb-coso">En el Coso: ${listaTablero(c.coso)}</span>` : ''}`;
+};
 const ICONO_MAPA = '<path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11Z"/><circle cx="12" cy="10" r="2.2"/>';
 // Botón que abre el mapa del tablero en una ventana, con la casilla `num` resaltada (o ninguna).
 const verCasilla = (t, num, texto) => `<button type="button" class="tb-ver" data-casilla="${t.id}${num ? `:${num}` : ''}">${svg(ICONO_MAPA)}<span>${texto}</span></button>`;
@@ -376,7 +431,7 @@ function tablerosBloque() {
     <div class="tb-pj pj-${p.id}">
       <h4>${esc(p.nombre)}</h4>
       <ul>${exclusivosDeTablero(p.id).map((e) => `
-        <li>${marca(ID.tableroCmd(p.id, e.n), `<b>${esc(e.n)}</b>`)}<span class="tb-donde">${e.donde.map((d) => `<span>${verCasilla(d.t, d.num, `${esc(d.t.nombre)}, casilla ${d.num}`)}${d.tipo === 'limitada' ? ' <small>(sale mientras no lo tengas)</small>' : ''}</span>`).join('')}</span></li>`).join('')}</ul>
+        <li>${marca(ID.tableroCmd(p.id, e.n), `<b>${esc(e.n)}</b>`)}<span class="tb-donde">${e.donde.map((d) => `<span>${verCasilla(d.t, d.num, `${esc(d.t.nombre)}, casilla ${d.num}`)}${d.tipo === 'limitada' ? ' <small>(solo si aún no lo tienes)</small>' : ''}</span>`).join('')}</span></li>`).join('')}</ul>
     </div>`).join('');
   const tableros = TABLEROS.map((t) => `
     <article class="tb" id="tablero-${t.id}">
@@ -390,7 +445,7 @@ function tablerosBloque() {
         <div class="tb-marcas"><span class="tb-marcas-t">En el Coso con</span>${PJS.map((p) => marca(ID.tableroCoso(p.id, t.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
         <ol class="tb-casillas">${t.casillas.map((c) => `
           <li><button type="button" class="tb-num" data-casilla="${t.id}:${c.num}" aria-label="Ver la casilla ${c.num} en el mapa">${c.num}</button><span>${premiosCasilla(c)}</span></li>`).join('')}</ol>
-        <p class="tb-pista">Toca un número para ver dónde está la casilla en el mapa.</p>
+        <p class="tb-pista">Toca un número para ver dónde está la casilla en el mapa. Los premios «solo si aún no lo tienes» desaparecen en cuanto ese comando está en tu lista (baraja o reserva); si vendes todas tus copias, vuelven a salir.</p>
       </div>
     </article>`).join('');
   const todos = (f) => PJS.flatMap((p) => TABLEROS.map((t) => f(p.id, t.id)));
@@ -1040,6 +1095,7 @@ function filaComando(n, cat, pj) {
   const [frase, paginaEs] = DESC_COMANDOS[n] ?? [];
   return `
     <li class="cmd" data-cat="${cat}" data-vias="${tipos.join(' ')}" data-texto="${esc(texto)}" data-nombre="${esc(n)}">
+      ${marca(idComando(pj, n), `<span class="sr-only">Conseguido: ${esc(n)}</span>`, 'cmd-marca')}
       <details>
         <summary>
           <img class="cmd-ico" src="${IMG_BUILD}ico-${cat}.webp" alt="" width="24" height="24">
@@ -1073,11 +1129,12 @@ function filaComando(n, cat, pj) {
 function comandosPj(pj) {
   const listas = LISTAS_COMANDOS[pj];
   const cats = CATS_CMD.filter(([k]) => listas[k]?.length);
+  for (const [k] of cats) medidores[`pj-${pj}-cmd-${k}`] = idsComandos(pj, k);
   return `
     <div class="cmds" data-pj="${pj}" data-cat="${cats[0][0]}">
       <div class="cmd-tabs" role="tablist" aria-label="Tipo de comando">${cats.map(([k, t], i) => `
         <button type="button" role="tab" class="cmd-tab" data-cmd-cat="${k}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">
-          <img src="${IMG_BUILD}ico-${k}.webp" alt="" width="22" height="22"><span>${t}</span><b>${listas[k].length}</b></button>`).join('')}
+          <img src="${IMG_BUILD}ico-${k}.webp" alt="" width="22" height="22"><span>${t}</span><b data-count="pj-${pj}-cmd-${k}">${store.contar(idsComandos(pj, k))}/${listas[k].length}</b></button>`).join('')}
       </div>
       <div class="cmd-tools">
         <label class="cmd-buscar"><span class="sr-only">Buscar comando, ingrediente o habilidad</span>
@@ -1214,14 +1271,17 @@ function vistaPersonaje(pj) {
     ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['logros', 'Logros'], ['cuartelillo', 'Cuartelillo'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
     ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
-    ${bloque('logros', `Logros de ${p.nombre}`, `<ul class="list">${logros.map(itemLogro).join('')}</ul>${fuentes(['steam', 'guiaSteam'])}`)}
+    ${bloque('logros', `Logros de ${p.nombre}`, `<ul class="list">${logros.map((l) => itemLogro(l)).join('')}</ul>${fuentes(['steam', 'guiaSteam'])}`)}
     ${bloque('cuartelillo', 'Cuartelillo', `
       <ul class="recipes">${CUARTELILLO[pj].map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
       <p class="hint">Cada síntesis tiene un 10 % de probabilidad de dar Cuartelillo; el 90 % restante da Hoja Afortunada.</p>
       ${fuentes(['wikiEsCuartelillo'])}`, {
       lead: `Ejecutarlo con ${p.nombre} da el logro «${esc(logros.find((l) => /Cuartelillo/.test(l.desc))?.nombre)}». Hay uno en un cofre de Ciudad Disney (sala de juegos de Pete) o puedes sintetizarlo:`,
     })}
-    ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), { lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Busca por nombre o ingrediente, o filtra por cómo se obtienen.' })}
+    ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), {
+      meter: medidor(`pj-${pj}-comandos`, idsComandos(pj), 'Comandos'),
+      lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Marca los que ya tengas, busca por nombre o ingrediente, o filtra por cómo se obtienen.',
+    })}
     ${bloque('nexos', 'Nexos-D', nexosPj(pj), { lead: `Los Nexos-D que puede usar ${p.nombre} y cómo se consigue cada uno.` })}`;
 
   const xeh = INFORMES_XEHANORT.filter((x) => x.pj === pj);
@@ -1246,7 +1306,7 @@ function vistaPersonaje(pj) {
       ${grupoTab('Victorias en cada tablero', `pj-${pj}-tab`, idsTab, `Gana una partida en cada tablero jugando con ${p.nombre}.`,
         TABLEROS.map((t) => item({ id: ID.tablero(pj, t.id), titulo: t.nombre, desc: `Se desbloquea: ${TABLEROS_INFO[t.id].desbloqueo}`, extra: `<div class="tb-extra">${verCasilla(t, null, 'Ver el tablero')}</div>` })).join(''))}
       ${grupoTab('Comandos que solo salen de un tablero', `pj-${pj}-tabx`, idsExcl, 'No se sintetizan ni salen de cofres o enemigos: hay que caer en esa casilla bonus.',
-        excl.map((e) => item({ id: ID.tableroCmd(pj, e.n), titulo: e.n, desc: e.donde.some((d) => d.tipo === 'limitada') ? 'Sale mientras no lo tengas.' : '',
+        excl.map((e) => item({ id: ID.tableroCmd(pj, e.n), titulo: e.n, desc: e.donde.some((d) => d.tipo === 'limitada') ? 'Solo sale si aún no lo tienes (ni en la baraja ni en la reserva).' : '',
           extra: `<div class="tb-extra">${e.donde.map((d) => verCasilla(d.t, d.num, `${esc(d.t.nombre)}, casilla ${d.num}`)).join('')}</div>` })).join(''))}
       ${grupoTab('Victorias en el Coso Virtual', `pj-${pj}-tabc`, idsTabCoso, 'Para llevar la cuenta. No suman al 100 %: ninguna fuente dice que hagan falta con cada personaje.',
         TABLEROS.map((t) => item({ id: ID.tableroCoso(pj, t.id), titulo: t.nombre })).join(''))}
@@ -1296,7 +1356,10 @@ function vistaPersonaje(pj) {
     ${bloque('tableros', 'Tableros de comandos', tablerosPj, {
       meter: medidor(`pj-${pj}-tableros`, [...idsTab, ...idsExcl], 'Tableros'),
     })}
-    ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), { lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Busca por nombre o ingrediente, o filtra por cómo se obtienen.' })}
+    ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), {
+      meter: medidor(`pj-${pj}-comandos`, idsComandos(pj), 'Comandos'),
+      lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Marca los que ya tengas, busca por nombre o ingrediente, o filtra por cómo se obtienen.',
+    })}
     ${bloque('nexos', 'Nexos-D', nexosPj(pj), { lead: `Los Nexos-D que puede usar ${p.nombre} y cómo se consigue cada uno.` })}`;
 
   return `
@@ -1336,13 +1399,17 @@ function rutaPasos(ruta, logros) {
     </li>`).join('');
 }
 
+// Cada grupo de logros enlaza con la sección de la guía donde se explica.
+const GRUPO_A_SECCION = { historia: 'sora', mundos: 'mundos', coliseo: 'coliseo', jefes: 'jefes', diario: 'diario', sintesis: 'sintesis', gumi: 'gumi', armas: 'armas', contadores: 'sora' };
 function khfmLogros() {
   const grupo = (g) => {
     const ids = g.ids.map(ID.khfmLogro);
     medidores[`khfm-g-${g.id}`] = ids;
+    const sec = seccionKhfm(GRUPO_A_SECCION[g.id]);
     return `
     <div class="group">
-      <h3>${esc(g.titulo)} <span class="count" data-count="khfm-g-${g.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <h3>${esc(g.titulo)} <span class="count" data-count="khfm-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
+        ${sec ? `<a class="ir-seccion" href="#/khfm/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
       <ul class="list">${g.ids.map((id) => itemLogro(logroKhfm[id], 'khfm')).join('')}</ul>
     </div>`;
   };
@@ -1462,6 +1529,116 @@ function khfmGumi() {
     ${grupoPlanos('khfm-pl-misiones', 'De misiones', 'Uno por cada misión III, y Bahamut al completar todas.', deMision)}`;
 }
 
+// Ficha de jefe (mismo diseño que los jefes de BBS) con casilla para marcarlo.
+function jefeKhfm(j, { titulo = j.nombre, subtitulo = j.mundo } = {}) {
+  const id = ID.khfmJefe(j.id);
+  const src = j.src ?? `${IMG_COLISEO}${j.img}.webp`;
+  const chips = [j.premio ? `<li class="chip">Premio: ${esc(j.premio)}</li>` : '', j.logro ? `<li class="chip chip-logro">Logro: ${esc(logroKhfm[j.logro].nombre)}</li>` : ''].join('');
+  return `
+    <article class="boss boss-khfm" id="jefe-${j.id}">
+      ${j.captura ? `<img class="boss-vs" src="${src}" alt="Combate contra ${esc(j.nombre)} en el juego" width="800" height="450" loading="lazy">` : ''}
+      <div class="boss-main${j.captura ? ' sin-art' : ''}">
+        ${j.captura ? '' : `<div class="boss-art"><img src="${src}" alt="" loading="lazy"></div>`}
+        <div class="boss-body">
+          <p class="boss-world">${esc(subtitulo)}</p>
+          <h3>${esc(titulo)}</h3>
+          ${chips ? `<ul class="boss-premios" aria-label="Recompensas">${chips}</ul>` : ''}
+          ${j.abre ? `<p class="boss-abre"><b>Cómo se llega:</b> ${esc(j.abre)}</p>` : ''}
+          ${marca(id, 'Vencido', 'boss-marca')}
+        </div>
+      </div>
+      <details class="boss-est">
+        <summary>Cómo vencerle</summary>
+        <p>${esc(j.t)}</p>
+      </details>
+    </article>`;
+}
+
+function khfmColiseo() {
+  const copa = (c) => {
+    const ids = MODOS_COPA.map(([m]) => ID.khfmCopa(c.id, m));
+    const clave = `khfm-copa-${c.id}`;
+    medidores[clave] = ids;
+    return `
+    <article class="copa">
+      <div class="copa-head">
+        <img class="copa-trofeo" src="${IMG_COLISEO}${c.img}.webp" alt="" loading="lazy">
+        <div>
+          <h3>${esc(c.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/3</span></h3>
+          <p class="copa-meta">${c.rondas} combates · <span class="chip chip-logro">Logro: ${esc(logroKhfm[c.logro].nombre)}</span></p>
+          <p class="copa-abre"><b>Se abre:</b> ${esc(c.abre)}</p>
+        </div>
+      </div>
+      <div class="copa-modos">${MODOS_COPA.map(([m, t]) => marca(ID.khfmCopa(c.id, m), `<b>${t}</b><small>${esc(c.modos[m])}</small>`, 'copa-modo')).join('')}</div>
+      ${c.nota ? `<p class="arma-nota">${esc(c.nota)}</p>` : ''}
+      ${c.rivales ? `<details class="copa-rivales"><summary>Combates clave</summary><ul>${c.rivales.map((r) => `
+        <li><img src="${IMG_COLISEO}${r.img}.webp" alt="" loading="lazy"><div><b>Puesto ${r.puesto}: ${esc(r.rival)}</b>${r.t ? `<p>${esc(r.t)}</p>` : ''}</div></li>`).join('')}</ul></details>` : ''}
+    </article>`;
+  };
+  return `
+    <ul class="sx-pasos bullets">${NOTAS_COLISEO.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+    <div class="copas">${COPAS.map(copa).join('')}</div>
+    <h3 class="bx-sub copa-sub">Combates de oro y de platino</h3>
+    <div class="bosses">${COMBATES_COLISEO.map((c) => jefeKhfm(c, { titulo: c.rival, subtitulo: `Coliseo del Olimpo · ${c.nombre}` })).join('')}</div>`;
+}
+
+const SUFIJO_NIVEL = ['', '+', '++'];
+function khfmSora() {
+  const eleccion = `
+    <div class="sx-tabla-wrap sora-tabla"><table class="sx-tabla">
+      <thead><tr><th>Te quedas</th><th>Desechas</th><th>VT</th><th>PM</th><th>PH</th><th>Fuerza</th><th>Defensa</th></tr></thead>
+      <tbody>${ELECCION.map((e) => `<tr${e.rec ? ' class="is-rec"' : ''}><th><b>${esc(e.quedas)}</b>${e.rec ? ' <span class="chip chip-fm">Recomendada</span>' : ''}</th><td>${esc(e.dejas)}</td>
+        <td>${e.vt}</td><td>${e.pm}</td><td>${e.ph}</td><td>${e.fue}</td><td>${e.def}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <ul class="sx-pasos bullets">${ELECCION_CONSEJO.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
+
+  const preguntas = `
+    <div class="info-cards">${PREGUNTAS.map((q) => `
+      <div class="info-card"><h3>${esc(q.quien)}: ${esc(q.p)}</h3>
+        <ol class="sora-resp">${q.r.map((r) => `<li>${esc(r)}</li>`).join('')}</ol></div>`).join('')}</div>
+    <div class="info-cards sora-ritmos">${RITMOS.map((r) => `
+      <div class="info-card"><h3>${esc(r.nombre)}</h3><p><b>${esc(r.como)}</b></p><p>${esc(r.t)}</p></div>`).join('')}</div>
+    <p class="arma-nota sora-nota">${esc(NOTA_RITMOS)}</p>`;
+
+  const magias = MAGIAS.map((m) => {
+    const ids = m.niveles.map((_, i) => ID.khfmMagia(m.id, i + 1));
+    const clave = `khfm-magia-${m.id}`;
+    medidores[clave] = ids;
+    return `
+    <article class="copa magia">
+      <h3>${esc(m.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/3</span></h3>
+      <ul class="magia-niveles">${m.niveles.map((t, i) => `<li>${marca(ids[i], `<b>${esc(m.nombre + SUFIJO_NIVEL[i])}</b>`, 'magia-nivel')}<span>${esc(t)}</span></li>`).join('')}</ul>
+    </article>`;
+  }).join('');
+
+  const invoc = INVOCACIONES.map((x) => item({
+    id: ID.khfmInvoc(x.id), titulo: x.nombre, desc: x.como,
+    meta: `<span class="chip">${x.pm} PM</span> <span>${esc(x.efecto)}</span>`,
+  })).join('');
+
+  medidores['khfm-sora-magias'] = idsMagias();
+  medidores['khfm-sora-invoc'] = idsInvoc();
+  return `
+    <h3 class="bx-sub">Las dos partidas</h3>
+    <div class="info-cards">${PARTIDAS.map((p) => `<div class="info-card"><h3>${esc(p.t)}</h3><p>${esc(p.d)}</p></div>`).join('')}</div>
+    <h3 class="bx-sub copa-sub">Elección inicial</h3>
+    <p class="group-intro">En el Despertar eliges un arma y desechas otra: decide tus estadísticas y las habilidades que aprendes. Estadísticas a nivel 1:</p>
+    ${eleccion}
+    <h3 class="bx-sub copa-sub">Las tres preguntas</h3>
+    <p class="group-intro">Da igual lo que respondas: lo que cuenta es si eliges la primera opción, la del medio o la última. Eso fija tu ritmo de experiencia para toda la partida.</p>
+    ${preguntas}
+    <h3 class="bx-sub copa-sub">Magias <span class="count" data-count="khfm-sora-magias">${store.contar(idsMagias())}/${idsMagias().length}</span></h3>
+    <p class="group-intro">${esc(NOTA_MAGIAS)}</p>
+    <div class="copas magias">${magias}</div>
+    <div class="group">
+      <h3>Invocaciones <span class="count" data-count="khfm-sora-invoc">${store.contar(idsInvoc())}/${idsInvoc().length}</span></h3>
+      <p class="group-intro">Lleva cada gema al Hada Madrina, en la Casa de Merlín de Ciudad de Paso. Para invocar hacen falta los tres miembros del grupo en pie. ${esc(NOTA_INVOC)}</p>
+      <ul class="list">${invoc}</ul>
+    </div>
+    <h3 class="bx-sub copa-sub">Nivel 100 y contadores</h3>
+    <ul class="sx-pasos bullets">${NIVEL_100.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
+}
+
 function khfmSintesis() {
   // Total de cada material para fabricar una vez cada objeto.
   const total = {};
@@ -1498,22 +1675,29 @@ function khfmSintesis() {
     <ul class="mats">${mats}</ul>`;
 }
 
-function khfmInformes() {
-  const idsMundos = MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro));
+// Sección de una sola parte: entradilla y contenido, sin repetir el título de la página.
+const seccionSimple = (html, lead) => `<p class="lead seccion-lead">${lead}</p>${html}`;
+// --- KH FM: una página por sección (#/khfm/<id>) y portada con una tarjeta por sección ---
+function khfmMundos() {
   const mundos = MUNDOS_KHFM.map((m) => item({
     id: ID.khfmLogro(m.logro), titulo: m.nombre, desc: m.cerradura,
     meta: `<span class="chip">Logro: ${esc(logroKhfm[m.logro].nombre)}</span>`,
   })).join('');
+  return seccionSimple(`<ul class="list">${mundos}</ul>
+      <div class="group"><h3>Páginas arrancadas del libro de Pooh</h3>
+        <p class="group-intro">Abren las zonas del Bosque de los Cien Acres; con todas puedes sellar su cerradura. Datos del KH original.</p>
+        <ul class="bullets">${PAGINAS_POOH.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+      ${fuentes([...FUENTES_MUNDOS_KHFM, 'wikiEsBosque'])}`, 'En el orden de sus logros. Marcar una cerradura aquí también marca su logro, y al revés.');
+}
 
+function khfmDiario() {
   const secciones = SECCIONES_DIARIO.map((s) => `
     <div class="info-card"><h3>${esc(s.titulo)}</h3><p>${esc(s.texto)}</p>
       <p class="info-logro"><span class="chip chip-logro">Logro: ${esc(logroKhfm[s.logro].nombre)}</span></p></div>`).join('');
-
   const ansem = INFORMES_ANSEM.map((x) => item({
     id: ID.khfmAnsem(x.n), titulo: `Informe Ansem ${x.n}`, desc: x.como,
     meta: x.fm ? '<span class="chip">Nuevo en Final Mix</span>' : '',
   })).join('');
-
   const mundosDalm = [...new Set(DALMATAS.map((d) => d.mundo))];
   const dalmatas = mundosDalm.map((mu) => {
     const ds = DALMATAS.filter((d) => d.mundo === mu);
@@ -1522,7 +1706,6 @@ function khfmInformes() {
       extra: d.nota ? `<p class="nota-fuente">${esc(d.nota)}</p>` : '',
     })).join(''));
   }).join('');
-
   const trios = TIPOS_TRIO.map((tp) => {
     const ms = triosDe(tp.id);
     return `<div class="trio-tipo" style="--trio:${tp.color}">${grupoKhfm(`khfm-trio-${tp.id}`, `<span class="trio-marca" aria-hidden="true"></span>${esc(tp.nombre)}`,
@@ -1532,24 +1715,13 @@ function khfmInformes() {
         extra: nota ? `<p class="nota-fuente">${esc(nota)}</p>` : '',
       })).join(''), `<p class="group-intro">Cuándo se aprende: ${esc(tp.aprende.charAt(0).toLowerCase() + tp.aprende.slice(1))}</p>`)}</div>`;
   }).join('');
-
   const records = RECORDS.map((r) => item({
     id: ID.khfmRecord(r.id), titulo: r.nombre, desc: r.como ?? '',
     meta: `<span class="chip">${esc(r.mundo)}</span>${r.meta ? ` <span>${esc(r.meta)}</span>` : ''}`,
   })).join('');
-
   return `
-    ${subnav([['mundos', 'Mundos'], ['diario', 'Diario de Pepito'], ['ansem', 'Informes Ansem'], ['dalmatas', 'Dálmatas'], ['trio', 'Marcas Trío'], ['records', 'Récords'], ['armas', 'Armas'], ['sintesis', 'Síntesis'], ['gumi', 'Naves gumi']])}
-    <p class="mode-note">El 100 % cuenta las cerraduras, lo que pide el diario de Pepito, las armas, la síntesis y las naves gumi.</p>
-    ${bloque('mundos', 'Mundos y cerraduras', `<ul class="list">${mundos}</ul>
-      <div class="group"><h3>Páginas arrancadas del libro de Pooh</h3>
-        <p class="group-intro">Abren las zonas del Bosque de los Cien Acres; con todas puedes sellar su cerradura. Datos del KH original.</p>
-        <ul class="bullets">${PAGINAS_POOH.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-      ${fuentes([...FUENTES_MUNDOS_KHFM, 'wikiEsBosque'])}`, {
-      meter: medidor('khfm-mundos', idsMundos, 'Cerraduras'),
-      lead: 'En el orden de sus logros. Marcar una cerradura aquí también marca su logro, y al revés.',
-    })}
-    ${bloque('diario', 'Diario de Pepito', `<div class="info-cards">${secciones}</div>${fuentes(['wikiEsDiario', 'guiaSteamKhfm', 'steamKhfm'])}`, {
+    ${subnav([['secciones', 'Secciones'], ['ansem', 'Informes Ansem'], ['dalmatas', 'Dálmatas'], ['trio', 'Marcas Trío'], ['records', 'Récords']])}
+    ${bloque('secciones', 'Las secciones del diario', `<div class="info-cards">${secciones}</div>${fuentes(['wikiEsDiario', 'guiaSteamKhfm', 'steamKhfm'])}`, {
       lead: 'Completarlo entero da «Ayudante de Pepito» y, en Normal, el final secreto «[Deep Dive]». Cada sección tiene su propio logro.',
     })}
     ${bloque('ansem', 'Informes Ansem', `<ul class="list">${ansem}</ul>${fuentes(['wikiEsAnsem', 'khwikiAnsem'])}`, {
@@ -1572,19 +1744,61 @@ function khfmInformes() {
       ${fuentes(['guiaSteamKhfm', 'wikiEsMinijuegos', 'wikiEsTobogan', 'diMinijuegos'])}`, {
       meter: medidor('khfm-records', idsRecords(), 'Minijuegos'),
       lead: 'Para el logro «Fan de los minijuegos» basta con jugar estos 9 minijuegos; no pide puntuación. Las puntuaciones de los del Bosque son para el premio de Búho.',
-    })}
-    ${bloque('armas', 'Armas', `${khfmArmas()}${fuentes(FUENTES_ARMAS_LISTA)}`, {
-      meter: medidor('khfm-armas', idsArmas(), 'Armas'),
-      lead: 'Las 48 armas de Sora, Donald y Goofy, con su bonificación en Final Mix y el texto del juego. Hay un logro por cada grupo completo.',
-    })}
-    ${bloque('sintesis', 'Síntesis', `${khfmSintesis()}${fuentes(FUENTES_SINTESIS_KHFM)}`, {
-      meter: medidor('khfm-sintesis', idsSintesis(), 'Objetos'),
-      lead: 'Los 33 objetos de la Orfebrería de Ciudad de Paso, en sus 6 listas. Cada lista se abre al fabricar cierto número de objetos distintos.',
-    })}
-    ${bloque('gumi', 'Naves gumi', `${khfmGumi()}${fuentes(['khwikiMisiones', 'diMisiones', 'khwikiPlanos', 'diPlanos', 'khwikiNaves', 'guiaSteamKhfm100', 'guiaSteamKhfm', 'wikiEsTrio'])}`, {
-      meter: medidor('khfm-gumi', [...idsMisiones(), ...idsPlanos()], 'Misiones y planos'),
-      lead: 'Las 30 misiones y los 48 planos, con la nave enemiga y la ruta de cada uno. Las piezas sin nombre oficial en castellano van en inglés entre «».',
     })}`;
+}
+
+function khfmJefes() {
+  const historia = JEFES_HISTORIA.map((j) => jefeKhfm({ ...j, src: `${IMG_JEFES}${j.img}.webp` })).join('');
+  return `
+    ${subnav([['historia', 'De la historia'], ['secretos', 'Secretos']])}
+    ${bloque('historia', 'Jefes de la historia', `<div class="bosses">${historia}</div>${fuentes(['wikiEsJefes', 'khwikiJefesKh', 'wikiEsAccesoriosKh'])}`, {
+      meter: medidor('khfm-jefes-historia', idsJefesHistoria(), 'Jefes'),
+      lead: 'En el orden en que aparecen, con lo que dan en Final Mix y cómo vencerlos. Los del Coliseo están en su sección.',
+    })}
+    ${bloque('secretos', 'Jefes secretos', `<div class="bosses">${JEFES_SECRETOS.map((j) => jefeKhfm(j)).join('')}</div>${fuentes(FUENTES_JEFES_LISTA)}`, {
+      meter: medidor('khfm-jefes', idsJefesSecretos(), 'Jefes'),
+      lead: 'Los tres jefes de Final Mix fuera del Coliseo. La guía recomienda ir con la historia terminada, el nivel alto y la magia al máximo.',
+    })}`;
+}
+
+// `ids`: lo que cuenta para su medidor; `img`: imagen de la tarjeta; `html`: contenido de su página.
+const SECCIONES_KHFM = [
+  { id: 'mundos', titulo: 'Mundos y cerraduras', desc: 'Dónde está cada cerradura y cómo se sella.', img: 'assets/img/khfm/logros/ACH_022.jpg',
+    ids: () => MUNDOS_KHFM.map((m) => ID.khfmLogro(m.logro)), html: khfmMundos },
+  { id: 'diario', titulo: 'Diario de Pepito', desc: 'Informes Ansem, 99 dálmatas, marcas Trío y récords.', img: 'assets/img/khfm/logros/ACH_033.jpg',
+    ids: () => [...idsAnsem(), ...idsDalmatas(), ...idsTrio(), ...idsRecords()], html: khfmDiario },
+  { id: 'armas', titulo: 'Armas', desc: 'Las 48 llaves espada, bastones y escudos.', img: `${IMG_ARMAS}arma-artema.webp`,
+    ids: idsArmas,
+    html: () => seccionSimple(`${khfmArmas()}${fuentes(FUENTES_ARMAS_LISTA)}`, 'Las 48 armas de Sora, Donald y Goofy, con su bonificación en Final Mix y el texto del juego. Hay un logro por cada grupo completo.') },
+  { id: 'sintesis', titulo: 'Síntesis', desc: 'Los 33 objetos de la Orfebrería y sus materiales.', img: 'assets/img/khfm/logros/ACH_040.jpg',
+    ids: idsSintesis,
+    html: () => seccionSimple(`${khfmSintesis()}${fuentes(FUENTES_SINTESIS_KHFM)}`, 'Los 33 objetos de la Orfebrería de Ciudad de Paso, en sus 6 listas. Cada lista se abre al fabricar cierto número de objetos distintos.') },
+  { id: 'gumi', titulo: 'Naves gumi', desc: 'Las 30 misiones y los 48 planos.', img: `${IMG_GUMI}kingdom.webp`,
+    ids: () => [...new Set([...idsMisiones(), ...idsPlanos()])],
+    html: () => seccionSimple(`${khfmGumi()}${fuentes(['khwikiMisiones', 'diMisiones', 'khwikiPlanos', 'diPlanos', 'khwikiNaves', 'guiaSteamKhfm100', 'guiaSteamKhfm', 'wikiEsTrio'])}`, 'Las 30 misiones y los 48 planos, con la nave enemiga y la ruta de cada uno. Las piezas sin nombre oficial en castellano van en inglés entre «».') },
+  { id: 'coliseo', titulo: 'Coliseo del Olimpo', desc: 'Las cuatro copas, sus tres modos y los combates de oro y platino.', img: `${IMG_COLISEO}copa-hades.webp`,
+    ids: idsColiseo,
+    html: () => seccionSimple(`${khfmColiseo()}${fuentes(FUENTES_COLISEO_LISTA)}`, 'Las cuatro copas con sus tres modos y lo que da cada uno, los combates clave y los dos combates secretos de Final Mix.') },
+  { id: 'jefes', titulo: 'Jefes', desc: 'Los de la historia y los tres secretos de Final Mix.', img: `${IMG_JEFES}lado-oscuro.webp`,
+    ids: () => [...idsJefesHistoria(), ...idsJefesSecretos()], html: khfmJefes },
+  { id: 'sora', titulo: 'Sora y dificultad', desc: 'Partidas, elección inicial, magias e invocaciones.', img: 'assets/img/khfm/logros/ACH_018.jpg',
+    ids: () => [...idsMagias(), ...idsInvoc()],
+    html: () => seccionSimple(`${khfmSora()}${fuentes(['guiaSteamKhfm', 'diStats', 'fandomEnExp', 'diMagia', 'diInvoc', 'wikiEsCopas', 'wikiEsEspectro'])}`, 'Cómo planificar las partidas, qué elegir al empezar y dónde se consigue cada nivel de magia y cada invocación.') },
+];
+const seccionKhfm = (id) => SECCIONES_KHFM.find((s) => s.id === id);
+
+function khfmPortada() {
+  return `
+    <p class="mode-note">El 100 % cuenta las cerraduras, lo que pide el diario de Pepito, las armas, la síntesis, las naves gumi, el Coliseo, los jefes, las magias y las invocaciones.</p>
+    <div class="secciones-khfm">${SECCIONES_KHFM.map((s) => `
+      <a class="seccion-khfm" href="#/khfm/${s.id}">
+        <span class="seccion-art"><img src="${esc(s.img)}" alt="" loading="lazy"></span>
+        <span class="seccion-cuerpo">
+          <span class="seccion-titulo">${esc(s.titulo)}</span>
+          <span class="seccion-desc">${esc(s.desc)}</span>
+          ${medidor(`khfm-sec-${s.id}`, s.ids(), 'Progreso')}
+        </span>
+      </a>`).join('')}</div>`;
 }
 
 function vistaKHFM() {
@@ -1599,7 +1813,198 @@ function vistaKHFM() {
       </div>
     </header>
     ${selectorModo('khfm-modo-logros', logrosKHFM(), 'khfm-modo-100', juegoKHFM(), { subLogros: 'Los 55 logros oficiales', subJuego: 'Lo que registra el juego' })}
-    ${modo() === 'logros' ? khfmLogros() : khfmInformes()}
+    ${modo() === 'logros' ? khfmLogros() : khfmPortada()}
+  </section>`;
+}
+
+function vistaSeccionKHFM(s) {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: 'Kingdom Hearts Final Mix', href: '#/khfm' }, { t: s.titulo }]);
+  const i = SECCIONES_KHFM.indexOf(s);
+  const ant = SECCIONES_KHFM[i - 1];
+  const sig = SECCIONES_KHFM[i + 1];
+  return `
+  <section class="page juego-khfm seccion-pagina">
+    <header class="seccion-head">
+      <img class="seccion-head-art" src="${esc(s.img)}" alt="" width="72" height="72">
+      <div class="seccion-head-txt">
+        <p class="seccion-juego"><a href="#/khfm">Kingdom Hearts Final Mix</a> · Informes · 100 %</p>
+        <h1 class="page-title">${esc(s.titulo)}</h1>
+      </div>
+      ${medidor(`khfm-pag-${s.id}`, s.ids(), 'Progreso de la sección')}
+    </header>
+    ${s.html()}
+    <nav class="seccion-nav" aria-label="Otras secciones">
+      ${ant ? `<a href="#/khfm/${ant.id}"><small>Anterior</small><b>${esc(ant.titulo)}</b></a>` : '<span></span>'}
+      ${sig ? `<a class="seccion-sig" href="#/khfm/${sig.id}"><small>Siguiente</small><b>${esc(sig.titulo)}</b></a>` : '<a class="seccion-sig" href="#/khfm"><small>Volver</small><b>Portada del juego</b></a>'}
+    </nav>
+  </section>`;
+}
+
+// ---------- KH III + Re Mind ----------
+const GRUPO_A_SECCION_KH3 = { artema: 'artema' };
+function kh3Logros() {
+  const grupo = (g) => {
+    const ids = g.ids.map(ID.kh3Logro);
+    medidores[`kh3-g-${g.id}`] = ids;
+    const sec = seccionKh3(GRUPO_A_SECCION_KH3[g.id]);
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="kh3-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
+        ${sec ? `<a class="ir-seccion" href="#/kh3/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
+      <ul class="list">${g.ids.map((id) => itemLogro(logroKh3[id], 'kh3')).join('')}</ul>
+      ${g.id === 'codigos' ? `<p class="nota-fuente">${esc(NOTA_RANGO_A)}</p>` : ''}
+    </div>`;
+  };
+  return `
+    ${subnav([['ruta', 'Antes de empezar'], ['logros', 'Logros']])}
+    ${bloque('ruta', 'Antes de empezar', `<ol class="steps">${rutaPasos(RUTA_KH3, logroKh3)}</ol>`, { lead: 'Lo que conviene saber antes de la primera partida.' })}
+    ${bloque('logros', 'Los 51 logros', `${GRUPOS_LOGROS_KH3.map(grupo).join('')}${fuentes(FUENTES_CONSEJOS_KH3)}`, {
+      meter: medidor('kh3-logros-lista', logrosKH3(), 'Logros'),
+      lead: 'Abre «Cómo conseguirlo» donde lo haya. Los logros ocultos esconden su descripción hasta que la abras.',
+    })}`;
+}
+
+// Anillo con los 7 Orichalcum+: cada gema se enciende al marcar el suyo y lleva a su ficha.
+function anilloOricalcos() {
+  const gemas = ORICALCOS.map((o, i) => {
+    const id = ID.kh3Oricalco(o.id);
+    return `<a class="gema${store.hecho(id) ? ' is-on' : ''}" data-gema="${id}" href="#ori-${o.id}" data-goto="ori-${o.id}" style="--i:${i}" title="${esc(o.titulo)}">
+      <img src="${IMG_ARTEMA}oricalco-plus.webp" alt="${esc(o.titulo)}" width="40" height="35"></a>`;
+  }).join('');
+  return `<div class="anillo" style="--n:${ORICALCOS.length}">
+    <img class="anillo-arma" src="${IMG_ARTEMA}arma-artema.webp" alt="Arma Artema de Kingdom Hearts III" width="480" height="456">
+    ${gemas}
+  </div>`;
+}
+
+const imgMat = (id, n = 36) => `<img src="${IMG_ARTEMA}${id}.webp" alt="" width="${n}" height="${n}" loading="lazy">`;
+
+function kh3Artema() {
+  const idsOri = ORICALCOS.map((o) => ID.kh3Oricalco(o.id));
+  medidores['kh3-ori'] = idsOri;
+  const tablaFlanes = `<div class="sx-tabla-wrap"><table class="sx-tabla flanes">
+    <thead><tr><th scope="col">Flan</th><th scope="col">Dónde</th><th scope="col">Puntos</th></tr></thead>
+    <tbody>${FLANES.map((f) => `<tr><th scope="row"><span class="flan">${imgMat(`flan-${f.id}`, 32)}${esc(f.nombre)}</span></th>
+      <td>${esc(f.mundo)}: ${esc(f.zona)}</td><td>más de ${esc(f.pts)}${f.nota ? `<small class="flan-nota">${esc(f.nota)}</small>` : ''}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+  const oricalco = (o) => item({
+    id: ID.kh3Oricalco(o.id), titulo: o.titulo, desc: o.como, meta: esc(o.donde), icono: `${IMG_ARTEMA}${o.img ?? 'oricalco-plus'}.webp`,
+    extra: o.flanes ? tablaFlanes : '',
+  }).replace('<li class="item', `<li id="ori-${o.id}" class="item`);
+  const cristal = (c) => `<article class="cristal">
+    <header class="cristal-head">${imgMat(c.id, 48)}<div><h3>${esc(c.nombre)}</h3><p class="cristal-en">${esc(c.en)}. Hacen falta ${c.falta}.</p></div></header>
+    <ul class="caidas">${c.caidas.map((d) => `<li>${imgMat(d.img, 44)}<span><b>${esc(d.enemigo)}</b> <span class="pct">${d.pct} %</span><small>${esc(d.donde)}</small></span></li>`).join('')}</ul>
+    ${c.receta ? `<p class="cristal-receta"><b>O fabrícalo:</b> ${esc(c.receta.mats)}. ${esc(c.receta.abre)}</p>` : ''}
+    ${c.extra ? `<p class="cristal-receta">${esc(c.extra)}</p>` : ''}
+  </article>`;
+  return `
+    <section class="forja">
+      ${anilloOricalcos()}
+      <div class="forja-txt">
+        <p class="lead">${esc(REQUISITO_ARTEMA)}</p>
+        <p class="forja-n"><b data-count="kh3-ori">${store.contar(idsOri)}/${ORICALCOS.length}</b> Orichalcum+ conseguidos</p>
+        <ul class="receta forja-receta" aria-label="Receta">${RECETA_ARTEMA.map((m) => `<li class="mat-chip" title="${esc(m.en)}">${imgMat(m.id, 22)}<b>×${m.n}</b> ${esc(m.nombre)}</li>`).join('')}</ul>
+        <p class="nota-fuente">${esc(NOTA_RECETA)}</p>
+        <div class="forja-pasos">${PASOS_ARTEMA.slice(0, -1).map((p) => marca(ID.kh3Artema(p.id), esc(p.t))).join('')}
+          ${marca(ID.kh3Logro('ACH_44'), 'Fabricar el Arma Artema (logro «Arma Artema»)')}
+          ${marca(ID.kh3Artema('nivel10'), esc(PASOS_ARTEMA.at(-1).t))}</div>
+      </div>
+    </section>
+    ${subnav([['oricalcos', 'Los 7 Orichalcum+'], ['cristales', 'Cristales'], ['mejoras', 'Mejoras'], ['ficha', 'Forma Suprema']])}
+    ${bloque('oricalcos', 'Los 7 Orichalcum+', `<ul class="list">${ORICALCOS.map(oricalco).join('')}</ul>`, {
+      meter: medidor('kh3-ori-lista', idsOri, 'Orichalcum+'),
+      lead: 'Hay justo siete en todo el juego y no se compran: marca cada uno al conseguirlo.',
+    })}
+    ${bloque('cristales', 'Dónde caen los cristales', `<div class="cristales">${CRISTALES_ARTEMA.map(cristal).join('')}</div>`, {
+      lead: 'Probabilidad de que lo suelte cada enemigo. Las «Battlegate» son los combates opcionales de cada mundo.',
+    })}
+    ${bloque('mejoras', 'Mejoras hasta el nivel 10', `<div class="sx-tabla-wrap"><table class="sx-tabla mejoras">
+      <thead><tr><th scope="col">Nivel</th><th scope="col">Fuerza</th><th scope="col">Magia</th><th scope="col">Materiales</th></tr></thead>
+      <tbody>${MEJORAS_ARTEMA.map((m) => `<tr><th scope="row">${m.nv}</th><td>+${m.fue}</td><td>+${m.mag}</td><td>${esc(m.mats)}</td></tr>`).join('')}</tbody>
+    </table></div><p class="nota-fuente">${esc(NOTA_MEJORAS)}</p>`, { lead: 'Se mejora en la tienda Moguri. Llevar cualquier llave espada al nivel 10 da el logro «Maestro armero».' })}
+    ${bloque('ficha', 'Qué hace y Forma Suprema', `<div class="ficha-artema">
+      <img src="${IMG_ARTEMA}forma-suprema.webp" alt="Sora en Forma Suprema" width="640" height="376" loading="lazy">
+      <div><p>${esc(FICHA_ARTEMA.base)}</p><p><b>Habilidades:</b> ${esc(FICHA_ARTEMA.habilidades)}.</p><p>${esc(FICHA_ARTEMA.forma)}</p></div>
+    </div>`)}
+    ${fuentes(FUENTES_ARTEMA)}`;
+}
+
+function kh3Portafortuna() {
+  const total = idsPf().length;
+  medidores['kh3-pf-total'] = idsPf();
+  const n = store.contar(idsPf());
+  const premios = `<ol class="hitos" aria-label="Premios por número de portafortuna">${PREMIOS_PF.map(([h, premio]) => `
+    <li class="hito${n >= h ? ' is-on' : ''}${premio === 'Orichalcum+' ? ' hito-ori' : ''}" data-hito="${h}"><b>${h}</b><span>${esc(premio)}</span></li>`).join('')}</ol>`;
+  const tarjeta = (w, x, i) => {
+    const id = ID.kh3Pf(w.id, i + 1);
+    const hecho = store.hecho(id);
+    return `<li class="item pf${hecho ? ' is-done' : ''}">
+      <label class="pf-label">
+        <input type="checkbox" class="sr-only check-input" data-id="${esc(id)}"${hecho ? ' checked' : ''}>
+        <span class="pf-foto"><img src="${IMG_PF}pf-${w.id}-${i + 1}.webp" alt="Portafortuna ${i + 1} de ${esc(w.nombre)}" width="480" height="270" loading="lazy">
+          <span class="pf-n">${i + 1}</span><span class="crown">${CORONA}</span></span>
+        <span class="pf-txt"><span class="pf-zona" title="${esc(x.en)}">${esc(x.zona)}</span><span class="pf-nota">${esc(x.t)}</span></span>
+      </label>
+    </li>`;
+  };
+  const mundo = (w) => bloque(`pf-${w.id}`, esc(w.nombre), `${w.aviso ? `<p class="nota-fuente">${esc(w.aviso)}</p>` : ''}
+    <ul class="pfs">${w.pf.map((x, i) => tarjeta(w, x, i)).join('')}</ul>`, { meter: medidor(`kh3-pf-${w.id}`, idsPf(w), 'Fotografiados') });
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_PF)}</p>
+    <h2 class="hitos-tit">Premios <span class="count" data-count="kh3-pf-total">${n}/${total}</span></h2>
+    ${premios}
+    ${subnav(MUNDOS_PF.map((w) => [`pf-${w.id}`, `${w.nombre} (${w.pf.length})`]))}
+    ${MUNDOS_PF.map(mundo).join('')}
+    ${fuentes(FUENTES_PF)}`;
+}
+
+const SECCIONES_KH3 = [
+  { id: 'portafortuna', titulo: 'Portafortuna', desc: 'Los 90, con captura de cada uno, y sus premios.', img: `${IMG_PF}pf-villa-1.webp`, ids: () => idsPf(), html: kh3Portafortuna },
+  { id: 'artema', titulo: 'Arma Artema', desc: 'Receta, los 7 Orichalcum+, cristales y mejoras.', img: `${IMG_ARTEMA}arma-artema.webp`, ids: () => idsArtema(), html: kh3Artema },
+];
+const seccionKh3 = (id) => SECCIONES_KH3.find((s) => s.id === id);
+
+function vistaKH3() {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: KH3.nombre }]);
+  return `
+  <section class="page juego-kh3" data-modo="${modo()}">
+    <header class="game-hero">
+      <img class="game-hero-logo" src="${KH3.logo}" alt="Kingdom Hearts III" width="720" height="438">
+      <div class="game-hero-stats">
+        ${medidor('kh3-logros', logrosKH3(), ETQ_LOGROS)}
+        ${medidor('kh3-100', juegoKH3(), ETQ_JUEGO)}
+      </div>
+    </header>
+    ${selectorModo('kh3-modo-logros', logrosKH3(), 'kh3-modo-100', juegoKH3(), { subLogros: 'Los 51 logros oficiales', subJuego: 'Lo que llevas preparado' })}
+    ${modo() === 'logros' ? kh3Logros() : `<div class="secciones-khfm">${SECCIONES_KH3.map((s) => `
+      <a class="seccion-khfm" href="#/kh3/${s.id}">
+        <span class="seccion-art"><img src="${esc(s.img)}" alt="" loading="lazy"></span>
+        <span class="seccion-cuerpo"><span class="seccion-titulo">${esc(s.titulo)}</span><span class="seccion-desc">${esc(s.desc)}</span>
+          ${medidor(`kh3-sec-${s.id}`, s.ids(), 'Progreso')}</span>
+      </a>`).join('')}</div>`}
+  </section>`;
+}
+
+function vistaSeccionKH3(s) {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: KH3.nombre, href: '#/kh3' }, { t: s.titulo }]);
+  const i = SECCIONES_KH3.indexOf(s);
+  const ant = SECCIONES_KH3[i - 1];
+  const sig = SECCIONES_KH3[i + 1];
+  return `
+  <section class="page juego-kh3 seccion-pagina">
+    <header class="seccion-head">
+      <img class="seccion-head-art" src="${esc(s.img)}" alt="" width="72" height="72">
+      <div class="seccion-head-txt">
+        <p class="seccion-juego"><a href="#/kh3">${esc(KH3.nombre)}</a></p>
+        <h1 class="page-title">${esc(s.titulo)}</h1>
+      </div>
+      ${medidor(`kh3-pag-${s.id}`, s.ids(), 'Progreso de la sección')}
+    </header>
+    ${s.html()}
+    <nav class="seccion-nav" aria-label="Otras secciones">
+      ${ant ? `<a href="#/kh3/${ant.id}"><small>Anterior</small><b>${esc(ant.titulo)}</b></a>` : '<span></span>'}
+      ${sig ? `<a class="seccion-sig" href="#/kh3/${sig.id}"><small>Siguiente</small><b>${esc(sig.titulo)}</b></a>` : '<a class="seccion-sig" href="#/kh3"><small>Volver</small><b>Portada del juego</b></a>'}
+    </nav>
   </section>`;
 }
 
@@ -1622,6 +2027,9 @@ function render({ conservarScroll = false } = {}) {
   else if (ruta[0] === 'bbs' && !ruta[1]) html = vistaBBS();
   else if (ruta[0] === 'bbs' && PERSONAJES[ruta[1]]) html = vistaPersonaje(ruta[1]);
   else if (ruta[0] === 'khfm' && !ruta[1]) html = vistaKHFM();
+  else if (ruta[0] === 'khfm' && seccionKhfm(ruta[1])) html = vistaSeccionKHFM(seccionKhfm(ruta[1]));
+  else if (ruta[0] === 'kh3' && !ruta[1]) html = vistaKH3();
+  else if (ruta[0] === 'kh3' && seccionKh3(ruta[1])) html = vistaSeccionKH3(seccionKh3(ruta[1]));
   else html = vista404();
   document.body.dataset.view = ruta[0] || 'titulo';
   $main.innerHTML = html;

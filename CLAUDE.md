@@ -30,8 +30,10 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
 `GET /api/estado` y restaurarlo después con `PUT /api/estado`. Nunca vaciar la BD: puede tener progreso real.
 
 ## Estructura
-- `src/app.js`: router por hash (`#/`, `#/juegos`, `#/bbs`, `#/bbs/<pj>`) y vistas como plantillas de texto.
-  Todo texto dinámico pasa por `esc()`.
+- `src/app.js`: router por hash (`#/`, `#/juegos`, `#/bbs`, `#/bbs/<pj>`, `#/khfm`, `#/khfm/<sección>`) y vistas como
+  plantillas de texto. Todo texto dinámico pasa por `esc()`. KH FM: la portada (`#/khfm`) muestra en «Logros» la ruta y los
+  55 logros (cada grupo enlaza con su sección) y en «Informes» una tarjeta por sección; cada sección tiene su página
+  (lista `SECCIONES_KHFM`: mundos, diario, armas, sintesis, gumi, coliseo, jefes, sora) con anterior/siguiente.
 - `src/store.js`: progreso (API de SQLite + copia en `localStorage`). `src/cursor.js`: estela de llave espada (solo ratón y sin reduced-motion).
 - `src/data/bbs-logros.js`: **generado** desde la página de logros de Steam (no editar a mano).
 - `src/data/bbs.js`: fuentes, personajes, ruta de logros, golpes finales, estilos, Cuartelillo,
@@ -53,6 +55,9 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
   Ids: `khfm.logro.ACH_xxx`; las cerraduras del 100 % reutilizan el id de su logro (una sola marca).
 - `src/data/khfm-diario.js`: a mano. Informes Ansem, 99 dálmatas (33 cofres), 46 marcas Trío, récords y páginas de Pooh.
   Ids: `khfm.ansem.<n>`, `khfm.dalmata.<primer cachorro>`, `khfm.trio.<tipo>.<n>`, `khfm.record.<id>`.
+- Resto de KH FM, todo a mano: `khfm-armas.js` (armas y síntesis), `khfm-gumi.js`, `khfm-coliseo.js` (copas y jefes secretos),
+  `khfm-jefes.js` (jefes de la historia) y `khfm-sora.js` (partidas, elección, magias, invocaciones). Imágenes en
+  `assets/img/khfm/<armas|gumi|coliseo>/` (en `coliseo/` también los jefes, `jefe-*.webp`).
 - `DESIGN.md`: sistema de diseño (vidriera como elemento distintivo, tokens en `:root`).
 
 **No cambiar los ids de conseguibles** (`bbs.logro.ACH_xxx`, `bbs.golpe.<pj>.<slug>`, `bbs.coso.<id>`,
@@ -76,7 +81,9 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
    ficha de cada pieza con qué es, cómo se consigue, receta e ingredientes, GIFs del juego y habilidades con su
    cristal. Coso con emblemas, rondas, reto extra y estrategia (también pendiente de revisión).
    Jefes de la historia de los tres personajes hechos (pendiente de revisión).
-1. **Comandos de cada personaje y Nexos-D hechos** (pendiente de revisión). Nexos-D: solo cómo se consigue cada uno
+1. **Comandos de cada personaje y Nexos-D hechos** (pendiente de revisión). Los comandos se marcan (21-10-2026):
+   ids `bbs.cmd.<pj>.<slug>`, salvo los que solo salen de un tablero, que usan `bbs.tablero.cmd.<pj>.<slug>` (una sola
+   marca); cuentan para el 100 % del personaje. Nexos-D: solo cómo se consigue cada uno
    (`src/data/bbs-nexos.js`); el usuario no quiere la lista de comandos de cada Nexo. Si no hay datos, no se pone nada.
 1b. **Tesoros de BBS hechos** (21-10-2026, pendiente de revisión): `src/data/bbs-tesoros.js` (**generado** con
    `notas/herramientas/genera_tesoros.py` desde la hoja «Treasures» de la guía de Steam 3292773479, en CSV). Ids
@@ -96,7 +103,14 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
    de la lista VI usan solo su id de arma). **Entrega 4 (naves gumi) hecha** el 21-10-2026, pendiente de revisión
    (`src/data/khfm-gumi.js`, imágenes en `assets/img/khfm/gumi/`; ids `khfm.gumi.mision.<mundo>.<n>` y `khfm.gumi.plano.<id>`,
    los planos de misión usan el id de su misión III). Piezas gumi: «Gumi Electro», «Gumi Electro+»… cuando hay fuente; si no,
-   inglés entre «». **Siguiente: entrega 5 (Coliseo y jefes).**
+   inglés entre «». **Entrega 5 (Coliseo y jefes secretos) hecha** el 21-10-2026, pendiente de revisión
+   (`src/data/khfm-coliseo.js`, imágenes en `assets/img/khfm/coliseo/`; ids `khfm.coliseo.<copa>.<normal|solo|contrarreloj>`
+   y `khfm.jefe.<id>`). Faltan los jefes de la historia (no entraron en esta entrega). **Entrega 6 (Sora y dificultad) hecha**
+   el 21-10-2026, pendiente de revisión (`src/data/khfm-sora.js`; ids `khfm.magia.<id>.<1-3>` y `khfm.invoc.<id>`).
+   **Jefes de la historia hechos y KH FM reorganizado en una página por sección** (21-10-2026, pendiente de revisión;
+   ids `khfm.jefe.<id>`). **KH FM queda completo.** Nombres de jefes: los de la Wiki ES («Acechador», «Jaula Parásita»,
+   «Armadura Inversa», «Bégimo»…). Sin datos: Riku y Riku-Ansem (no tienen estrategia ni premio de FM en KHWiki).
+   **Siguiente: Re:Chain of Memories o KH II FM** (preguntar al usuario cuál).
    **Fuentes de KH FM (mejor que la Wiki ES, que a menudo da el KH original sin los cambios de Final Mix):**
    - Guía de logros de KH1 en castellano (Steam 3293246581): perdibles, consejos, dónde sale cada llave espada, bastón y escudo,
      materiales de síntesis y sus sincorazón, planos gumi. Otras guías de Steam: 3279160251 (síntesis y materiales),
@@ -107,3 +121,11 @@ Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `lo
    - Wiki inglesa de Fandom (`kingdomhearts.fandom.com/api.php`, misma API): marca las filas «(FM)».
    - KHWiki: la API daba 503; `notas/herramientas/khtexto.py` baja las páginas en HTML (solo funcionan las que están en caché).
    358/2 Days y Re:coded no van: en la colección son solo películas.
+4. **KH III + Re Mind** (22-10-2026, pendiente de revisión; juego aparte en Steam, app 2552450): `#/kh3` con los 51 logros
+   (`kh3-logros.js` generado con `notas/herramientas/genera_kh3_logros.py`), ruta y consejos (`kh3.js`), y la sección
+   `#/kh3/artema` (`kh3-artema.js`): receta, los 7 Orichalcum+ marcables (`kh3.oricalco.<id>`), cristales, mejoras.
+   Ids `kh3.logro.ACH_xx`, `kh3.artema.<paso>`. Acento `--kh3` (lila del logo). Nombres de materiales: Wiki ES
+   (Wellspring = «Poder», Lucid = «Claro», Pulsing = «Fuerza», comprobado por las caídas). Las guías de Steam dieron
+   «too many requests»: reintentar. **Portafortuna hechos** (22-10-2026, pendiente de revisión): `#/kh3/portafortuna`
+   (`kh3-portafortuna.js`, a mano), numeración y capturas de KHWiki (`assets/img/kh3/portafortuna/`), ids
+   `kh3.portafortuna.<mundo>.<n>`; la numeración de la Wiki ES es distinta. **Siguientes entregas:** tesoros, Orfebrería y materiales, Flantásticos y minijuegos, nave gumi, cocina, Re Mind (datos y méritos de códigos).

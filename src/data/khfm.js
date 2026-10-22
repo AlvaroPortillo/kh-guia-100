@@ -108,8 +108,8 @@ export const CONSEJOS_KHFM = {
   ACH_042: 'Tres objetos distintos de la lista I; al hacerlos se abre la lista II.',
   ACH_043: 'Con 15 objetos distintos se abre la lista IV y el moguri te da la habilidad Más Encuentros.',
   ACH_044: 'Treinta objetos distintos: todas las listas I a V. Al hacerlo se abre la lista VI.',
-  ACH_040: 'Son 33 objetos. Los tres de la lista VI son armas: Vara de Fantasía, Siete Elementos y Arma Artema. Recetas y materiales en «Informes · 100 %», sección Síntesis.',
-  ACH_053: 'Son 18 llaves espada, contando la Cadena del Reino. La última, el Arma Artema, se fabrica en la lista VI de la síntesis. Dónde sale cada una: «Informes · 100 %», sección Armas.',
+  ACH_040: 'Son 33 objetos. Los tres de la lista VI son armas: Vara de Fantasía, Siete Elementos y Arma Artema. Recetas y materiales en la sección Síntesis de esta guía.',
+  ACH_053: 'Son 18 llaves espada, contando la Cadena del Reino. La última, el Arma Artema, se fabrica en la lista VI de la síntesis. Dónde sale cada una: en la sección Armas de esta guía.',
   ACH_054: 'Son 15 bastones. Vara de Fantasía se fabrica en la lista VI de la síntesis y el Cetro de Brujo solo lo suelta el sincorazón Brujo (0,2 %).',
   ACH_055: 'Son 15 escudos. Siete Elementos se fabrica en la lista VI de la síntesis y el Defensor solo lo suelta el sincorazón Defensor (0,2 %).',
 };
