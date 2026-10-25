@@ -274,7 +274,7 @@ export const MUNDOS_TESOROS = [
       c(2, 'Undersea Cavern', 'Adamantite', 'Desde la entrada de la cueva, toma el camino de la derecha. Pasado el coral amarillo y naranja, rompe las cajas y barriles de la derecha: tapan un hueco con el cofre.'),
       c(3, 'Undersea Cavern', 'Orichalcum', 'Por la derecha hasta la cueva con muchas medusas. Crúzala mirando la pared izquierda: hay otro túnel con medusas. Elimínalas con magia: el cofre está al final.'),
       c(4, 'Undersea Cavern', "Fishin' Frenzy", 'Cruza ese túnel; al final, sigue recto (no a la derecha), pasa la zona con sincorazón y entra en el pasadizo estrecho con medusas. Al final está el cofre.', { juego: true }),
-      c(15, 'Undersea Cavern', 'Ocean Heartbinder', 'Al vencer al «Lightning Angler» y recuperar el control, mira justo debajo de Sora.'),
+      c(15, 'Undersea Cavern', 'Ocean Heartbinder', 'Al vencer al Rape Eléctrico y recuperar el control, mira justo debajo de Sora.'),
       c(45, 'Southern Waters', 'Celestriad', 'En el propio Leviatán: desde el timón, usa los puntos de salto para subir a la cofa. El cofre está arriba.'),
       c(12, 'Southern Waters', 'Orichalcum+', 'En «Exile Island», en el centro de la isla, en el suelo de un pequeño hueco. Es uno de los 7 Orichalcum+ del Arma Artema.', { id: 'kh3.oricalco.exile' }),
       c(44, 'Northern Waters', 'Chaos Anklet', 'En «Horseshoe Island», por la orilla hacia la gran roca del centro: hay cinco cofres juntos.'),

@@ -107,7 +107,7 @@ export const RECORDS_KH3 = [
   { id: 'vinculo', titulo: 'Vínculos', intro: 'Usa cada uno una vez contra enemigos.', items: [
     'Marramaguau: en Villa Crepúsculo, tras el primer jefe.', 'Rompe Ralph: en la Caja de juguetes, al superar Verum Rex en la tienda de videojuegos.',
     'Simba: en Monstruópolis, tras el jefe de mitad del mundo.', 'Stitch: en San Fransokyo, tras superar un circuito de Cazaluz.',
-    'Ariel: en El Caribe, en el cofre que protege el «Lightning Angler» (cofre n.º 15). Hay que abrirlo; si se te pasó, puedes volver.',
+    'Ariel: en El Caribe, en el cofre que protege el Rape Eléctrico (cofre n.º 15). Hay que abrirlo; si se te pasó, puedes volver.',
   ] },
   { id: 'cien-acres', titulo: 'Minijuegos del Bosque de los Cien Acres', intro: 'Forman parte de la historia del mundo y no se pueden perder.', items: [
     "«Tigger's Vegetable Spree»", "«Lumpy's Fruit Parade»", "«Pooh's Hunny Harvest»",

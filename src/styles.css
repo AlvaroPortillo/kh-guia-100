@@ -1359,6 +1359,27 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .schwarz b { color: var(--text); }
 @media (max-width: 640px) { .schwarz { grid-template-columns: 1fr; } .schwarz img { max-width: 260px; } }
 
+/* KH III · Adversarios: cuadrícula de tarjetas con el render de cada enemigo */
+.adv-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 12px; }
+.item.adv { border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface); overflow: hidden;
+  transition: border-color var(--t) var(--ease), transform var(--t) var(--ease); }
+.item.adv:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); transform: translateY(-2px); }
+.item.adv.is-done { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); }
+.adv-label { display: grid; align-content: start; cursor: pointer; height: 100%; }
+.adv-label:has(.check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: -2px; border-radius: var(--r-m); }
+.adv-img { position: relative; display: grid; place-items: center; height: 120px; padding: 12px;
+  background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%); }
+.adv-img img { max-width: 100%; max-height: 96px; object-fit: contain; transition: filter var(--t) var(--ease); }
+.adv:not(.is-done) .adv-img img { filter: saturate(.6) brightness(.85); }
+.adv-img .pf-n { left: 8px; top: 8px; min-width: 26px; height: 26px; font-size: .8125rem; }
+.adv-img .crown { position: absolute; right: 8px; top: 8px; width: 26px; height: 26px; }
+.adv:not(.is-done) .adv-img .crown { background: color-mix(in srgb, var(--bg) 82%, transparent); }
+.adv-txt { display: grid; gap: 3px; padding: 10px 12px 12px; font-size: .8125rem; color: var(--text-2); }
+.adv-txt b { font-size: .9375rem; color: var(--text); }
+.adv-txt b[title] { cursor: help; }
+.adv-nota { color: color-mix(in srgb, var(--gold) 85%, var(--text)); }
+@media (prefers-reduced-motion: reduce) { .item.adv, .item.adv:hover { transition: none; transform: none; } }
+
 /* KH III · Re Mind: suma de puntos de mérito EXPERTO */
 .exp-suma { display: grid; justify-items: start; gap: 2px; margin: 0 0 16px; padding: 16px 20px; border-radius: var(--r-m);
   border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, transparent), var(--surface)); color: var(--text-2); }

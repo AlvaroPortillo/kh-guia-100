@@ -56,6 +56,9 @@ export const FUENTES_KH3 = {
   khwIngredientes: { nombre: 'KHWiki — Ingredients (dónde sale cada ingrediente)', url: `${KHW}Ingredients` },
   ppxRecetas: { nombre: 'PowerPyx — las 28 recetas de KH3 (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-all-cooking-recipes-list/' },
   ppxIngredientes: { nombre: 'PowerPyx — dónde están los ingredientes (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-all-ingredients-locations/' },
+  ppxAdversarios: { nombre: 'PowerPyx — los 81 adversarios y dónde salen (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-adversaries-locations-list/' },
+  wesEnemigos: { nombre: 'Wiki ES — Enemigos de Kingdom Hearts III', url: `${WES}Categor%C3%ADa:Enemigos_Kingdom_Hearts_III` },
+  khwJefes: { nombre: 'KHWiki — ficha de cada jefe de KH III (premios y estrategia de KH III y Re Mind), p. ej. Sköll', url: `${KHW}Sk%C3%B6ll` },
   wesAccesorios: { nombre: 'Wiki ES — Accesorios de Kingdom Hearts III', url: `${WES}Categor%C3%ADa:Accesorios_de_Kingdom_Hearts_III` },
 };
 

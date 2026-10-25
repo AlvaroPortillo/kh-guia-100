@@ -54,6 +54,8 @@ import { INTRO_COCINA, JUEGOS_COCINA, ESTRELLAS_BISTRO, CONSEJOS_COCINA, FUENTES
 import {
   PASOS_REMIND, DATOS_ORG, MERITOS_PRIN, CODIGOS_EXP, JEFES_MERITO, RANGOS_MERITO, NOTA_RANGO_B, CONSEJOS_EXP, FUENTES_REMIND,
 } from './data/kh3-remind.js';
+import { ADVERSARIOS_KH3 } from './data/kh3-adversarios.js';
+import { IMG_JEFES_KH3, JEFES_KH3, DATOS_ESTRATEGIA, YOZORA, FUENTES_JEFES_KH3 } from './data/kh3-jefes.js';
 import { RUTAS_GUMI, INTRO_CONST, INTRO_TES_GUMI, SCHWARZGEIST, FUENTES_GUMI as FUENTES_GUMI_KH3 } from './data/kh3-gumi.js';
 import { iniciarEstela } from './cursor.js';
 
@@ -116,6 +118,8 @@ const ID = {
   kh3Const: (id) => `kh3.constelacion.${id}`,
   kh3Plato: (id) => `kh3.plato.${id}`,
   kh3Datos: (id) => `kh3.datos.${id}`,
+  kh3Adversario: (id) => `kh3.adversario.${id}`,
+  kh3Jefe: (id) => `kh3.jefe.${id}`,
   kh3Merito: (id) => `kh3.merito.${id}`,
   kh3JefeExp: (id) => `kh3.jefe-exp.${id}`,
   kh3Ingrediente: (id) => `kh3.ingrediente.${id}`,
@@ -202,7 +206,8 @@ const idsGumiKh3 = () => [...idsConstKh3(), ...idsGumiTesKh3(), ID.kh3Logro('ACH
 const idsPlatosClasicos = () => PLATOS_KH3.filter((p) => p.menu === 'clasico').map((p) => ID.kh3Plato(p.id));
 const idsCocinaKh3 = () => [...PLATOS_KH3.map((p) => ID.kh3Plato(p.id)), ...INGREDIENTES_KH3.map((i) => ID.kh3Ingrediente(i.id))];
 const idsRemindKh3 = () => [...DATOS_ORG.map((d) => ID.kh3Datos(d.id)), ...MERITOS_PRIN.map((m) => ID.kh3Merito(m.id))];
-const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsCocinaKh3(), ...idsRemindKh3(), ...idsArtema()])];
+const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsCocinaKh3(), ...idsRemindKh3(), ...ADVERSARIOS_KH3.map((a) => ID.kh3Adversario(a.id)), ...idsJefesKh3(), ...idsArtema()])];
+const idsJefesKh3 = () => JEFES_KH3.flatMap((g) => g.jefes.map((j) => ID.kh3Jefe(j.id)));
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
@@ -1980,7 +1985,7 @@ function vistaSeccionKHFM(s) {
 }
 
 // ---------- KH III + Re Mind ----------
-const GRUPO_A_SECCION_KH3 = { artema: ['artema', 'orfebreria'], gumifono: ['portafortuna', 'tesoros', 'orfebreria', 'minijuegos'], minijuegos: ['minijuegos'], gumi: ['gumi'], fotos: ['cocina'], remind: ['remind'], codigos: ['remind'] };
+const GRUPO_A_SECCION_KH3 = { artema: ['artema', 'orfebreria'], gumifono: ['portafortuna', 'tesoros', 'adversarios', 'orfebreria', 'minijuegos'], minijuegos: ['minijuegos'], gumi: ['gumi'], fotos: ['cocina'], remind: ['remind', 'jefes'], codigos: ['remind'], historia: ['jefes'] };
 function kh3Logros() {
   const grupo = (g) => {
     const ids = g.ids.map(ID.kh3Logro);
@@ -2421,6 +2426,79 @@ function kh3Remind() {
     ${fuentes(FUENTES_REMIND)}`;
 }
 
+// Adversarios: los 81 tipos de enemigo del gumífono, en su orden, con imagen y dónde salen.
+const IMG_ADV = 'assets/img/kh3/adversarios/';
+function kh3Adversarios() {
+  let n = 0;
+  const tarjeta = (a) => {
+    n += 1;
+    const id = ID.kh3Adversario(a.id);
+    const hecho = store.hecho(id);
+    return `<li class="item adv${hecho ? ' is-done' : ''}">
+      <label class="adv-label">
+        <input type="checkbox" class="sr-only check-input" data-id="${esc(id)}"${hecho ? ' checked' : ''}>
+        <span class="adv-img"><img src="${IMG_ADV}adv-${a.id}.webp" alt="" loading="lazy"><span class="pf-n">${n}</span><span class="crown">${CORONA}</span></span>
+        <span class="adv-txt"><b${a.nombre.startsWith('«') ? '' : ` title="En inglés: ${esc(a.en)}"`}>${esc(a.nombre)}</b>
+          ${a.mundos.length ? `<span>${esc(a.mundos.join(' · '))}</span>` : ''}
+          ${a.nota ? `<span class="adv-nota">${esc(a.nota)}</span>` : ''}</span>
+      </label>
+    </li>`;
+  };
+  const tipos = [...new Set(ADVERSARIOS_KH3.map((a) => a.tipo))];
+  const grupos = tipos.map((t) => {
+    const lista = ADVERSARIOS_KH3.filter((a) => a.tipo === t);
+    const ids = lista.map((a) => ID.kh3Adversario(a.id));
+    medidores[`adv-${slug(t)}`] = ids;
+    return `<div class="group"><h3>${esc(t)} <span class="count" data-count="adv-${slug(t)}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="adv-grid">${lista.map(tarjeta).join('')}</ul></div>`;
+  }).join('');
+  return `
+    <p class="lead seccion-lead">Para «Conoce a tu enemigo» basta con derrotar al menos a uno de cada tipo. Están en el orden del gumífono, con su número, para que encuentres el que te falte. Los flanes solo salen al volver a su mundo y varios enemigos solo aparecen en los portales de batalla, después de la historia. <span class="chip chip-logro">Logro «${esc(logroKh3.ACH_16.nombre)}»</span></p>
+    ${bloque('adv', 'Adversarios', grupos, { meter: medidor('adv-total', ADVERSARIOS_KH3.map((a) => ID.kh3Adversario(a.id)), 'Derrotados') })}
+    ${fuentes(['ppxAdversarios', 'khwMateriales', 'wesEnemigos'])}`;
+}
+
+// Jefes de la historia y de Re Mind (misma tarjeta que los jefes de KH FM).
+function jefeKh3({ id, n, img, premio, t, nota, logro }, mundo) {
+  const chips = [premio ? `<li class="chip">Premio: ${esc(premio)}</li>` : '', logro ? `<li class="chip chip-logro">Logro «${esc(logroKh3[logro].nombre)}»</li>` : ''].join('');
+  return `
+    <article class="boss boss-khfm">
+      <div class="boss-main">
+        <div class="boss-art"><img src="${IMG_JEFES_KH3}${img}.webp" alt="" loading="lazy"></div>
+        <div class="boss-body">
+          <p class="boss-world">${esc(mundo)}</p>
+          <h3>${esc(n)}</h3>
+          ${chips ? `<ul class="boss-premios" aria-label="Recompensas">${chips}</ul>` : ''}
+          ${nota ? `<p class="boss-abre">${esc(nota)}</p>` : ''}
+          ${marca(id, 'Vencido', 'boss-marca')}
+        </div>
+      </div>
+      ${t ? `<details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(t)}</p></details>` : ''}
+    </article>`;
+}
+function kh3Jefes() {
+  const mundos = JEFES_KH3.map((g) => {
+    const ids = g.jefes.map((j) => ID.kh3Jefe(j.id));
+    medidores[`jefes-${slug(g.mundo)}`] = ids;
+    return `<div class="group"><h3>${esc(g.mundo)} <span class="count" data-count="jefes-${slug(g.mundo)}">${store.contar(ids)}/${ids.length}</span></h3>
+      <div class="bosses">${g.jefes.map((j) => jefeKh3({ ...j, id: ID.kh3Jefe(j.id), img: j.img ?? j.id }, g.mundo)).join('')}</div></div>`;
+  }).join('');
+  const datos = DATOS_ORG.map((d) => jefeKh3({
+    id: ID.kh3Datos(d.id), n: `Datos de ${d.n}`, img: `datos-${d.id}`, premio: d.premio, t: DATOS_ESTRATEGIA[d.id],
+    nota: d.tarde ? 'Se abre al vencer a los otros once.' : '',
+  }, 'Episodio Limitcut')).join('');
+  const yozora = jefeKh3({ id: ID.kh3Logro('ACH_51'), n: 'Yozora', img: 'yozora', premio: YOZORA.premio, t: YOZORA.t, logro: 'ACH_51' }, 'Episodio secreto');
+  return `
+    <p class="lead seccion-lead">Los jefes de la historia, mundo a mundo, con su premio y cómo vencerlos, y los combates de Re Mind. La estrategia está resumida de KHWiki; algunos jefes no tienen estrategia allí y solo llevan su premio.</p>
+    ${subnav([['jefes-historia', 'Historia'], ['jefes-remind', 'Re Mind']])}
+    ${bloque('jefes-historia', 'Jefes de la historia', mundos, { meter: medidor('jefes-kh3', idsJefesKh3(), 'Vencidos') })}
+    ${bloque('jefes-remind', 'Re Mind: datos y Yozora', `<div class="bosses">${datos}${yozora}</div>`, {
+      meter: medidor('jefes-datos', DATOS_ORG.map((d) => ID.kh3Datos(d.id)), 'Datos vencidos'),
+      lead: 'Las marcas son las mismas que en la sección Re Mind. Son los combates más difíciles del juego: aquí van los consejos clave de cada uno.',
+    })}
+    ${fuentes(FUENTES_JEFES_KH3)}`;
+}
+
 const SECCIONES_KH3 = [
   { id: 'portafortuna', titulo: 'Portafortuna', desc: 'Los 90, con captura de cada uno, y sus premios.', img: `${IMG_PF}pf-villa-1.webp`, ids: () => idsPf(), html: kh3Portafortuna },
   { id: 'tesoros', titulo: 'Tesoros', desc: 'Los 245 cofres del gumífono, mundo a mundo y con cómo llegar a cada uno.', img: `${IMG_TES}cofre-olimpo.webp`, ids: () => idsTesKh3(), html: kh3Tesoros },
@@ -2428,7 +2506,9 @@ const SECCIONES_KH3 = [
   { id: 'minijuegos', titulo: 'Minijuegos', desc: 'Siete Flantásticos, los minijuegos de los mundos, el Reino clásico y los récords.', img: `${IMG_ARTEMA}flan-cereza.webp`, ids: () => idsMiniKh3(), html: kh3Minijuegos },
   { id: 'gumi', titulo: 'Nave gumi', desc: 'Las 9 constelaciones, los 36 tesoros de los combates y Schwarzgeist.', img: `${IMG_GUMI3}golden-highwind.webp`, ids: () => idsGumiKh3(), html: kh3Gumi },
   { id: 'cocina', titulo: 'Cocina', desc: 'Los 28 platos con su minijuego, las estrellas del bistró y los 59 ingredientes.', img: `${IMG_TES}icono-cocina.webp`, ids: () => idsCocinaKh3(), html: kh3Cocina },
+  { id: 'jefes', titulo: 'Jefes', desc: 'Los jefes de la historia con su premio y cómo vencerlos, y los combates de datos y Yozora.', img: `${IMG_JEFES_KH3}maestro.webp`, ids: () => [...idsJefesKh3(), ...DATOS_ORG.map((d) => ID.kh3Datos(d.id)), ID.kh3Logro('ACH_51')], html: kh3Jefes },
   { id: 'remind', titulo: 'Re Mind', desc: 'Los tres episodios, los 13 combates de datos, Yozora y los méritos de los códigos.', img: 'assets/img/logos/kh3-remind.webp', ids: () => idsRemindKh3(), html: kh3Remind },
+  { id: 'adversarios', titulo: 'Adversarios', desc: 'Los 81 tipos de enemigo del gumífono, con su imagen y dónde salen.', img: `${IMG_ADV}adv-shadow.webp`, ids: () => ADVERSARIOS_KH3.map((a) => ID.kh3Adversario(a.id)), html: kh3Adversarios },
   { id: 'artema', titulo: 'Arma Artema', desc: 'Receta, los 7 Orichalcum+, cristales y mejoras.', img: `${IMG_ARTEMA}arma-artema.webp`, ids: () => idsArtema(), html: kh3Artema },
 ];
 const seccionKh3 = (id) => SECCIONES_KH3.find((s) => s.id === id);

@@ -158,4 +158,9 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    «Excelente» y `kh3.ingrediente.<id>`; platos e ingredientes en inglés salvo las frutas de los flanes) y `#/kh3/remind`
    (`kh3-remind.js`: episodios, 13 datos `kh3.datos.<id>`, 9 retos PRINCIPIANTE `kh3.merito.<id>`, códigos EXPERTO y jefes
    de mérito `kh3.jefe-exp.<id>` con suma de puntos). Marshmallow = **Merengue** (Wiki ES).
-   **Siguientes entregas:** adversarios, jefes de la historia (con estrategia de los 13 datos y Yozora).
+   **Adversarios y Jefes hechos** (25-10-2026, pendientes de revisión): `#/kh3/adversarios` (`kh3-adversarios.js`
+   **generado** con `notas/herramientas/genera_kh3_adversarios.py`, 81 tarjetas con imagen; ids `kh3.adversario.<id>`) y
+   `#/kh3/jefes` (`kh3-jefes.js`, a mano: jefes por mundo con premio y estrategia de KHWiki, `kh3.jefe.<id>`; datos de Re
+   Mind con estrategia, mismas marcas `kh3.datos.<id>`; Yozora usa el id de su logro). Lightning Angler = Rape Eléctrico,
+   Grim Guardianess = Madre Enloquecida (Wiki ES). **KH III queda completo** (logros y 100 %).
+   **Siguiente juego:** Re:Chain of Memories o KH II FM (preguntar al usuario).
