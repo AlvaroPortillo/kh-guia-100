@@ -76,15 +76,15 @@ export const MEJORAS_ARTEMA = [
   { nv: 1, fue: 9, mag: 4, mats: 'Fluorita ×1 · Guijarro de Poder ×3' },
   { nv: 2, fue: 9, mag: 5, mats: 'Fluorita ×1 · Guijarro de Poder ×4' },
   { nv: 3, fue: 10, mag: 6, mats: 'Fluorita ×1 · Roca de Poder ×1' },
-  { nv: 4, fue: 10, mag: 7, mats: '«Damascus» ×1 · Roca de Poder ×2 · Roca Voraz ×1' },
-  { nv: 5, fue: 11, mag: 8, mats: '«Damascus» ×1 · Roca de Poder ×3 · Roca Voraz ×2' },
-  { nv: 6, fue: 11, mag: 9, mats: '«Damascus» ×1 · Gema de Poder ×1' },
+  { nv: 4, fue: 10, mag: 7, mats: 'Damasco ×1 · Roca de Poder ×2 · Roca Voraz ×1' },
+  { nv: 5, fue: 11, mag: 8, mats: 'Damasco ×1 · Roca de Poder ×3 · Roca Voraz ×2' },
+  { nv: 6, fue: 11, mag: 9, mats: 'Damasco ×1 · Gema de Poder ×1' },
   { nv: 7, fue: 12, mag: 10, mats: 'Adamantita ×1 · Gema de Poder ×2 · Gema Voraz ×1' },
   { nv: 8, fue: 12, mag: 11, mats: 'Adamantita ×1 · Gema de Poder ×3 · Gema Voraz ×2' },
   { nv: 9, fue: 13, mag: 12, mats: 'Adamantita ×1 · Cristal de Poder ×1' },
   { nv: 10, fue: 13, mag: 13, mats: 'Electrum ×1 · Cristal de Poder ×2 · Cristal Voraz ×1' },
 ];
-export const NOTA_MEJORAS = 'Fluorita, «Damascus», Adamantita y Electrum salen en cofres y al romper meteoritos azules con la nave gumi: Fluorita 2,5 % en «Starlight Way»; «Damascus» 2 % en «Misty Stream»; Adamantita 1,5 % y Electrum 1 % en «The Eclipse». Los materiales Voraces (Hungry) son los nombres de la Wiki ES sin confirmar en el juego.';
+export const NOTA_MEJORAS = 'Fluorita, Damasco, Adamantita y Electrum salen en cofres y al romper meteoritos azules con la nave gumi: Fluorita 2,5 % en «Starlight Way»; Damasco 2 % en «Misty Stream»; Adamantita 1,5 % y Electrum 1 % en «The Eclipse». Los materiales Voraces (Hungry) son los nombres de la Wiki ES sin confirmar en el juego.';
 
 export const FICHA_ARTEMA = {
   base: 'Nivel 0: Fuerza +8, Magia +3. Nivel 10: Fuerza +13, Magia +13. Longitud 165.',

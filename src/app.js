@@ -2,7 +2,7 @@ import { store } from './store.js';
 import { JUEGOS } from './data/juegos.js';
 import {
   BBS, PERSONAJES, GRUPOS_LOGROS, RUTA, GOLPES_FINALES, ESTILOS, CUARTELILLO, COSO, COSO_INFO,
-  CONSEJOS, FUENTES,
+  CONSEJOS, FUENTES, NIVELES_COSO, NIVELES_COSO_INTRO, FUENTES_NIVELES_COSO,
 } from './data/bbs.js';
 import { PIEZAS, COMBATES, HABILIDADES, CRISTALES, VIAS, IMG_BUILD } from './data/bbs-build.js';
 import { COSO_RONDAS, COSO_ESTRATEGIA, COSO_GENERAL } from './data/bbs-coso.js';
@@ -43,6 +43,7 @@ import {
   IMG_ARTEMA, REQUISITO_ARTEMA, RECETA_ARTEMA, NOTA_RECETA, ORICALCOS, FLANES, CRISTALES_ARTEMA, MEJORAS_ARTEMA, NOTA_MEJORAS, FICHA_ARTEMA, FUENTES_ARTEMA,
 } from './data/kh3-artema.js';
 import { IMG_PF, MUNDOS_PF, PREMIOS_PF, INTRO_PF, FUENTES_PF } from './data/kh3-portafortuna.js';
+import { IMG_TES, TIPOS_TESORO, MUNDOS_TESOROS, INTRO_TES, FUENTES_TESOROS } from './data/kh3-tesoros.js';
 import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
@@ -73,6 +74,7 @@ const ID = {
   tesoro: (pj, mundo, t) => `bbs.tesoro.${pj}.${mundo}.${t}`,
   tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
   tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
+  cosoNivel: (pj, m) => `bbs.cosonivel.${pj}.${m}`,
   tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
   cmd: (pj, n) => `bbs.cmd.${pj}.${slug(n)}`,
   khfmLogro: (id) => `khfm.logro.${id}`,
@@ -92,6 +94,7 @@ const ID = {
   kh3Oricalco: (id) => `kh3.oricalco.${id}`,
   kh3Artema: (paso) => `kh3.artema.${paso}`,
   kh3Pf: (mundo, n) => `kh3.portafortuna.${mundo}.${n}`,
+  kh3Tesoro: (mundo, n) => `kh3.tesoro.${mundo}.${n}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -107,7 +110,10 @@ const juegoPj = (pj) => [
   ...TABLEROS.map((t) => ID.tablero(pj, t.id)),
   ...exclusivosDeTablero(pj).map((e) => ID.tableroCmd(pj, e.n)),
   ...idsComandos(pj),
+  ...idsNivelesCoso(pj),
 ];
+// Misiones del Coso de un personaje: su nivel del Coso es 1 + las que lleve.
+const idsNivelesCoso = (pj) => NIVELES_COSO.flatMap((g) => g.misiones.map((m) => ID.cosoNivel(pj, m.id)));
 // Comandos marcables; los que solo salen de un tablero comparten la marca de la sección Tableros.
 const EXCL_TABLERO = {};
 const idComando = (pj, n) => ((EXCL_TABLERO[pj] ??= new Set(exclusivosDeTablero(pj).map((e) => e.n))).has(n) ? ID.tableroCmd(pj, n) : ID.cmd(pj, n));
@@ -155,7 +161,10 @@ const PASOS_ARTEMA = [
 ];
 const idsArtema = () => [...ORICALCOS.map((o) => ID.kh3Oricalco(o.id)), ...PASOS_ARTEMA.map((p) => ID.kh3Artema(p.id)), ID.kh3Logro('ACH_44')];
 const idsPf = (m) => (m ? [m] : MUNDOS_PF).flatMap((w) => w.pf.map((_, i) => ID.kh3Pf(w.id, i + 1)));
-const juegoKH3 = () => [...idsPf(), ...idsArtema()];
+// Los dos cofres con Orichalcum+ usan el id de la sección Arma Artema: el Set evita contarlos dos veces.
+const idTesoroKh3 = (w, x) => x.id ?? ID.kh3Tesoro(w.id, x.n);
+const idsTesKh3 = (m) => (m ? [m] : MUNDOS_TESOROS).flatMap((w) => w.t.map((x) => idTesoroKh3(w, x)));
+const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsArtema()])];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
@@ -191,6 +200,7 @@ function refrescarMedidores() {
     el.classList.toggle('is-full', n === ids.length);
   });
   document.querySelectorAll('[data-hito]').forEach((el) => el.classList.toggle('is-on', store.contar(idsPf()) >= Number(el.dataset.hito)));
+  document.querySelectorAll('[data-nivel-coso]').forEach((el) => { el.textContent = 1 + store.contar(idsNivelesCoso(el.dataset.nivelCoso)); });
   document.querySelectorAll('[data-gema]').forEach((el) => el.classList.toggle('is-on', store.hecho(el.dataset.gema)));
   document.querySelectorAll('[data-count]').forEach((el) => {
     const ids = medidores[el.dataset.count];
@@ -516,13 +526,14 @@ function hubLogros() {
   const porPj = PJS.map((p) => `<div class="pj-${p.id}">${grupo(`Logros de ${p.nombre}`, BBS.logros.filter((l) => l.pj === p.id).map((l) => l.id))}</div>`).join('');
 
   return `
-    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis']])}
+    ${subnav([['ruta', 'Ruta de logros'], ['logros', 'Logros comunes'], ['logros-pj', 'Logros de personaje'], ['coso-niveles', 'Niveles del Coso'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis']])}
     ${bloque('ruta', 'Ruta de logros', `<ol class="steps">${ruta}</ol>`, { lead: 'Lo que conviene saber antes de empezar para no repetir partidas.' })}
     ${bloque('logros', 'Logros comunes', `${comunes}${fuentes(['steam', 'guiaSteam'])}`, {
       meter: medidor('bbs-comunes-logros', GRUPOS_LOGROS.flatMap((g) => g.ids).map(ID.logro), 'Logros comunes'),
       lead: 'Abre «Cómo conseguirlo» para ver el consejo de cada uno.',
     })}
     ${bloque('logros-pj', 'Logros de cada personaje', porPj)}
+    ${bloque('coso-niveles', 'Niveles del Coso', nivelesCoso(), { lead: esc(NIVELES_COSO_INTRO) })}
     ${bloque('tableros', 'Tableros de comandos', tablerosBloque(), { lead: 'Qué hace falta de verdad, qué comandos solo salen de un tablero y qué da cada casilla bonus.' })}
     ${bloque('sintesis', 'Síntesis de comandos', sintesisBloque(), { lead: 'Cómo funciona, qué habilidad sale con cada tipo de receta y cristal, y de dónde sacar cada cristal.' })}`;
 }
@@ -650,6 +661,70 @@ function cosoLista() {
   }).join('');
 }
 
+// Las 29 misiones que suben el nivel del Coso, con una marca por personaje.
+function nivelesCoso() {
+  const cosoPorId = Object.fromEntries(COSO.map((c) => [c.id, c]));
+  const fila = (m) => {
+    const c = m.coso && cosoPorId[m.coso];
+    const titulo = c ? `Supera «${c.nombre}»` : m.t;
+    const req = c ? [c.nivel ? `Pide nivel ${c.nivel}${c.ticket ? ' o su ticket' : ''}.` : '', c.abre || ''].filter(Boolean).join(' ') : '';
+    return `
+    <li class="cn-fila">
+      ${c ? `<img class="cn-icono" src="${IMG_BUILD}coso-${c.id}.webp" alt="" width="40" height="40" loading="lazy">` : ''}
+      <div class="cn-txt"><span class="cn-titulo">${esc(titulo)}</span>${req ? `<span class="cn-req">${esc(req)}</span>` : ''}</div>
+      <div class="cn-marcas">${PJS.map((p) => marca(ID.cosoNivel(p.id, m.id), esc(p.nombre), `pj-${p.id}`)).join('')}</div>
+    </li>`;
+  };
+  const niveles = PJS.map((p) => {
+    const ids = idsNivelesCoso(p.id);
+    medidores[`cn-${p.id}`] = ids;
+    return `<div class="cn-pj pj-${p.id}"><span class="cn-pj-nombre">${esc(p.nombre)}</span>
+      <span class="cn-pj-nivel">Nivel <b data-nivel-coso="${p.id}">${1 + store.contar(ids)}</b> / 30</span>
+      <span class="cn-pj-mis"><span data-count="cn-${p.id}">${store.contar(ids)}/${ids.length}</span> misiones</span></div>`;
+  }).join('');
+  const grupos = NIVELES_COSO.map((g) => {
+    const ids = PJS.flatMap((p) => g.misiones.map((m) => ID.cosoNivel(p.id, m.id)));
+    medidores[`cn-g-${g.id}`] = ids;
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="cn-g-${g.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">${esc(g.intro)}</p>
+      <ul class="cn-lista">${g.misiones.map(fila).join('')}</ul>
+    </div>`;
+  }).join('');
+  return `<div class="cn-niveles">${niveles}</div>${grupos}${fuentes(FUENTES_NIVELES_COSO)}`;
+}
+
+// Misiones del Coso de un personaje, con una casilla cada una (mismas marcas que en el hub de BBS).
+function nivelesCosoPj(pj) {
+  const cosoPorId = Object.fromEntries(COSO.map((c) => [c.id, c]));
+  const grupos = NIVELES_COSO.map((g) => {
+    const ids = g.misiones.map((m) => ID.cosoNivel(pj, m.id));
+    medidores[`cn-${pj}-${g.id}`] = ids;
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="cn-${pj}-${g.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">${esc(g.intro)}</p>
+      <ul class="list">${g.misiones.map((m) => {
+        const c = m.coso && cosoPorId[m.coso];
+        const abre = c ? [c.nivel ? `Pide nivel ${c.nivel}${c.ticket ? ' o su ticket' : ''}.` : '', c.abre || ''].filter(Boolean).join(' ') : '';
+        return item({
+          id: ID.cosoNivel(pj, m.id),
+          titulo: c ? `Supera «${c.nombre}»` : m.t,
+          desc: abre,
+          icono: c ? `${IMG_BUILD}coso-${c.id}.webp` : '',
+          meta: c?.premio?.[pj] ? tagPj(pj, `Recompensa: ${c.premio[pj]}`) : '',
+        });
+      }).join('')}</ul>
+    </div>`;
+  }).join('');
+  return `
+    <div class="cn-niveles"><div class="cn-pj pj-${pj}"><span class="cn-pj-nombre">${esc(PERSONAJES[pj].nombre)}</span>
+      <span class="cn-pj-nivel">Nivel <b data-nivel-coso="${pj}">${1 + store.contar(idsNivelesCoso(pj))}</b> / 30</span>
+      <span class="cn-pj-mis">Los combates, con sus rondas y estrategia, están en <a href="#/bbs" data-ir-seccion="coso">Birth by Sleep › Coso Virtual</a>.</span></div></div>
+    ${grupos}${fuentes(FUENTES_NIVELES_COSO)}`;
+}
+
 function hubInformes() {
   const xeh = INFORMES_XEHANORT.map((x) => item({
     id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde, meta: tagPj(x.pj, PERSONAJES[x.pj].nombre),
@@ -677,7 +752,7 @@ function hubInformes() {
   })).join('');
 
   return `
-    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['minijuegos', 'Minijuegos'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis'], ['retos', 'Retos'], ['helados', 'Helados']])}
+    ${subnav([['xehanort', 'Informes Xehanort'], ['coso', 'Coso Virtual'], ['coso-niveles', 'Niveles del Coso'], ['minijuegos', 'Minijuegos'], ['tableros', 'Tableros'], ['sintesis', 'Síntesis'], ['retos', 'Retos'], ['helados', 'Helados']])}
     <p class="mode-note">Los golpes finales, estilos de comandos y pegatinas de cada personaje están en su página.</p>
     ${bloque('xehanort', 'Informes Xehanort', `<ul class="list">${xeh}</ul>${fuentes(['wikiEsXehanort', 'guiaSteam'])}`, {
       meter: medidor('inf-xeh', INFORMES_XEHANORT.map((x) => ID.xeh(x.id)), 'Documentos'),
@@ -694,6 +769,9 @@ function hubInformes() {
       ${fuentes(['khwikiArenaMode', 'khwikiTickets', 'khwikiCoso', 'wikiEsCoso', 'guiaSteam'])}`, {
       meter: medidor('inf-coso', COSO.map((c) => ID.coso(c.id)), 'Combates'),
       lead: 'Agrupados por estrellas, que es como cuentan los logros. Despliega cada combate para ver sus rondas, el reto extra y la estrategia; toca un comando para ver su ficha.',
+    })}
+    ${bloque('coso-niveles', 'Niveles del Coso', nivelesCoso(), {
+      lead: esc(NIVELES_COSO_INTRO),
     })}
     ${bloque('minijuegos', 'Minijuegos', `${minis}${fuentes(['guiaSteam'])}`, {
       meter: medidor('inf-mini', MINIJUEGOS.flatMap((g) => g.items.map((i) => ID.mini(g.id, i.id))), 'Minijuegos'),
@@ -1322,7 +1400,7 @@ function vistaPersonaje(pj) {
       <p class="hint">Los mapas y lo que da cada casilla están en <a href="#/bbs" data-ir-seccion="tableros">Birth by Sleep › Tableros</a>.</p>
       ${fuentes(['khwikiTableros', 'wikiEsTableros'])}`;
   const contInformes = () => `
-    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['tesoros', 'Tesoros'], ['tableros', 'Tableros'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
+    ${subnav([['build', 'Build'], ...(JEFES[pj] ? [['jefes', 'Jefes']] : []), ['xehanort', 'Informes Xehanort'], ['golpes', 'Golpes finales'], ['estilos', 'Estilos'], ['pegatinas', 'Pegatinas'], ['tesoros', 'Tesoros'], ['tableros', 'Tableros'], ['coso-niveles', 'Coso'], ['comandos', 'Comandos'], ['nexos', 'Nexos-D']])}
     ${bloque('build', 'Build recomendada', buildPj(pj), { lead: 'Empieza por «Avanzar por la historia» o elige un combate difícil; toca cada pieza para ver qué es y cómo se consigue.' })}
     ${JEFES[pj] ? bloque('jefes', 'Jefes de la historia', jefesPj(pj), { lead: `Los jefes de la historia de ${p.nombre}, con sus debilidades, recompensas y cómo vencerlos. El Desconocido y los jefes secretos están en la build.` }) : ''}
     ${bloque('xehanort', `Informes Xehanort de ${p.nombre}`, `<ul class="list">${xeh.map((x) => item({ id: ID.xeh(x.id), titulo: x.nombre, desc: x.donde })).join('')}</ul>${fuentes(['wikiEsXehanort'])}`, {
@@ -1365,6 +1443,10 @@ function vistaPersonaje(pj) {
     ${bloque('tableros', 'Tableros de comandos', tablerosPj, {
       meter: medidor(`pj-${pj}-tableros`, [...idsTab, ...idsExcl], 'Tableros'),
     })}
+    ${bloque('coso-niveles', `Niveles del Coso de ${p.nombre}`, nivelesCosoPj(pj), {
+      meter: medidor(`pj-${pj}-coso`, idsNivelesCoso(pj), 'Misiones'),
+      lead: `${p.nombre} empieza en el nivel 1 del Coso y sube uno por misión: con las 29 llega al 30, el máximo. Se pueden hacer en cualquier orden; lo más cómodo es dejarlas para después de terminar las tres historias.`,
+    })}
     ${bloque('comandos', `Comandos de ${p.nombre}`, comandosPj(pj), {
       meter: medidor(`pj-${pj}-comandos`, idsComandos(pj), 'Comandos'),
       lead: 'Todos sus comandos, en el orden del menú del juego: cómo se consigue cada uno y sus recetas de síntesis. Marca los que ya tengas, busca por nombre o ingrediente, o filtra por cómo se obtienen.',
@@ -1388,7 +1470,7 @@ function vistaPersonaje(pj) {
       </div>
     </header>
     ${selectorModo(`pj-${pj}-modo-logros`, logrosPj(pj), `pj-${pj}-modo-100`, juegoPj(pj), {
-      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos, pegatinas, tesoros y tableros',
+      subLogros: `Logros propios de ${p.nombre}`, subJuego: 'Informes, golpes, estilos, pegatinas, tesoros, tableros y Coso',
     })}
     ${m === 'logros' ? contLogros() : contInformes()}
   </section>`;
@@ -1850,16 +1932,16 @@ function vistaSeccionKHFM(s) {
 }
 
 // ---------- KH III + Re Mind ----------
-const GRUPO_A_SECCION_KH3 = { artema: 'artema' };
+const GRUPO_A_SECCION_KH3 = { artema: ['artema'], gumifono: ['portafortuna', 'tesoros'] };
 function kh3Logros() {
   const grupo = (g) => {
     const ids = g.ids.map(ID.kh3Logro);
     medidores[`kh3-g-${g.id}`] = ids;
-    const sec = seccionKh3(GRUPO_A_SECCION_KH3[g.id]);
+    const secs = (GRUPO_A_SECCION_KH3[g.id] ?? []).map(seccionKh3);
     return `
     <div class="group">
       <h3>${esc(g.titulo)} <span class="count" data-count="kh3-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
-        ${sec ? `<a class="ir-seccion" href="#/kh3/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
+        ${secs.map((sec) => `<a class="ir-seccion" href="#/kh3/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>`).join('')}</h3>
       <ul class="list">${g.ids.map((id) => itemLogro(logroKh3[id], 'kh3')).join('')}</ul>
       ${g.id === 'codigos' ? `<p class="nota-fuente">${esc(NOTA_RANGO_A)}</p>` : ''}
     </div>`;
@@ -1967,8 +2049,49 @@ function kh3Portafortuna() {
     ${fuentes(FUENTES_PF)}`;
 }
 
+// Cofres de un mundo agrupados por tramos seguidos de la misma zona (la ruta vuelve a veces a una zona ya vista).
+function kh3Tesoros() {
+  const fila = (w, x) => {
+    const id = idTesoroKh3(w, x);
+    const hecho = store.hecho(id);
+    const tipo = TIPOS_TESORO[x.tipo];
+    const traducido = !x.nombre.startsWith('«');
+    return `
+    <li class="item tes3${hecho ? ' is-done' : ''}">
+      <label class="item-row">
+        <input type="checkbox" class="sr-only check-input" data-id="${esc(id)}"${hecho ? ' checked' : ''}>
+        <span class="crown">${CORONA}</span>
+        <img class="item-icon tes3-icono" src="${IMG_TES}${tipo.icono}.webp" alt="" width="32" height="32" loading="lazy">
+        <span class="item-body">
+          <span class="item-title"${traducido && x.tipo !== 'mapa' ? ` title="En inglés: ${esc(x.en)}"` : ''}>${esc(x.nombre)}</span>
+          <span class="item-desc">${esc(x.t)}</span>
+          <span class="item-meta"><span class="tes3-n">n.º ${x.n}</span><span class="chip">${esc(tipo.t)}</span></span>
+        </span>
+      </label>
+    </li>`;
+  };
+  const tramos = (w) => w.t.reduce((acc, x) => {
+    const ult = acc.at(-1);
+    if (ult && ult.zona === x.zona) ult.t.push(x);
+    else acc.push({ zona: x.zona, en: x.zonaEn, t: [x] });
+    return acc;
+  }, []);
+  const zonaTit = (z) => (z.zona ? `<h3 class="tes3-zona"${z.zona.startsWith('«') ? '' : ` title="En inglés: ${esc(z.en)}"`}>${esc(z.zona)}</h3>` : '');
+  const mundo = (w) => bloque(`tes-${w.id}`,
+    `<img class="tes3-cofre" src="${IMG_TES}cofre-${w.id}.webp" alt="" width="56" height="49" loading="lazy">${esc(w.nombre)}`,
+    `${w.aviso ? `<p class="nota-fuente">${esc(w.aviso)}</p>` : ''}
+    ${tramos(w).map((z) => `${zonaTit(z)}<ul class="list tes3-lista">${z.t.map((x) => fila(w, x)).join('')}</ul>`).join('')}`,
+    { meter: medidor(`kh3-tes-${w.id}`, idsTesKh3(w), 'Cofres') });
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_TES)}</p>
+    ${subnav(MUNDOS_TESOROS.map((w) => [`tes-${w.id}`, `${w.nombre} (${w.t.length})`])).replace('class="subnav"', 'class="subnav subnav-wrap"')}
+    ${MUNDOS_TESOROS.map(mundo).join('')}
+    ${fuentes(FUENTES_TESOROS)}`;
+}
+
 const SECCIONES_KH3 = [
   { id: 'portafortuna', titulo: 'Portafortuna', desc: 'Los 90, con captura de cada uno, y sus premios.', img: `${IMG_PF}pf-villa-1.webp`, ids: () => idsPf(), html: kh3Portafortuna },
+  { id: 'tesoros', titulo: 'Tesoros', desc: 'Los 245 cofres del gumífono, mundo a mundo y con cómo llegar a cada uno.', img: `${IMG_TES}cofre-olimpo.webp`, ids: () => idsTesKh3(), html: kh3Tesoros },
   { id: 'artema', titulo: 'Arma Artema', desc: 'Receta, los 7 Orichalcum+, cristales y mejoras.', img: `${IMG_ARTEMA}arma-artema.webp`, ids: () => idsArtema(), html: kh3Artema },
 ];
 const seccionKh3 = (id) => SECCIONES_KH3.find((s) => s.id === id);

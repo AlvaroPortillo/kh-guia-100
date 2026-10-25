@@ -27,7 +27,8 @@ python server.py   # y abrir http://127.0.0.1:5173
 (tablas `hechos(id, fecha)` y `ajustes(clave, valor JSON)`). No sirve `datos/` ni archivos ocultos.
 Si la BD está vacía al abrir la web, `store.iniciar()` sube lo que haya en `localStorage`.
 **Al probar con Playwright:** usar otro puerto (`python server.py 5174`; el 5173 es el del usuario), guardar antes
-`GET /api/estado` y restaurarlo después con `PUT /api/estado`. Nunca vaciar la BD: puede tener progreso real.
+`GET /api/estado` y restaurarlo después con `PUT /api/estado`. Antes de restaurar, vaciar el `localStorage` del navegador de
+Playwright: si no, al recargar vuelve a subir a la BD las marcas de prueba. Nunca vaciar la BD: puede tener progreso real.
 
 **Publicada** en https://alvaroportillo.github.io/kh-guia-100/ (GitHub Pages desde `main`; repo público). Allí no hay
 `server.py`: el progreso queda solo en el `localStorage` del navegador. Pages cachea 10 min; si tras un push no se
@@ -98,6 +99,10 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    (el usuario no quiere las indicaciones de cómo llegar). **Zonas en castellano:** las que tienen fuente (Wiki ES, guía de
    Steam) y el resto traducidas por petición del usuario (`ZONA_TRAD` del generador, marcadas `zt`; la web enseña el
    nombre inglés al pasar el ratón). Los ids usan el nombre inglés de la zona, así que traducir no rompe el progreso.
+1c. **Niveles del Coso hechos** (25-10-2026, pendiente de revisión): sección «Coso» (`#coso-niveles`) en la página de cada
+   personaje (modo Informes, una casilla por misión) y en el hub de BBS (los dos modos, tres casillas por misión), con
+   las 29 misiones de Final Mix que suben del nivel 1 al 30 (`NIVELES_COSO` en `bbs.js`, KHWiki «Arena Mission»), una marca
+   por personaje (`bbs.cosonivel.<pj>.<id>`), que cuenta para el 100 % de ese personaje.
 2. **Pegatinas por mundo hechas** (`src/data/bbs-pegatinas.js`, generado; ids `bbs.peg.mundo.<pj>.<mundo>`, cuentan para el
    100 %). El usuario las quiere simples: mundo, número y zona; sin imágenes.
 3. Siguientes juegos: KH Final Mix, Re:Chain of Memories, KH II Final Mix (KH FM y KH II FM tienen «Informes Ansem»).
@@ -134,4 +139,8 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    (Wellspring = «Poder», Lucid = «Claro», Pulsing = «Fuerza», comprobado por las caídas). Las guías de Steam dieron
    «too many requests»: reintentar. **Portafortuna hechos** (22-10-2026, pendiente de revisión): `#/kh3/portafortuna`
    (`kh3-portafortuna.js`, a mano), numeración y capturas de KHWiki (`assets/img/kh3/portafortuna/`), ids
-   `kh3.portafortuna.<mundo>.<n>`; la numeración de la Wiki ES es distinta. **Siguientes entregas:** tesoros, Orfebrería y materiales, Flantásticos y minijuegos, nave gumi, cocina, Re Mind (datos y méritos de códigos).
+   `kh3.portafortuna.<mundo>.<n>`; la numeración de la Wiki ES es distinta. **Tesoros hechos** (25-10-2026, pendiente de revisión):
+   `#/kh3/tesoros` (`kh3-tesoros.js`, a mano), los 245 cofres en el orden de ruta de PowerPyx con el n.º del gumífono y cómo
+   llegar, contrastados con las páginas de objeto de KHWiki. Ids `kh3.tesoro.<mundo>.<n>`; los dos Orichalcum+ reutilizan
+   `kh3.oricalco.exile` y `kh3.oricalco.mundo-final`. Nombres de objeto: Wiki ES emparejada por katakana con KHWiki.
+   **Siguientes entregas:** Orfebrería y materiales, Flantásticos y minijuegos, nave gumi, cocina, Re Mind (datos y méritos de códigos).

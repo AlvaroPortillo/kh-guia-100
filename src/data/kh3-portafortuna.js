@@ -4,7 +4,7 @@
 // Ids: kh3.portafortuna.<mundo>.<n>. Imágenes: assets/img/kh3/portafortuna/pf-<mundo>-<n>.webp (KHWiki).
 export const IMG_PF = 'assets/img/kh3/portafortuna/';
 
-const Z = {
+export const ZONAS_KH3 = {
   'Overlook': 'Tebas: Mirador',
   'The Big Olive': 'Tebas: La gran aceituna',
   'Agora': 'Tebas: Ágora',
@@ -24,7 +24,7 @@ const Z = {
   "Hiro's Garage": 'Garaje de Hiro',
   'South District': 'Distrito Sur',
 };
-const p = (en, t) => ({ zona: Z[en] ?? `«${en}»`, en, t });
+const p = (en, t) => ({ zona: ZONAS_KH3[en] ?? `«${en}»`, en, t });
 
 export const MUNDOS_PF = [
   {

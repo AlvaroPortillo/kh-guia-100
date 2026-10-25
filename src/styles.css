@@ -1054,6 +1054,28 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tb-coso { color: var(--text-2); font-size: .8125rem; }
 .tb-medidores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
 .tb-marcas { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* Niveles del Coso: nivel actual de cada personaje y misiones con una marca por personaje */
+.cn-niveles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; margin: 4px 0 24px; }
+.cn-pj { display: grid; gap: 2px; padding: 14px 16px; border-radius: var(--r-m); border: 1px solid color-mix(in srgb, var(--pc) 40%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pc) 14%, transparent), var(--surface)); color: var(--text-2); font-size: .875rem; }
+.cn-pj.pj-terra { --pc: var(--terra); } .cn-pj.pj-ventus { --pc: var(--ventus); } .cn-pj.pj-aqua { --pc: var(--aqua); }
+.cn-pj-nombre { font-weight: 800; color: var(--pc); font-size: 1rem; }
+.cn-pj-nivel { color: var(--text); font-size: 1.25rem; }
+.cn-pj-nivel b { font-weight: 800; font-variant-numeric: tabular-nums; }
+.cn-lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.cn-fila { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; padding: 12px 8px; border-bottom: 1px solid var(--line); }
+.cn-fila:not(:has(.cn-icono)) { grid-template-columns: 1fr auto; }
+.cn-icono { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line); object-fit: cover; }
+.cn-txt { display: grid; gap: 2px; min-width: 0; }
+.cn-titulo { font-weight: 600; }
+.cn-req { color: var(--text-2); font-size: .875rem; max-width: 70ch; }
+.cn-marcas { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+@media (max-width: 640px) {
+  .cn-fila, .cn-fila:not(:has(.cn-icono)) { grid-template-columns: auto 1fr; }
+  .cn-fila:not(:has(.cn-icono)) .cn-txt { grid-column: 1 / -1; }
+  .cn-marcas { grid-column: 1 / -1; justify-content: flex-start; }
+}
 .tb-marcas-t { font-size: .875rem; color: var(--text-2); min-width: 7.5em; }
 .marca { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: .875rem; font-weight: 600; transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
 .marca .crown { width: 24px; height: 24px; padding: 3px; border-radius: 50%; }
@@ -1283,3 +1305,18 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .pf-nota { font-size: .875rem; color: var(--text-2); }
 @media (prefers-reduced-motion: reduce) { .item.pf, .item.pf:hover { transition: none; transform: none; } }
 .pfs + .nota-fuente, .block > .nota-fuente { margin-left: 0; }
+
+/* KH III · Tesoros: cofre del mundo en el título, zona por tramos de la ruta, icono del menú del juego por tipo */
+.block-head h2:has(.tes3-cofre) { display: flex; align-items: center; gap: 12px; }
+.tes3-cofre { width: 56px; height: auto; flex: none; filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--accent) 25%, transparent)); transition: transform var(--t) var(--ease); }
+.block:hover .tes3-cofre { transform: translateY(-2px) rotate(-3deg); }
+.tes3-zona { margin: 28px 0 8px; font-size: .9375rem; font-weight: 700; letter-spacing: .01em; color: var(--accent); width: fit-content; }
+@media (min-width: 760px) { .subnav-wrap { flex-wrap: wrap; } }
+.tes3-zona[title] { cursor: help; }
+.tes3-zona:first-of-type { margin-top: 6px; }
+.tes3-lista .item-row { align-items: center; }
+.tes3-icono.item-icon { width: 40px; height: 40px; padding: 4px; border-radius: 10px; object-fit: contain;
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 28%, var(--line)); }
+.tes3 .item-title[title] { cursor: help; }
+.tes3-n { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text); }
+@media (prefers-reduced-motion: reduce) { .tes3-cofre, .block:hover .tes3-cofre { transition: none; transform: none; } }

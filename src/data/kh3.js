@@ -36,6 +36,10 @@ export const FUENTES_KH3 = {
   khwSintesis: { nombre: 'KHWiki — Synthesis (Kingdom Hearts III)', url: `${KHW}Synthesis` },
   wesFormaSuprema: { nombre: 'Wiki ES — Forma Suprema', url: `${WES}Forma_Suprema` },
   khwInfinity: { nombre: 'KHWiki — Infinity Circle', url: `${KHW}Infinity_Circle` },
+  ppxTesoros: { nombre: 'PowerPyx — coleccionables de KH3 por mundo (tesoros, inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-collectibles-guide-treasures-lucky-emblems/' },
+  khwObjetos: { nombre: 'KHWiki — páginas de objeto (dónde sale cada uno en KH III), p. ej. Hi-Refocuser', url: `${KHW}Hi-Refocuser` },
+  khwCofres: { nombre: 'KHWiki — Treasure Chest (cofres de cada mundo)', url: `${KHW}Treasure_Chest` },
+  wesAccesorios: { nombre: 'Wiki ES — Accesorios de Kingdom Hearts III', url: `${WES}Categor%C3%ADa:Accesorios_de_Kingdom_Hearts_III` },
 };
 
 export const KH3 = {
@@ -110,7 +114,7 @@ export const CONSEJOS_KH3 = {
   ACH_10: 'Hay que superar los tres minijuegos del Bosque de los Cien Acres. Se desbloquean a través de Merlín, en el Bistró de Villa Crepúsculo.',
   ACH_15: 'Son 90 en total. Al fotografiar 80 te dan un Orichalcum+ (uno de los 7 del Arma Artema) y a los 90, el último premio. Los del Olimpo solo aparecen al volver tras la Ola Infernal de Villa Crepúsculo.',
   ACH_16: 'Basta con derrotar al menos a un enemigo de cada tipo. Mira en el gumífono cuáles te faltan.',
-  ACH_17: 'Abre todos los cofres. Algunas zonas solo se abren después de la historia, así que habrá que volver a algunos mundos.',
+  ACH_17: 'Son 245 cofres. Algunas zonas solo se abren después de la historia, así que habrá que volver a algunos mundos. Los tienes todos, con cómo llegar, en la sección Tesoros.',
   ACH_18: 'Hay que fabricar todos los objetos de la tienda Moguri, también el Arma Artema. Déjalo para el final.',
   ACH_19: 'Consigue el icono de Mickey en todas las categorías de Récords.',
   ACH_20: 'Derrota a un enemigo con una atracción.',

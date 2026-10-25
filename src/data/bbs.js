@@ -26,6 +26,7 @@ export const FUENTES = {
   khwikiCofres: { nombre: 'KHWiki — Treasure Chest (imágenes de los cofres de cada mundo)', url: 'https://www.khwiki.com/Treasure_Chest' },
   khwikiArenaMode: { nombre: 'KHWiki — Arena Mode (desbloqueos y estrellas)', url: 'https://www.khwiki.com/Arena_Mode' },
   khwikiTickets: { nombre: 'KHWiki — Battle Tickets', url: 'https://www.khwiki.com/Risky_Ticket' },
+  khwikiMisiones: { nombre: 'KHWiki — Arena Mission (misiones que suben el nivel del Coso, columna de Final Mix)', url: 'https://www.khwiki.com/Arena_Mission' },
   khwikiCoso: { nombre: 'KHWiki — Mirage Arena (nivel del Coso)', url: 'https://www.khwiki.com/Mirage_Arena' },
   wikiEsXehanort: { nombre: 'Wiki ES — Informes Xehanort', url: 'https://kingdomhearts.fandom.com/es/wiki/Informes_Xehanort' },
   wikiEsHelado: { nombre: 'Wiki ES — Helado', url: 'https://kingdomhearts.fandom.com/es/wiki/Helado' },
@@ -265,6 +266,39 @@ export const COSO = [
     nivel: 30, premio: { terra: 'Corona Eterna', ventus: 'Corona Eterna', aqua: 'Corona Eterna' }, logro: 'ACH_161',
     nota: 'La Wiki ES indica 999 medallas.' },
 ];
+
+// Misiones del Coso de Final Mix (KHWiki, «Arena Mission»): cada una sube un nivel del Coso, del 1 al 30.
+// Van por personaje (cada uno tiene su Informe; la guía de Steam las pide para el 100 %). Ids: bbs.cosonivel.<pj>.<id>.
+// `coso`: id del combate en COSO. Carreras y tableros: nombres de la sección Minijuegos y Tableros de la guía.
+export const NIVELES_COSO = [
+  { id: 'medallas', titulo: 'Medallas', intro: 'Medallas reunidas a lo largo de la partida. Lo más rápido es repetir «Engendro Marino»: unas 675 medallas por combate con la táctica de «Medallas rápidas» de arriba.', misiones: [
+    { id: 'med-300', t: 'Consigue 300 medallas.' },
+    { id: 'med-1000', t: 'Consigue 1000 medallas.' },
+    { id: 'med-3333', t: 'Consigue 3333 medallas.' },
+    { id: 'med-5555', t: 'Consigue 5555 medallas.' },
+    { id: 'med-7777', t: 'Consigue 7777 medallas.' },
+    { id: 'med-9999', t: 'Consigue 9999 medallas.' },
+  ] },
+  { id: 'combates', titulo: 'Combates', intro: 'Supera cada combate con el personaje. «Oscuridad Manifiesta» no es misión: se abre al llegar al nivel 30.', misiones: [
+    'dia-del-juicio', 'perdicion-rodada', 'traicionera-avaricia', 'rueca-loca', 'carcelero-implacable', 'el-conjurador',
+    'amenaza-conjunta', 'tesoro-peleon', 'castigo-inexorable', 'halito-gelido', 'maestro-de-ilusiones', 'custodios-del-coso',
+    'engendro-marino', 'vil-venganza', 'mentor-de-la-luz',
+  ].map((coso) => ({ id: coso, coso })) },
+  { id: 'carreras', titulo: 'Retumbódromo', intro: 'Desde el Coso Virtual. GP Jarana y Castillo Frenético se abren ganando antes en Ciudad Disney (ver Minijuegos).', misiones: [
+    { id: 'marcha', t: 'Marcha Campestre: cinco vueltas en menos de 2:30.' },
+    { id: 'formula', t: 'Fórmula Disney: cinco vueltas en menos de 5:00.' },
+    { id: 'jarana', t: 'GP Jarana: cinco vueltas en menos de 5:00.' },
+    { id: 'frenetico', t: 'Castillo Frenético: cinco vueltas en menos de 5:30.' },
+  ] },
+  { id: 'tableros', titulo: 'Tablero de comandos', intro: 'Partidas ganadas en el Coso Virtual. Valen siete victorias en el mismo tablero: el de la Llave Espada es el más rápido.', misiones: [
+    { id: 'tab-1', t: 'Gana 1 partida.' },
+    { id: 'tab-3', t: 'Gana 3 partidas.' },
+    { id: 'tab-5', t: 'Gana 5 partidas.' },
+    { id: 'tab-7', t: 'Gana 7 partidas.' },
+  ] },
+];
+export const NIVELES_COSO_INTRO = 'Cada personaje empieza en el nivel 1 y sube uno por misión: con las 29 llega al 30, el máximo. Marca cada misión con el personaje que la haya cumplido; las misiones se pueden hacer en cualquier orden. Lo más cómodo es dejarlas para después de terminar las tres historias.';
+export const FUENTES_NIVELES_COSO = ['khwikiMisiones', 'guiaSteam'];
 
 // Consejos por logro (guía de Steam en castellano, salvo indicación).
 export const CONSEJOS = {
