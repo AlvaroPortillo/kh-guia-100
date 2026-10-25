@@ -271,7 +271,7 @@ export const COSO = [
 // Van por personaje (cada uno tiene su Informe; la guía de Steam las pide para el 100 %). Ids: bbs.cosonivel.<pj>.<id>.
 // `coso`: id del combate en COSO. Carreras y tableros: nombres de la sección Minijuegos y Tableros de la guía.
 export const NIVELES_COSO = [
-  { id: 'medallas', titulo: 'Medallas', intro: 'Medallas reunidas a lo largo de la partida. Lo más rápido es repetir «Engendro Marino»: unas 675 medallas por combate con la táctica de «Medallas rápidas» de arriba.', misiones: [
+  { id: 'medallas', titulo: 'Medallas', intro: 'Medallas reunidas a lo largo de la partida. Lo más rápido es repetir «Engendro Marino» (unas 675 medallas por combate, menos de un minuto): lleva un Megafulgor y el resto de la baraja con Cuadro de minas, y ten desbloqueado el estilo Trance armónico (140 puntos de pegatinas). Al empezar, lanza Megafulgor contra los nescientes. Contra Monstruo, golpea dos barriles hacia él para aturdirlo, acércate a su boca, usa todos los Cuadros de minas y remata con el ataque del estilo.', misiones: [
     { id: 'med-300', t: 'Consigue 300 medallas.' },
     { id: 'med-1000', t: 'Consigue 1000 medallas.' },
     { id: 'med-3333', t: 'Consigue 3333 medallas.' },

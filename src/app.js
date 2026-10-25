@@ -44,6 +44,12 @@ import {
 } from './data/kh3-artema.js';
 import { IMG_PF, MUNDOS_PF, PREMIOS_PF, INTRO_PF, FUENTES_PF } from './data/kh3-portafortuna.js';
 import { IMG_TES, TIPOS_TESORO, MUNDOS_TESOROS, INTRO_TES, FUENTES_TESOROS } from './data/kh3-tesoros.js';
+import { MATERIALES_KH3, FAMILIAS_KH3, SINTESIS_KH3 } from './data/kh3-sintesis.js';
+import { IMG_SINT, FOTOS_KH3, INTRO_ORF, FUENTES_ORF } from './data/kh3-orfebreria.js';
+import {
+  FLANES_INFO, INTRO_FLANES, MINIJUEGOS_KH3, CLASICO_KH3, INTRO_CLASICO, RECORDS_KH3, INTRO_RECORDS, FUENTES_MINI,
+} from './data/kh3-minijuegos.js';
+import { RUTAS_GUMI, INTRO_CONST, INTRO_TES_GUMI, SCHWARZGEIST, FUENTES_GUMI as FUENTES_GUMI_KH3 } from './data/kh3-gumi.js';
 import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
@@ -95,6 +101,15 @@ const ID = {
   kh3Artema: (paso) => `kh3.artema.${paso}`,
   kh3Pf: (mundo, n) => `kh3.portafortuna.${mundo}.${n}`,
   kh3Tesoro: (mundo, n) => `kh3.tesoro.${mundo}.${n}`,
+  kh3Sintesis: (id) => (id === 'ultima-weapon' ? 'kh3.logro.ACH_44' : `kh3.sintesis.${id}`),
+  kh3Foto: (n) => `kh3.foto.${n}`,
+  kh3Material: (id) => `kh3.material.${id}`,
+  kh3Flan: (id, alta) => `kh3.flan.${id}${alta ? '.alta' : ''}`,
+  kh3Mini: (id) => `kh3.mini.${id}`,
+  kh3Clasico: (n) => `kh3.clasico.${n}`,
+  kh3Record: (g, n) => `kh3.record.${g}.${n}`,
+  kh3Const: (id) => `kh3.constelacion.${id}`,
+  kh3GumiTes: (ruta, n) => `kh3.gumi.tesoro.${ruta}.${n}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -164,7 +179,17 @@ const idsPf = (m) => (m ? [m] : MUNDOS_PF).flatMap((w) => w.pf.map((_, i) => ID.
 // Los dos cofres con Orichalcum+ usan el id de la sección Arma Artema: el Set evita contarlos dos veces.
 const idTesoroKh3 = (w, x) => x.id ?? ID.kh3Tesoro(w.id, x.n);
 const idsTesKh3 = (m) => (m ? [m] : MUNDOS_TESOROS).flatMap((w) => w.t.map((x) => idTesoroKh3(w, x)));
-const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsArtema()])];
+const idsMatKh3 = () => MATERIALES_KH3.map((m) => ID.kh3Material(m.id));
+const idsOrf = () => [...SINTESIS_KH3.map((o) => ID.kh3Sintesis(o.id)), ...FOTOS_KH3.map((f) => ID.kh3Foto(f.n)), ...idsMatKh3()];
+const idsRecordsKh3 = () => RECORDS_KH3.flatMap((r) => r.items.map((_, i) => ID.kh3Record(r.id, i + 1)));
+const idsMiniKh3 = () => [
+  ...FLANES.flatMap((f) => [ID.kh3Flan(f.id), ID.kh3Flan(f.id, true)]), ...MINIJUEGOS_KH3.map((m) => ID.kh3Mini(m.id)),
+  ...CLASICO_KH3.map((g) => ID.kh3Clasico(g.n)), ...idsRecordsKh3(),
+];
+const idsConstKh3 = () => RUTAS_GUMI.flatMap((r) => r.constelaciones.map((c) => ID.kh3Const(c.id)));
+const idsGumiTesKh3 = () => RUTAS_GUMI.flatMap((r) => r.tesoros.map((_, i) => ID.kh3GumiTes(r.id, i + 1)));
+const idsGumiKh3 = () => [...idsConstKh3(), ...idsGumiTesKh3(), ID.kh3Logro('ACH_29')];
+const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsArtema()])];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
@@ -201,6 +226,8 @@ function refrescarMedidores() {
   });
   document.querySelectorAll('[data-hito]').forEach((el) => el.classList.toggle('is-on', store.contar(idsPf()) >= Number(el.dataset.hito)));
   document.querySelectorAll('[data-nivel-coso]').forEach((el) => { el.textContent = 1 + store.contar(idsNivelesCoso(el.dataset.nivelCoso)); });
+  const nMat = store.contar(idsMatKh3());
+  document.querySelectorAll('[data-umbral]').forEach((el) => el.classList.toggle('is-on', nMat >= Number(el.dataset.umbral)));
   document.querySelectorAll('[data-gema]').forEach((el) => el.classList.toggle('is-on', store.hecho(el.dataset.gema)));
   document.querySelectorAll('[data-count]').forEach((el) => {
     const ids = medidores[el.dataset.count];
@@ -1932,7 +1959,7 @@ function vistaSeccionKHFM(s) {
 }
 
 // ---------- KH III + Re Mind ----------
-const GRUPO_A_SECCION_KH3 = { artema: ['artema'], gumifono: ['portafortuna', 'tesoros'] };
+const GRUPO_A_SECCION_KH3 = { artema: ['artema', 'orfebreria'], gumifono: ['portafortuna', 'tesoros', 'orfebreria', 'minijuegos'], minijuegos: ['minijuegos'], gumi: ['gumi'] };
 function kh3Logros() {
   const grupo = (g) => {
     const ids = g.ids.map(ID.kh3Logro);
@@ -2089,9 +2116,179 @@ function kh3Tesoros() {
     ${fuentes(FUENTES_TESOROS)}`;
 }
 
+// Orfebrería: recetas por lo que las desbloquea, misiones fotográficas y materiales (con sus enemigos).
+const ICONO_SINT = { objeto: `${IMG_TES}icono-objeto.webp`, llave: `${IMG_SINT}icono-llave.webp`, baston: `${IMG_TES}icono-baston.webp`,
+  escudo: `${IMG_TES}icono-escudo.webp`, proteccion: `${IMG_TES}icono-proteccion.webp`, accesorio: `${IMG_TES}icono-accesorio.webp` };
+const matKh3PorId = Object.fromEntries(MATERIALES_KH3.map((m) => [m.id, m]));
+const imgMatKh3 = (id, n = 22) => `<img src="${IMG_SINT}${id}.webp" alt="" width="${n}" height="${n}" loading="lazy">`;
+function kh3Orfebreria() {
+  const nMat = store.contar(idsMatKh3());
+  const receta = (o) => `<span class="rec">${o.mats.map(([id, q]) => `<span class="rec-mat">${imgMatKh3(id)}${q} × ${esc(matKh3PorId[id].nombre)}</span>`).join('')}</span>`;
+  const objeto = (o) => item({
+    id: ID.kh3Sintesis(o.id),
+    titulo: o.nombre,
+    icono: o.tipo === 'material' ? `${IMG_SINT}${o.id}.webp` : ICONO_SINT[o.tipo],
+    meta: `${receta(o)}${o.nota ? `<span class="note">${esc(o.nota)}</span>` : ''}${o.id === 'ultima-weapon' ? '<span class="chip chip-logro">Logro «Arma Artema»</span>' : ''}`,
+  });
+  const grupo = (clave, titulo, lista, extra = '') => {
+    const ids = lista.map((o) => ID.kh3Sintesis(o.id));
+    medidores[clave] = ids;
+    return `<div class="group orf-grupo">
+      <h3>${titulo} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span>${extra}</h3>
+      <ul class="list orf-lista">${lista.map(objeto).join('')}</ul></div>`;
+  };
+  const umbrales = [...new Set(SINTESIS_KH3.filter((o) => o.req).map((o) => o.req))].sort((a, b) => a - b);
+  const recetas = [
+    grupo('orf-u0', 'Desde el principio', SINTESIS_KH3.filter((o) => !o.req && !o.foto)),
+    ...umbrales.map((u) => grupo(`orf-u${u}`, `${u} materiales distintos`, SINTESIS_KH3.filter((o) => o.req === u),
+      `<span class="umbral${nMat >= u ? ' is-on' : ''}" data-umbral="${u}"><span class="u-si">Desbloqueado</span><span class="u-no">Bloqueado</span></span>`)),
+    grupo('orf-foto', 'Con una misión fotográfica', SINTESIS_KH3.filter((o) => o.foto).sort((a, b) => a.foto - b.foto)),
+  ].join('');
+
+  const sintPorId = Object.fromEntries(SINTESIS_KH3.map((o) => [o.id, o]));
+  const fotos = FOTOS_KH3.map((f) => item({
+    id: ID.kh3Foto(f.n), titulo: `${f.n}. ${f.que}`, desc: f.donde,
+    meta: `<span class="chip">Se abre: ${esc(f.abre)}</span><span class="chip">Receta: ${esc(sintPorId[f.objeto].nombre)}</span>`,
+  })).join('');
+
+  // Cofres de la sección Tesoros que dan cada material.
+  const cofres = {};
+  MUNDOS_TESOROS.forEach((w) => w.t.forEach((x) => { cofres[x.en] = (cofres[x.en] ?? 0) + 1; }));
+  const material = (m) => {
+    const vias = [
+      m.enemigos.length ? `<span><b>Enemigos:</b> ${m.enemigos.map((e) => `${esc(e.e)}${e.p ? ` (${e.p})` : ''}`).join(', ')}.</span>` : '',
+      m.gumi.length ? `<span><b>Nave gumi:</b> asteroides de ${m.gumi.map((g) => `${esc(g.r)} (${g.p})`).join(', ')}.</span>` : '',
+      cofres[m.en] ? `<span><b>Cofres:</b> ${cofres[m.en]} en la <a href="#/kh3/tesoros">sección Tesoros</a>.</span>` : '',
+      m.mundos.length ? `<span><b>También en:</b> ${esc(m.mundos.join(', '))}.</span>` : '',
+      ...m.otras.map((t) => `<span>${esc(t)}</span>`),
+    ].filter(Boolean).join('');
+    return item({ id: ID.kh3Material(m.id), titulo: m.nombre, icono: `${IMG_SINT}${m.id}.webp`, meta: `<span class="mat-vias">${vias}</span>` });
+  };
+  const familias = FAMILIAS_KH3.map((f) => {
+    const ids = f.materiales.map(ID.kh3Material);
+    medidores[`orf-f-${f.id}`] = ids;
+    return `<div class="group"><h3>${esc(f.nombre)} <span class="count" data-count="orf-f-${f.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list orf-lista">${f.materiales.map((id) => material(matKh3PorId[id])).join('')}</ul></div>`;
+  }).join('');
+
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_ORF)}</p>
+    ${subnav([['orf-recetas', 'Recetas (88)'], ['orf-fotos', 'Misiones fotográficas (20)'], ['orf-materiales', 'Materiales (60)']])}
+    ${bloque('orf-recetas', 'Recetas', recetas, {
+      meter: medidor('orf-sint', SINTESIS_KH3.map((o) => ID.kh3Sintesis(o.id)), 'Fabricados'),
+      lead: 'Marca cada objeto cuando lo fabriques. «Desbloqueado» se enciende según los materiales que marques abajo.',
+    })}
+    ${bloque('orf-fotos', 'Misiones fotográficas', `<ul class="list">${fotos}</ul>`, {
+      meter: medidor('orf-fotos', FOTOS_KH3.map((f) => ID.kh3Foto(f.n)), 'Fotos'),
+      lead: 'Te las encargan los moguris de las tiendas a partir de Villa Crepúsculo. Cada una da un objeto y su receta. Haz la foto con el gumífono: un aviso rojo confirma que vale.',
+    })}
+    ${bloque('orf-materiales', 'Materiales', familias, {
+      meter: medidor('orf-mat', idsMatKh3(), 'Registrados'),
+      lead: 'Hay 60 y con 58 distintos se desbloquean todas las recetas. Marca los que ya hayas conseguido al menos una vez: es lo que cuenta el juego en sus objetivos de coleccionista.',
+    })}
+    ${fuentes(FUENTES_ORF)}`;
+}
+
+// Minijuegos: Siete Flantásticos, minijuegos de los mundos, Reino clásico y récords del gumífono.
+const chipLogroKh3 = (id) => `<span class="chip chip-logro">Logro «${esc(logroKh3[id].nombre)}»</span>`;
+function kh3Minijuegos() {
+  const flan = (f) => {
+    const info = FLANES_INFO[f.id];
+    const premios = info.premios.map(([pts, p]) => `<li><b>Más de ${pts}</b><span>${esc(p)}</span></li>`).join('');
+    return item({
+      id: ID.kh3Flan(f.id), titulo: f.nombre, icono: `${IMG_ARTEMA}flan-${f.id}.webp`,
+      desc: `${f.mundo}, ${f.zona}. ${info.donde}`,
+      meta: '<span>Márcalo al jugarlo una vez, con cualquier puntuación.</span>',
+      extra: `<div class="mini-extra"><p>${esc(info.como)}</p><ul class="mini-premios">${premios}</ul>
+        ${marca(ID.kh3Flan(f.id, true), `Puntuación alta (más de ${esc(f.pts)})`)}</div>`,
+    });
+  };
+  const mini = (m) => item({
+    id: ID.kh3Mini(m.id), titulo: `${m.nombre} · rango A`, desc: `${m.mundo}. ${m.donde}`,
+    meta: `<b class="mini-meta">${esc(m.meta)}</b>${chipLogroKh3(m.logro)}`,
+    extra: `<div class="mini-extra"><p>${esc(m.como)}</p><p class="mini-premio">${esc(m.premio)}</p></div>`,
+  });
+  const nombreMundo = Object.fromEntries(MUNDOS_TESOROS.map((w) => [w.id, w.nombre]));
+  const clasico = (g) => item({
+    id: ID.kh3Clasico(g.n), titulo: `${g.n}. «${g.en}»`, desc: g.obj,
+    meta: g.cofre
+      ? `<span>Cofre n.º ${g.cofre[1]} de ${esc(nombreMundo[g.cofre[0]])} (<a href="#/kh3/tesoros" data-goto="tes-${g.cofre[0]}">sección Tesoros</a>)</span>`
+      : `<span>${esc(g.origen)}</span>`,
+  });
+  const records = RECORDS_KH3.map((r) => {
+    const ids = r.items.map((_, i) => ID.kh3Record(r.id, i + 1));
+    medidores[`rec-${r.id}`] = ids;
+    return `<div class="group"><h3>${esc(r.titulo)} <span class="count" data-count="rec-${r.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">${esc(r.intro)}</p>
+      <ul class="list list-tight">${r.items.map((t, i) => item({ id: ID.kh3Record(r.id, i + 1), titulo: t })).join('')}</ul></div>`;
+  }).join('');
+  const idsFlan = FLANES.flatMap((f) => [ID.kh3Flan(f.id), ID.kh3Flan(f.id, true)]);
+  return `
+    <p class="lead seccion-lead">Los Siete Flantásticos, los cuatro minijuegos de los mundos, los 23 juegos del Reino clásico y los récords del gumífono, con lo que pide cada logro.</p>
+    ${subnav([['mini-flanes', 'Flantásticos (7)'], ['mini-mundos', 'Minijuegos (4)'], ['mini-clasico', 'Reino clásico (23)'], ['mini-records', 'Récords']])}
+    ${bloque('mini-flanes', 'Los Siete Flantásticos', `<ul class="list mini-lista">${FLANES.map(flan).join('')}</ul>`, {
+      meter: medidor('mini-flanes', idsFlan, 'Flanes'), lead: esc(INTRO_FLANES),
+    })}
+    ${bloque('mini-mundos', 'Minijuegos de los mundos', `<ul class="list mini-lista">${MINIJUEGOS_KH3.map(mini).join('')}</ul>`, {
+      meter: medidor('mini-rango', MINIJUEGOS_KH3.map((m) => ID.kh3Mini(m.id)), 'Rango A'),
+      lead: 'Se repiten después de terminar su mundo. Marca cada uno al sacar el rango A. Los logros piden algo más: la cifra está en cada uno.',
+    })}
+    ${bloque('mini-clasico', 'Reino clásico', `<ul class="list">${CLASICO_KH3.map(clasico).join('')}</ul>`, {
+      meter: medidor('mini-clasico', CLASICO_KH3.map((g) => ID.kh3Clasico(g.n)), 'Récords batidos'),
+      lead: `${esc(INTRO_CLASICO)} ${chipLogroKh3('ACH_41')} ${chipLogroKh3('ACH_42')}`,
+    })}
+    ${bloque('mini-records', 'Récords del gumífono', records, {
+      meter: medidor('mini-records', idsRecordsKh3(), 'Récords'),
+      lead: `${esc(INTRO_RECORDS)} ${chipLogroKh3('ACH_19')}`,
+    })}
+    ${fuentes(FUENTES_MINI)}`;
+}
+
+// Nave gumi: constelaciones, tesoros de los combates y Schwarzgeist.
+const IMG_GUMI3 = 'assets/img/kh3/gumi/';
+function kh3Gumi() {
+  const rango = (r) => (r ? `<span class="chip">Rango ${r}${r === 'C' ? ' o mejor' : ''}</span>` : '<span class="chip">Al ganarlo</span>');
+  const constelaciones = RUTAS_GUMI.map((r) => {
+    const ids = r.constelaciones.map((c) => ID.kh3Const(c.id));
+    medidores[`gumi-c-${r.id}`] = ids;
+    return `<div class="group"><h3>${r.nombre} <span class="count" data-count="gumi-c-${r.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list">${r.constelaciones.map((c) => item({ id: ID.kh3Const(c.id), titulo: `«${c.en}»`, desc: c.donde })).join('')}</ul></div>`;
+  }).join('');
+  const tesoros = RUTAS_GUMI.map((r) => {
+    const ids = r.tesoros.map((_, i) => ID.kh3GumiTes(r.id, i + 1));
+    medidores[`gumi-t-${r.id}`] = ids;
+    return `<div class="group"><h3>${r.nombre} <span class="count" data-count="gumi-t-${r.id}">${store.contar(ids)}/${ids.length}</span></h3>
+      <p class="group-intro">Ruta de ${esc(r.mundos)}. ${esc(r.nota)}</p>
+      <ul class="list list-tight">${r.tesoros.map(([t, combate, ra], i) => item({
+        id: ID.kh3GumiTes(r.id, i + 1), titulo: `«${t}»`,
+        meta: `<span>${t.endsWith('/G') ? 'Pieza decorativa' : 'Plano de nave'} · combate «${esc(combate)}»</span>${rango(ra)}`,
+      })).join('')}</ul></div>`;
+  }).join('');
+  const chip = (id) => `<span class="chip chip-logro">Logro «${esc(logroKh3[id].nombre)}»</span>`;
+  return `
+    <p class="lead seccion-lead">Las tres rutas de la nave gumi: dónde está cada constelación, qué combate da cada tesoro y cómo vencer a Schwarzgeist.</p>
+    ${subnav([['gumi-const', 'Constelaciones (9)'], ['gumi-tes', 'Tesoros (36)'], ['gumi-schwarz', 'Schwarzgeist']])}
+    ${bloque('gumi-const', 'Constelaciones', constelaciones, {
+      meter: medidor('gumi-const', idsConstKh3(), 'Fotografiadas'), lead: `${esc(INTRO_CONST)} ${chip('ACH_28')}`,
+    })}
+    ${bloque('gumi-tes', 'Tesoros de la nave', tesoros, {
+      meter: medidor('gumi-tes', idsGumiTesKh3(), 'Tesoros'), lead: `${esc(INTRO_TES_GUMI)} ${chip('ACH_27')}`,
+    })}
+    ${bloque('gumi-schwarz', 'Schwarzgeist', `
+      <div class="schwarz">
+        <img src="${IMG_GUMI3}schwarzgeist.webp" alt="Schwarzgeist, jefe de la nave gumi" width="480" height="412" loading="lazy">
+        <div><p><b>Dónde:</b> ${esc(SCHWARZGEIST.donde)}</p><p><b>Cómo:</b> ${esc(SCHWARZGEIST.como)}</p><p><b>Premios:</b> ${esc(SCHWARZGEIST.premios)}</p>
+          ${marca(ID.kh3Logro('ACH_29'), `Derrotado (logro «${esc(logroKh3.ACH_29.nombre)}»)`)}</div>
+      </div>`)}
+    ${fuentes(FUENTES_GUMI_KH3)}`;
+}
+
 const SECCIONES_KH3 = [
   { id: 'portafortuna', titulo: 'Portafortuna', desc: 'Los 90, con captura de cada uno, y sus premios.', img: `${IMG_PF}pf-villa-1.webp`, ids: () => idsPf(), html: kh3Portafortuna },
   { id: 'tesoros', titulo: 'Tesoros', desc: 'Los 245 cofres del gumífono, mundo a mundo y con cómo llegar a cada uno.', img: `${IMG_TES}cofre-olimpo.webp`, ids: () => idsTesKh3(), html: kh3Tesoros },
+  { id: 'orfebreria', titulo: 'Orfebrería', desc: 'Los 88 objetos con su receta, las 20 misiones fotográficas y los 60 materiales con sus enemigos.', img: `${IMG_SINT}lucid-crystal.webp`, ids: () => idsOrf(), html: kh3Orfebreria },
+  { id: 'minijuegos', titulo: 'Minijuegos', desc: 'Siete Flantásticos, los minijuegos de los mundos, el Reino clásico y los récords.', img: `${IMG_ARTEMA}flan-cereza.webp`, ids: () => idsMiniKh3(), html: kh3Minijuegos },
+  { id: 'gumi', titulo: 'Nave gumi', desc: 'Las 9 constelaciones, los 36 tesoros de los combates y Schwarzgeist.', img: `${IMG_GUMI3}golden-highwind.webp`, ids: () => idsGumiKh3(), html: kh3Gumi },
   { id: 'artema', titulo: 'Arma Artema', desc: 'Receta, los 7 Orichalcum+, cristales y mejoras.', img: `${IMG_ARTEMA}arma-artema.webp`, ids: () => idsArtema(), html: kh3Artema },
 ];
 const seccionKh3 = (id) => SECCIONES_KH3.find((s) => s.id === id);

@@ -143,4 +143,14 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    `#/kh3/tesoros` (`kh3-tesoros.js`, a mano), los 245 cofres en el orden de ruta de PowerPyx con el n.º del gumífono y cómo
    llegar, contrastados con las páginas de objeto de KHWiki. Ids `kh3.tesoro.<mundo>.<n>`; los dos Orichalcum+ reutilizan
    `kh3.oricalco.exile` y `kh3.oricalco.mundo-final`. Nombres de objeto: Wiki ES emparejada por katakana con KHWiki.
-   **Siguientes entregas:** Orfebrería y materiales, Flantásticos y minijuegos, nave gumi, cocina, Re Mind (datos y méritos de códigos).
+   **Orfebrería hecha** (25-10-2026, pendiente de revisión): `#/kh3/orfebreria`, los 88 objetos con receta agrupados por
+   lo que los desbloquea, las 20 misiones fotográficas (`kh3-orfebreria.js`, a mano) y los 60 materiales con sus enemigos
+   (`kh3-sintesis.js`, **generado** con `notas/herramientas/genera_kh3_sintesis.py`). Ids `kh3.sintesis.<id>` (el Arma Artema
+   usa `kh3.logro.ACH_44`), `kh3.foto.<n>`, `kh3.material.<id>`. Familias de materiales: Wiki ES por nombre japonés
+   (Blazing = Ígneo, Soothing = Vital, Betwixt = Neutro…; Guijarro/Roca/Gema/Cristal). Iconos en `assets/img/kh3/sintesis/`.
+   **Minijuegos y nave gumi hechos** (25-10-2026, pendientes de revisión): `#/kh3/minijuegos` (`kh3-minijuegos.js`: Siete
+   Flantásticos, 4 minijuegos con rango A, 23 juegos del Reino clásico enlazados a su cofre y récords del gumífono; ids
+   `kh3.flan.<id>[.alta]`, `kh3.mini.<id>`, `kh3.clasico.<n>`, `kh3.record.<grupo>.<n>`) y `#/kh3/gumi` (`kh3-gumi.js`:
+   9 constelaciones, 36 tesoros de los combates y Schwarzgeist; ids `kh3.constelacion.<id>`, `kh3.gumi.tesoro.<ruta>.<n>`;
+   Schwarzgeist usa el id de su logro). Nombres de shotlocks, naves, combates gumi y constelaciones: inglés entre «».
+   **Siguientes entregas:** cocina, Re Mind (datos y méritos de códigos), adversarios, jefes de la historia.

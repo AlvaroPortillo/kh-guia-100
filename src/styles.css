@@ -1320,3 +1320,41 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .tes3 .item-title[title] { cursor: help; }
 .tes3-n { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text); }
 @media (prefers-reduced-motion: reduce) { .tes3-cofre, .block:hover .tes3-cofre { transition: none; transform: none; } }
+
+/* KH III · Orfebrería: receta con iconos de material, umbral de materiales y vías de cada material */
+.orf-lista .item-icon { width: 44px; height: 44px; padding: 4px; object-fit: contain; border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 24%, var(--line)); }
+.rec { display: flex; flex-wrap: wrap; gap: 6px; }
+.rec-mat { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rec-mat img { width: 22px; height: 22px; object-fit: contain; }
+.orf-grupo h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.umbral { font-size: .75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--line); color: var(--text-2);
+  transition: color var(--t) var(--ease), background var(--t) var(--ease), border-color var(--t) var(--ease); }
+.umbral .u-si, .umbral.is-on .u-no { display: none; }
+.umbral.is-on .u-si { display: inline; }
+.umbral.is-on { border-style: solid; border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, transparent); }
+.mat-vias { display: grid; gap: 4px; max-width: 75ch; font-size: .875rem; }
+.mat-vias b { color: var(--text); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .umbral { transition: none; } }
+
+/* KH III · Minijuegos: cómo se juega, premios por puntuación y marca de puntuación alta */
+.mini-extra { display: grid; gap: 10px; padding: 0 8px 16px 50px; color: var(--text-2); font-size: .9375rem; max-width: calc(70ch + 112px); }
+.item-row:has(.item-icon) ~ .mini-extra { padding-left: 112px; }
+.mini-extra > .marca { justify-self: start; }
+.mini-premios { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.mini-premios li { display: grid; gap: 2px; padding: 8px 12px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--surface); font-size: .875rem; }
+.mini-premios b { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mini-premios span { color: var(--text); }
+.mini-premio { color: var(--text); font-size: .875rem; }
+.mini-meta { color: var(--text); font-weight: 600; }
+.mini-lista .item-icon { object-fit: contain; padding: 2px; background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+@media (max-width: 640px) { .mini-extra, .item-row:has(.item-icon) ~ .mini-extra { padding-left: 8px; } }
+
+/* KH III · Nave gumi: ficha de Schwarzgeist */
+.schwarz { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: 24px; align-items: start; padding: 18px; border-radius: var(--r-m);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), var(--surface)); }
+.schwarz img { width: 100%; height: auto; filter: drop-shadow(0 10px 24px color-mix(in srgb, var(--accent) 30%, transparent)); }
+.schwarz p { margin: 0 0 10px; max-width: 70ch; color: var(--text-2); }
+.schwarz b { color: var(--text); }
+@media (max-width: 640px) { .schwarz { grid-template-columns: 1fr; } .schwarz img { max-width: 260px; } }
