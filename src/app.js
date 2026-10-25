@@ -49,6 +49,11 @@ import { IMG_SINT, FOTOS_KH3, INTRO_ORF, FUENTES_ORF } from './data/kh3-orfebrer
 import {
   FLANES_INFO, INTRO_FLANES, MINIJUEGOS_KH3, CLASICO_KH3, INTRO_CLASICO, RECORDS_KH3, INTRO_RECORDS, FUENTES_MINI,
 } from './data/kh3-minijuegos.js';
+import { PLATOS_KH3, INGREDIENTES_KH3 } from './data/kh3-cocina.js';
+import { INTRO_COCINA, JUEGOS_COCINA, ESTRELLAS_BISTRO, CONSEJOS_COCINA, FUENTES_COCINA } from './data/kh3-bistro.js';
+import {
+  PASOS_REMIND, DATOS_ORG, MERITOS_PRIN, CODIGOS_EXP, JEFES_MERITO, RANGOS_MERITO, NOTA_RANGO_B, CONSEJOS_EXP, FUENTES_REMIND,
+} from './data/kh3-remind.js';
 import { RUTAS_GUMI, INTRO_CONST, INTRO_TES_GUMI, SCHWARZGEIST, FUENTES_GUMI as FUENTES_GUMI_KH3 } from './data/kh3-gumi.js';
 import { iniciarEstela } from './cursor.js';
 
@@ -109,6 +114,11 @@ const ID = {
   kh3Clasico: (n) => `kh3.clasico.${n}`,
   kh3Record: (g, n) => `kh3.record.${g}.${n}`,
   kh3Const: (id) => `kh3.constelacion.${id}`,
+  kh3Plato: (id) => `kh3.plato.${id}`,
+  kh3Datos: (id) => `kh3.datos.${id}`,
+  kh3Merito: (id) => `kh3.merito.${id}`,
+  kh3JefeExp: (id) => `kh3.jefe-exp.${id}`,
+  kh3Ingrediente: (id) => `kh3.ingrediente.${id}`,
   kh3GumiTes: (ruta, n) => `kh3.gumi.tesoro.${ruta}.${n}`,
 };
 
@@ -189,7 +199,10 @@ const idsMiniKh3 = () => [
 const idsConstKh3 = () => RUTAS_GUMI.flatMap((r) => r.constelaciones.map((c) => ID.kh3Const(c.id)));
 const idsGumiTesKh3 = () => RUTAS_GUMI.flatMap((r) => r.tesoros.map((_, i) => ID.kh3GumiTes(r.id, i + 1)));
 const idsGumiKh3 = () => [...idsConstKh3(), ...idsGumiTesKh3(), ID.kh3Logro('ACH_29')];
-const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsArtema()])];
+const idsPlatosClasicos = () => PLATOS_KH3.filter((p) => p.menu === 'clasico').map((p) => ID.kh3Plato(p.id));
+const idsCocinaKh3 = () => [...PLATOS_KH3.map((p) => ID.kh3Plato(p.id)), ...INGREDIENTES_KH3.map((i) => ID.kh3Ingrediente(i.id))];
+const idsRemindKh3 = () => [...DATOS_ORG.map((d) => ID.kh3Datos(d.id)), ...MERITOS_PRIN.map((m) => ID.kh3Merito(m.id))];
+const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsCocinaKh3(), ...idsRemindKh3(), ...idsArtema()])];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
@@ -228,6 +241,14 @@ function refrescarMedidores() {
   document.querySelectorAll('[data-nivel-coso]').forEach((el) => { el.textContent = 1 + store.contar(idsNivelesCoso(el.dataset.nivelCoso)); });
   const nMat = store.contar(idsMatKh3());
   document.querySelectorAll('[data-umbral]').forEach((el) => el.classList.toggle('is-on', nMat >= Number(el.dataset.umbral)));
+  const nCoc = store.contar(idsPlatosClasicos());
+  document.querySelectorAll('[data-estrella]').forEach((el) => el.classList.toggle('is-on', nCoc >= Number(el.dataset.estrella)));
+  document.querySelectorAll('[data-count="coc-clasicos"]').forEach((el) => { el.textContent = `${nCoc}/20`; });
+  if (document.querySelector('[data-puntos-exp]')) {
+    const pExp = puntosExpKh3();
+    document.querySelectorAll('[data-puntos-exp]').forEach((el) => { el.textContent = fmtNum(pExp); });
+    document.querySelectorAll('[data-rango-exp]').forEach((el) => el.classList.toggle('is-on', pExp >= Number(el.dataset.rangoExp)));
+  }
   document.querySelectorAll('[data-gema]').forEach((el) => el.classList.toggle('is-on', store.hecho(el.dataset.gema)));
   document.querySelectorAll('[data-count]').forEach((el) => {
     const ids = medidores[el.dataset.count];
@@ -1959,7 +1980,7 @@ function vistaSeccionKHFM(s) {
 }
 
 // ---------- KH III + Re Mind ----------
-const GRUPO_A_SECCION_KH3 = { artema: ['artema', 'orfebreria'], gumifono: ['portafortuna', 'tesoros', 'orfebreria', 'minijuegos'], minijuegos: ['minijuegos'], gumi: ['gumi'] };
+const GRUPO_A_SECCION_KH3 = { artema: ['artema', 'orfebreria'], gumifono: ['portafortuna', 'tesoros', 'orfebreria', 'minijuegos'], minijuegos: ['minijuegos'], gumi: ['gumi'], fotos: ['cocina'], remind: ['remind'], codigos: ['remind'] };
 function kh3Logros() {
   const grupo = (g) => {
     const ids = g.ids.map(ID.kh3Logro);
@@ -2283,12 +2304,131 @@ function kh3Gumi() {
     ${fuentes(FUENTES_GUMI_KH3)}`;
 }
 
+// Cocina: platos (con su minijuego), estrellas del bistró e ingredientes.
+const ingKh3PorId = Object.fromEntries(INGREDIENTES_KH3.map((i) => [i.id, i]));
+function kh3Cocina() {
+  const chip = (id) => `<span class="chip chip-logro">Logro «${esc(logroKh3[id].nombre)}»</span>`;
+  const nClasicos = store.contar(idsPlatosClasicos());
+  const estrellas = `<ol class="hitos" aria-label="Estrellas del bistró">${ESTRELLAS_BISTRO.map(([e, n, premio]) => `
+    <li class="hito${nClasicos >= n ? ' is-on' : ''}" data-estrella="${n}"><b>${'★'.repeat(e)}</b><span>${n} platos${premio ? ` · ${esc(premio)}` : ''}</span></li>`).join('')}</ol>`;
+  const plato = (p) => item({
+    id: ID.kh3Plato(p.id), titulo: p.nombre,
+    meta: `<span class="chip">${p.menu === 'especial' ? 'Menú especial' : 'Menú clásico'}</span>
+      <span class="chip">${esc(JUEGOS_COCINA[p.juego].t)} · dificultad ${p.dif}</span>
+      <span class="rec">${p.ings.map((id) => `<span class="rec-mat">${esc(ingKh3PorId[id].nombre)}</span>`).join('')}</span>`,
+  });
+  const cats = [...new Set(PLATOS_KH3.map((p) => p.cat))];
+  const platos = cats.map((c) => {
+    const lista = PLATOS_KH3.filter((p) => p.cat === c);
+    const ids = lista.map((p) => ID.kh3Plato(p.id));
+    medidores[`coc-${slug(c)}`] = ids;
+    return `<div class="group"><h3>${esc(c)} <span class="count" data-count="coc-${slug(c)}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list list-tight">${lista.map(plato).join('')}</ul></div>`;
+  }).join('');
+  const juegos = Object.values(JUEGOS_COCINA).map((j) => `<div class="info-card"><h3>${esc(j.t)}</h3><p>${esc(j.como)}</p></div>`).join('');
+  const nombreFlan = Object.fromEntries(FLANES.map((f) => [f.id, f.nombre]));
+  const ingrediente = (i) => item({
+    id: ID.kh3Ingrediente(i.id), titulo: i.nombre,
+    meta: `<span class="mat-vias">${[
+      i.flan ? `<span><b>Flan:</b> el ${esc(nombreFlan[i.flan])} la da al superar su puntuación (<a href="#/kh3/minijuegos" data-goto="mini-flanes">sección Minijuegos</a>).</span>` : '',
+      i.tienda ? '<span><b>Tienda Moguri:</b> se vende (más variedad según avanzas en la historia).</span>' : '',
+      i.zonas.length ? `<span><b>Dónde:</b> ${esc(i.zonas.join(', '))}.</span>` : '',
+    ].filter(Boolean).join('')}</span>`,
+  });
+  const grupos = [...new Set(INGREDIENTES_KH3.map((i) => i.grupo))].map((g) => {
+    const lista = INGREDIENTES_KH3.filter((i) => i.grupo === g);
+    const ids = lista.map((i) => ID.kh3Ingrediente(i.id));
+    medidores[`ing-${slug(g)}`] = ids;
+    return `<div class="group"><h3>${esc(g)} <span class="count" data-count="ing-${slug(g)}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list list-tight">${lista.map(ingrediente).join('')}</ul></div>`;
+  }).join('');
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_COCINA)}</p>
+    ${subnav([['coc-platos', 'Platos (28)'], ['coc-juegos', 'Minijuegos de cocina'], ['coc-ingredientes', 'Ingredientes (59)']])}
+    ${bloque('coc-platos', 'Platos', `
+      <h3 class="hitos-tit">Estrellas del bistró <span class="count" data-count="coc-clasicos">${nClasicos}/20</span></h3>
+      ${estrellas}
+      ${platos}`, {
+      meter: medidor('coc-platos', PLATOS_KH3.map((p) => ID.kh3Plato(p.id)), 'Con «Excelente»'),
+      lead: `Marca cada plato cuando lo saques con «Excelente». Solo los 20 del menú clásico dan estrellas al bistró. ${chip('ACH_39')} ${chip('ACH_40')}`,
+    })}
+    ${bloque('coc-juegos', 'Minijuegos de cocina', `<div class="info-cards">${juegos}</div>
+      <ul class="recipes">${CONSEJOS_COCINA.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`, {
+      lead: 'Cada plato usa uno de estos cuatro. Al final, la pantalla se oscurece y salen chispas rojas: marcan el momento de la última acción.',
+    })}
+    ${bloque('coc-ingredientes', 'Ingredientes', grupos, {
+      meter: medidor('coc-ing', INGREDIENTES_KH3.map((i) => ID.kh3Ingrediente(i.id)), 'Conseguidos'),
+      lead: `Se compran en la tienda Moguri, se recogen por los mundos (cajas, arbustos, burbujas en el agua…) o los dan los flanes. ${chip('ACH_38')}`,
+    })}
+    ${fuentes(FUENTES_COCINA)}`;
+}
+
+// Re Mind: episodios, combates de datos, retos PRINCIPIANTE y méritos EXPERTO (con suma de puntos).
+const META_RANGO_A = RANGOS_MERITO.at(-1)[1];
+// Jefes de mérito desplegados: los 13 datos cuentan uno a uno.
+const jefesMeritoKh3 = () => JEFES_MERITO.flatMap((j) => (j.por
+  ? DATOS_ORG.map((d) => ({ id: `datos-${d.id}`, mundo: j.mundo, n: `Datos de ${d.n}`, base: j.base }))
+  : [j]));
+const puntosExpKh3 = () => jefesMeritoKh3().reduce((t, j) => t + (store.hecho(ID.kh3JefeExp(j.id)) ? j.base * 50 : 0), 0);
+const fmtNum = (n) => n.toLocaleString('es-ES');
+function kh3Remind() {
+  const chip = (id) => `<span class="chip chip-logro">Logro «${esc(logroKh3[id].nombre)}»</span>`;
+  const pasos = PASOS_REMIND.map((p, i) => `
+    <li class="step"><span class="step-n" aria-hidden="true">${i + 1}</span>
+      <div class="step-body"><h3>${esc(p.t)}</h3><p>${esc(p.texto)}</p><div class="item-foot">${chip(p.logro)}</div></div></li>`).join('');
+  const datos = DATOS_ORG.map((d) => item({
+    id: ID.kh3Datos(d.id), titulo: d.n,
+    meta: `<span class="chip">Premio: ${esc(d.premio)}</span>${d.tarde ? '<span class="note">Se abre al vencer a los otros once.</span>' : ''}`,
+  })).join('');
+  const meritos = MERITOS_PRIN.map((m) => item({
+    id: ID.kh3Merito(m.id), titulo: `«${m.en}»`, desc: m.pide,
+    extra: `<details class="tip"><summary>Cómo conseguirlo</summary><p>${esc(m.como)}</p></details>`,
+  })).join('');
+  const pts = puntosExpKh3();
+  const jefes = jefesMeritoKh3().map((j) => item({
+    id: ID.kh3JefeExp(j.id), titulo: j.n, desc: j.mundo,
+    meta: `<span class="chip">${fmtNum(j.base)} puntos base · ${fmtNum(j.base * 50)} con todos los códigos</span>`,
+  })).join('');
+  const codigos = `<div class="sx-tabla-wrap"><table class="sx-tabla">
+    <thead><tr><th scope="col">Código</th><th scope="col">Estrellas</th><th scope="col">Qué hace</th></tr></thead>
+    <tbody>${CODIGOS_EXP.map(([n, e, t]) => `<tr><th scope="row">«${esc(n)}»</th><td>${'★'.repeat(e)}</td><td>${esc(t)}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+  const rangos = `<ol class="hitos">${RANGOS_MERITO.map(([r, p]) => `<li class="hito${pts >= p ? ' is-on' : ''}" data-rango-exp="${p}"><b>${r}</b><span>${fmtNum(p)}</span></li>`).join('')}</ol>`;
+  return `
+    <p class="lead seccion-lead">El contenido descargable de KH III: la historia extra, los trece combates de datos, Yozora y los méritos de los dos menús de códigos.</p>
+    ${subnav([['rm-pasos', 'Episodios'], ['rm-datos', 'Datos (13)'], ['rm-prin', 'Méritos PRINCIPIANTE'], ['rm-exp', 'Méritos EXPERTO']])}
+    ${bloque('rm-pasos', 'Los tres episodios', `<ol class="steps">${pasos}</ol>`, { lead: 'Van en este orden: cada uno se abre al terminar el anterior.' })}
+    ${bloque('rm-datos', 'Datos de la Organización XIII', `<ul class="list">${datos}</ul>`, {
+      meter: medidor('rm-datos', DATOS_ORG.map((d) => ID.kh3Datos(d.id)), 'Vencidos'),
+      lead: `Marca cada combate al ganarlo. ${chip('ACH_49')} ${chip('ACH_50')}`,
+    })}
+    ${bloque('rm-prin', 'Méritos de los códigos PRINCIPIANTE', `<ul class="list">${meritos}</ul>`, {
+      meter: medidor('rm-prin', MERITOS_PRIN.map((m) => ID.kh3Merito(m.id)), 'Méritos'),
+      lead: `Se abren eligiendo la aventura fácil al empezar o al vencer a Yozora. Salvo el de supervivencia, no hace falta activar ningún código; con los dos menús abiertos (tras Yozora) son mucho más fáciles. ${chip('ACH_46')}`,
+    })}
+    ${bloque('rm-exp', 'Méritos de los códigos EXPERTO', `
+      <div class="exp-suma"><span>Puntos con los jefes marcados</span><b data-puntos-exp>${fmtNum(pts)}</b><span>de ${fmtNum(META_RANGO_A)} para el rango A</span></div>
+      ${rangos}
+      <p class="nota-fuente">${esc(NOTA_RANGO_A)} ${esc(NOTA_RANGO_B)}</p>
+      <h3 class="hitos-tit">Consejos</h3>
+      <ul class="recipes">${CONSEJOS_EXP.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+      <h3 class="hitos-tit">Los 13 códigos</h3>${codigos}
+      <h3 class="hitos-tit">Jefes que dan puntos</h3>
+      <p class="group-intro">Marca cada jefe que hayas vencido con todos los códigos activados (×50) y la suma de arriba se actualiza.</p>
+      <ul class="list list-tight">${jefes}</ul>`, {
+      lead: `Se ganan venciendo a ciertos jefes con códigos EXPERTO activados: cada estrella de código multiplica por 1,25 los puntos del jefe y, con los trece, el multiplicador es ×50. ${chip('ACH_47')}`,
+    })}
+    ${fuentes(FUENTES_REMIND)}`;
+}
+
 const SECCIONES_KH3 = [
   { id: 'portafortuna', titulo: 'Portafortuna', desc: 'Los 90, con captura de cada uno, y sus premios.', img: `${IMG_PF}pf-villa-1.webp`, ids: () => idsPf(), html: kh3Portafortuna },
   { id: 'tesoros', titulo: 'Tesoros', desc: 'Los 245 cofres del gumífono, mundo a mundo y con cómo llegar a cada uno.', img: `${IMG_TES}cofre-olimpo.webp`, ids: () => idsTesKh3(), html: kh3Tesoros },
   { id: 'orfebreria', titulo: 'Orfebrería', desc: 'Los 88 objetos con su receta, las 20 misiones fotográficas y los 60 materiales con sus enemigos.', img: `${IMG_SINT}lucid-crystal.webp`, ids: () => idsOrf(), html: kh3Orfebreria },
   { id: 'minijuegos', titulo: 'Minijuegos', desc: 'Siete Flantásticos, los minijuegos de los mundos, el Reino clásico y los récords.', img: `${IMG_ARTEMA}flan-cereza.webp`, ids: () => idsMiniKh3(), html: kh3Minijuegos },
   { id: 'gumi', titulo: 'Nave gumi', desc: 'Las 9 constelaciones, los 36 tesoros de los combates y Schwarzgeist.', img: `${IMG_GUMI3}golden-highwind.webp`, ids: () => idsGumiKh3(), html: kh3Gumi },
+  { id: 'cocina', titulo: 'Cocina', desc: 'Los 28 platos con su minijuego, las estrellas del bistró y los 59 ingredientes.', img: `${IMG_TES}icono-cocina.webp`, ids: () => idsCocinaKh3(), html: kh3Cocina },
+  { id: 'remind', titulo: 'Re Mind', desc: 'Los tres episodios, los 13 combates de datos, Yozora y los méritos de los códigos.', img: 'assets/img/logos/kh3-remind.webp', ids: () => idsRemindKh3(), html: kh3Remind },
   { id: 'artema', titulo: 'Arma Artema', desc: 'Receta, los 7 Orichalcum+, cristales y mejoras.', img: `${IMG_ARTEMA}arma-artema.webp`, ids: () => idsArtema(), html: kh3Artema },
 ];
 const seccionKh3 = (id) => SECCIONES_KH3.find((s) => s.id === id);

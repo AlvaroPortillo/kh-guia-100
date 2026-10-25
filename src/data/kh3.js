@@ -52,6 +52,10 @@ export const FUENTES_KH3 = {
   khwRutasGumi: { nombre: 'KHWiki — rutas gumi de KH III (Starlight Way, Misty Stream, The Eclipse)', url: `${KHW}Misty_Stream` },
   ppxConst: { nombre: 'PowerPyx — dónde están las constelaciones (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-constellation-photograph-locations/' },
   khwSchwarz: { nombre: 'KHWiki — Schwarzgeist', url: `${KHW}Schwarzgeist` },
+  khwBistro: { nombre: 'KHWiki — Le Grand Bistrot (platos, minijuegos de cocina y estrellas)', url: `${KHW}Le_Grand_Bistrot` },
+  khwIngredientes: { nombre: 'KHWiki — Ingredients (dónde sale cada ingrediente)', url: `${KHW}Ingredients` },
+  ppxRecetas: { nombre: 'PowerPyx — las 28 recetas de KH3 (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-all-cooking-recipes-list/' },
+  ppxIngredientes: { nombre: 'PowerPyx — dónde están los ingredientes (inglés)', url: 'https://www.powerpyx.com/kingdom-hearts-3-all-ingredients-locations/' },
   wesAccesorios: { nombre: 'Wiki ES — Accesorios de Kingdom Hearts III', url: `${WES}Categor%C3%ADa:Accesorios_de_Kingdom_Hearts_III` },
 };
 

@@ -153,4 +153,9 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    `kh3.flan.<id>[.alta]`, `kh3.mini.<id>`, `kh3.clasico.<n>`, `kh3.record.<grupo>.<n>`) y `#/kh3/gumi` (`kh3-gumi.js`:
    9 constelaciones, 36 tesoros de los combates y Schwarzgeist; ids `kh3.constelacion.<id>`, `kh3.gumi.tesoro.<ruta>.<n>`;
    Schwarzgeist usa el id de su logro). Nombres de shotlocks, naves, combates gumi y constelaciones: inglés entre «».
-   **Siguientes entregas:** cocina, Re Mind (datos y méritos de códigos), adversarios, jefes de la historia.
+   **Cocina y Re Mind hechos** (25-10-2026, pendientes de revisión): `#/kh3/cocina` (`kh3-cocina.js` **generado** con
+   `notas/herramientas/genera_kh3_cocina.py` desde KHWiki + textos a mano en `kh3-bistro.js`; ids `kh3.plato.<id>` con
+   «Excelente» y `kh3.ingrediente.<id>`; platos e ingredientes en inglés salvo las frutas de los flanes) y `#/kh3/remind`
+   (`kh3-remind.js`: episodios, 13 datos `kh3.datos.<id>`, 9 retos PRINCIPIANTE `kh3.merito.<id>`, códigos EXPERTO y jefes
+   de mérito `kh3.jefe-exp.<id>` con suma de puntos). Marshmallow = **Merengue** (Wiki ES).
+   **Siguientes entregas:** adversarios, jefes de la historia (con estrategia de los 13 datos y Yozora).

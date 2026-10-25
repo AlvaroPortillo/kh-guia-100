@@ -46,7 +46,7 @@ export const FOTOS_KH3 = [
   { n: 19, que: 'Una Torre Maldita', abre: 'Al terminar San Fransokyo.', objeto: 'dark-chain',
     donde: 'Monstruópolis, «Tank Yard», cuando ya se pueden hacer los Portales de Batalla (tras la historia). Sal al exterior, deslízate por el raíl de la izquierda: el portal azul del centro de la sala redonda saca una Torre Maldita.' },
   { n: 20, que: 'Cada compañero de equipo (12)', abre: 'Al terminar San Fransokyo.', objeto: 'petite-ribbon',
-    donde: 'Donald y Goofy (en cualquier sitio), Hércules (El Olimpo), Woody y Buzz Lightyear (Caja de juguetes), Flynn Rider y Rapunzel (Reino de Corona), Mike Wazowski y Sulley (Monstruópolis), «Marshmallow» (Arendelle), Jack Sparrow (El Caribe) y Baymax (San Fransokyo). Mejor fuera de combate: apunta, espera a que posen y dispara.' },
+    donde: 'Donald y Goofy (en cualquier sitio), Hércules (El Olimpo), Woody y Buzz Lightyear (Caja de juguetes), Flynn Rider y Rapunzel (Reino de Corona), Mike Wazowski y Sulley (Monstruópolis), Merengue (Arendelle), Jack Sparrow (El Caribe) y Baymax (San Fransokyo). Mejor fuera de combate: apunta, espera a que posen y dispara.' },
 ];
 
 export const INTRO_ORF = 'Para el logro «Orfebre» hay que fabricar una vez cada uno de los 88 objetos de la Orfebrería (taller de cualquier tienda Moguri). Las recetas se desbloquean de dos formas: registrando materiales distintos (objetivos de coleccionista, de 2 a 58) y con las 20 misiones fotográficas de los moguris. Nada es perdible.';

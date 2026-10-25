@@ -1358,3 +1358,8 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .schwarz p { margin: 0 0 10px; max-width: 70ch; color: var(--text-2); }
 .schwarz b { color: var(--text); }
 @media (max-width: 640px) { .schwarz { grid-template-columns: 1fr; } .schwarz img { max-width: 260px; } }
+
+/* KH III · Re Mind: suma de puntos de mérito EXPERTO */
+.exp-suma { display: grid; justify-items: start; gap: 2px; margin: 0 0 16px; padding: 16px 20px; border-radius: var(--r-m);
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, transparent), var(--surface)); color: var(--text-2); }
+.exp-suma b { font-size: 2rem; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; line-height: 1.1; }
