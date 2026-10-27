@@ -15,6 +15,7 @@
   --khfm: #6FA8FF;
   --kh3: #B9ABFF;
   --kh2fm: #8C9AFF;
+  --ddd: #FF66B2;
   --danger: #FF8A8A;
   --lead: #050816;
   --accent: var(--gold);
@@ -48,6 +49,7 @@
   --khfm: #1F55B8;
   --kh3: #5A3DB8;
   --kh2fm: #3343B3;
+  --ddd: #B3105F;
   --danger: #B42323;
   --lead: #FFFFFF;
   color-scheme: light;
@@ -91,6 +93,7 @@ body[data-view="bbs"] .sky,
 body[data-view="khfm"] .sky,
 body[data-view="kh3"] .sky,
 body[data-view="kh2fm"] .sky,
+body[data-view="ddd"] .sky,
 body[data-view="juegos"] .sky { opacity: .9; }
 
 /* ---------- barra superior ---------- */
@@ -1448,3 +1451,23 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .mini-consejo { margin: 6px 0 0; font-size: .875rem; color: var(--text-2); line-height: 1.5; }
 .mini-kh2 .niveles-forma { margin-top: 10px; }
 .marca.marca-juego { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+
+/* KH Dream Drop Distance: fucsia del logo y de los marcos de los logros (el azul eléctrico del Nexo, solo en detalles) */
+.juego-ddd { --accent: var(--ddd); --pj: var(--ddd); }
+.juego-ddd .info-card h3 { color: var(--accent); }
+.lucientes-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin-top: 18px; align-items: start; }
+.luciente-ddd { display: grid; gap: 10px; align-content: start; padding: 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.luciente-ddd-head { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+.luciente-ddd-img { width: 72px; height: 72px; object-fit: contain; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+.luciente-ddd-ph { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 14px; background: var(--surface-2); border: 1px dashed var(--line); color: var(--text-2); font-weight: 800; }
+.luciente-ddd h3 { font-size: 1.0625rem; font-weight: 800; line-height: 1.2; }
+.luciente-ddd small { color: var(--text-2); font-size: .8125rem; }
+.luciente-ddd p { margin: 0; font-size: .875rem; color: var(--text-2); line-height: 1.45; }
+.luciente-ddd details summary { cursor: pointer; font-weight: 600; font-size: .875rem; width: fit-content; }
+.luciente-ddd details ul { margin: 8px 0 0; padding-left: 18px; font-size: .8125rem; color: var(--text-2); }
+.portales-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; margin-top: 12px; }
+.portales-ddd .marca { align-items: start; }
+.portales-ddd .marca > span:last-child { display: grid; gap: 2px; }
+.portales-ddd small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.sub-pj { margin: 18px 0 0; font-size: 1.0625rem; font-weight: 800; color: var(--accent); }
+.ddd-estrellas { color: var(--gold); letter-spacing: 1px; }

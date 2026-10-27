@@ -211,5 +211,5 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    Siguiente: entrega 9 (Nave gumi), la última de KH II FM. Plan y pendientes en `notas/plan-kh2fm.md`.
    **Plan maestro de todos los KH** (317 logros, guía de cada logro y de cada «100 %»): `notas/plan-todos-kh.md`.
    **Después: KH HD 2.8 Final Chapter Prologue, Dream Drop Distance (KH DDD)**, plan en `notas/plan-ddd.md`
-   (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). Aún sin
-   empezar. Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).
+   (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). **Datos preparados el 27-10-2026
+   (generadores, `ddd*.js`, imágenes, acento, logo); falta enganchar la interfaz: ver «Estado… (siguiente sesión)» en `notas/plan-ddd.md`.** Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).

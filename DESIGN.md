@@ -20,6 +20,7 @@ sobrio: listas tipo menú de KH, superficies translúcidas y mucho aire.
 | `--khfm` | `#6FA8FF` | `#1F55B8` | Acento de KH Final Mix: azul del corazón del logo (va con el dorado de la corona) |
 | `--kh3` | `#B9ABFF` | `#5A3DB8` | Acento de KH III: lila plateado del trazo del logo |
 | `--kh2fm` | `#8C9AFF` | `#3343B3` | Acento de KH II Final Mix: azul cobalto del «II» del logo |
+| `--ddd` | `#FF66B2` | `#B3105F` | Acento de KH Dream Drop Distance: fucsia del logo y de los marcos de sus logros (7,3:1 sobre el fondo oscuro, 5,4:1 sobre `--bg-2` claro) |
 
 Cada página de personaje redefine `--accent` con su color. Máximo dos acentos visibles a la vez
 (`--accent` + `--gold`).

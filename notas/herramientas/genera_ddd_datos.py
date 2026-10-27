@@ -4,7 +4,7 @@ imágenes de los Lucientes a assets/img/ddd/lucientes/ (hace falta Pillow: usar 
 Uso: python genera_ddd_datos.py <carpeta-con-las-fuentes> <raiz-del-proyecto>
 
 La carpeta de fuentes tiene las páginas en texto (no se guardan en el repositorio: Gamerbase prohíbe copiar sus textos; aquí
-solo se extraen datos: nombres y cómo se consigue cada cosa). Se bajan así y se pasan a texto con el script `totext`:
+solo se extraen datos: nombres y cómo se consigue cada cosa). Se bajan así y se pasan a texto con el script `ddd_totext.py` (python ddd_totext.py gb-trofeos.html …):
   curl -sL --compressed -A "Mozilla/5.0" "https://gamerbase.net/guia-de-trofeos/kingdom-hearts-dream-drop-distance-93" -o gb-trofeos.html
   curl -sL --compressed -A "Mozilla/5.0" "https://gamerbase.net/guias/anexo-fusiones-nexo-nexos-duales-y-creacion-de-lucientes-kingdom-hearts-dream-drop-distance-94" -o gb-anexo.html
   curl -sL --compressed -A "Mozilla/5.0" "http://www.khworld.org/iceberg/?centro=spirits" -o kw-spirits.html
@@ -48,8 +48,8 @@ def lineas_entre(ini, fin):
 
 
 # Comandos por categoría: «- Nombre: cómo se consigue»
-i0 = next(k for k, l in enumerate(gb) if l.strip() == 'ATAQUE' or l.strip().startswith('ATAQUE'))
-i1 = next(k for k, l in enumerate(gb) if 'Coleccionista de fórmulas' in l)
+i0 = next(k for k, l in enumerate(gb) if l.strip() == 'ATAQUE')
+i1 = next(k for k in range(i0, len(gb)) if gb[k].strip() == 'Coleccionista de fórmulas')
 cat = None
 comandos = {}
 for l in gb[i0:i1]:
@@ -140,7 +140,7 @@ for f in filas:
     f['en'] = m.group(1).strip() if m else None
     time.sleep(.15)
 print('sin nombre en inglés:', [f['es'] for f in filas if not f['en']])
-en_a_es = {f['en']: f['es'] for f in filas if f['en']}
+en_a_es = {f['en'].lower(): f['es'] for f in filas if f['en']}
 
 # ---------- Imágenes (KHWiki, página Dream Eater) ----------
 t = wikitext(KHW, 'Dream Eater')
@@ -195,12 +195,20 @@ CLASE = {'Fancy': ('Ensueño', 0), 'Figment': ('Ilusión', 1), 'Fantasy': ('Fant
 onis = {o.lower() for o in ONIRITAS}
 
 
+# KHWorld abrevia con la inicial; la «W» es ambigua (Wild o Wondrous) y esas recetas se descartan.
+INICIAL = {k[0]: k for k in TIPO if k[0] != 'W'}
+
+
 def onirita(tok):
-    m = re.match(r'^([A-Za-z]+) (Fancy|Figment|Fantasy)$', tok.strip())
-    if not m or m.group(1) not in TIPO:
+    tok = re.sub(r'\s+', ' ', tok).strip()
+    m = re.match(r'^([A-Za-z]+)\.? ?(Fancy|Figment|Fantasy)$', tok)
+    if not m:
+        return None
+    tipo = INICIAL.get(m.group(1)) if len(m.group(1)) == 1 else m.group(1)
+    if tipo not in TIPO:
         return None
     cl, g = CLASE[m.group(2)]
-    es = f'{cl} {TIPO[m.group(1)][g]}'
+    es = f'{cl} {TIPO[tipo][g]}'
     return es if es.lower() in onis else None
 
 
@@ -268,7 +276,7 @@ for c in crudos:
     especie = re.sub(r'^.*/\s*', '', enem) if '/' in enem else re.sub(r'\s*\(.*\)', '', enem)
     especie = especie.strip()
     PORTALES.append({'mundo': c['mundo'], 'pj': c['pj'], 'n': int(c['n']), 'lugar': LUGARES_ES.get(lugar, lugar), 'lugarEn': lugar not in LUGARES_ES,
-                     'estrellas': int(est.group(1)) if est else None, 'luciente': en_a_es.get(especie), 'enemigoEn': especie,
+                     'estrellas': int(est.group(1)) if est else None, 'luciente': en_a_es.get(especie.lower()), 'enemigoEn': especie,
                      'objetivo': obj})
 print('portales', len(PORTALES), 'secretos', len(SECRETOS), 'sin traducir:', sorted({p['enemigoEn'] for p in PORTALES if not p['luciente']}))
 
@@ -280,6 +288,6 @@ datos = cab + ''.join(f'export const {k} = {json.dumps(v, ensure_ascii=False, in
                        ('LUCIENTES_DDD', LUCIENTES), ('NEXOS_DDD', NEXOS)])
 open(os.path.join(raiz, 'src', 'data', 'ddd-datos.js'), 'w', encoding='utf-8', newline='\n').write(datos)
 por = cab + ''.join(f'export const {k} = {json.dumps(v, ensure_ascii=False, indent=1)};\n' for k, v in
-                    [('PORTALES_DDD', PORTALES), ('SECRETOS_DDD', SECRETOS)])
+                    [('PORTALES_DDD', PORTALES), ('SECRETOS_PORTALES_DDD', SECRETOS)])
 open(os.path.join(raiz, 'src', 'data', 'ddd-portales.js'), 'w', encoding='utf-8', newline='\n').write(por)
 print('OK')
