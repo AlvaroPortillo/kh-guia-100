@@ -14,8 +14,9 @@ El usuario la revisa poco a poco: hacer cambios por entregas y enseñarlos antes
   (color del personaje o azul). El selector de modo (`ajustes.modo`) cambia toda la vista.
 - **Cada conseguible es marcable** y se guarda en SQLite (`datos/progreso.db`, vía `server.py`) con copia
   en `localStorage` (`kh100:v1`), y con exportar/importar.
-- Orden de navegación: Título → Elegir juego → Hub del juego (los 3 personajes arriba del todo) →
-  página de personaje.
+- Orden de navegación: Portada única (las tres colecciones de Steam: 1.5+2.5 ReMIX con KH, KH II, BBS y Re:CoM «En preparación»;
+  2.8 con DDD y 0.2; KH III) → Hub del juego (los 3 personajes arriba del todo en BBS) → página de personaje o sección.
+  `#/juegos` muestra la misma portada bajando a las colecciones. Colecciones y orden en `src/data/juegos.js` (`COLECCIONES`).
 - Commits y push solo cuando el usuario lo pida.
 
 ## Stack y ejecución

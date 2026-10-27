@@ -1,5 +1,5 @@
 import { store } from './store.js';
-import { JUEGOS } from './data/juegos.js';
+import { JUEGOS, COLECCIONES } from './data/juegos.js';
 import {
   BBS, PERSONAJES, GRUPOS_LOGROS, RUTA, GOLPES_FINALES, ESTILOS, CUARTELILLO, COSO, COSO_INFO,
   CONSEJOS, FUENTES, NIVELES_COSO, NIVELES_COSO_INTRO, FUENTES_NIVELES_COSO,
@@ -615,46 +615,102 @@ function selectorModo(clLogros, idsLogros, clJuego, idsJuego, { subLogros = 'Los
 }
 
 // ---------- vistas ----------
-function vistaTitulo() {
-  $top.hidden = true;
-  return `
-  <section class="title-screen">
-    <div class="title-glass">${vidriera(['var(--aqua)', 'var(--ventus)', 'var(--terra)'], { porciones: 18, clase: 'spin' })}</div>
-    <div class="title-copy">
-      <div class="title-logos">
-        <img class="title-logo" src="assets/img/logos/remix.png" alt="Kingdom Hearts HD 1.5+2.5 ReMIX" width="699" height="491">
-        <img class="title-logo" src="assets/img/logos/kh3-remind.webp" alt="Kingdom Hearts III Re Mind" width="720" height="460">
-      </div>
-      <h1 class="title-word">Guía al 100 %</h1>
-      <p class="title-sub">Logros de Steam, coleccionables y comandos de cada juego, en castellano. Marca lo que consigas y lleva tu propio registro.</p>
-      <a class="btn-start" href="#/juegos">Empezar</a>
-      <a class="title-proyectos" href="${PORTADA}">${ICONO_PROYECTOS}Mis proyectos</a>
-    </div>
-  </section>`;
-}
+// (La máscara del destello va con URL absoluta: en una variable CSS, una ruta relativa se resolvería desde src/styles.css.)
+// Portada única: título y las tres colecciones de Steam, cada una con su vidriera y sus juegos.
+// Movimiento (sin prefers-reduced-motion): la vidriera de cada colección gira despacio y se enciende al entrar en pantalla, sus
+// juegos suben escalonados y cada logo se inclina hacia el ratón con un destello que lo recorre (activarPortada).
+const ACENTO_JUEGO = { khfm: 'var(--khfm)', recom: 'var(--text-2)', kh2fm: 'var(--kh2fm)', bbs: 'var(--ventus)', ddd: 'var(--ddd)', bbs02: 'var(--aqua)', kh3: 'var(--kh3)' };
+const TAM_LOGO = {
+  khfm: [704, 478], recom: [738, 488], kh2fm: [708, 480], bbs: [652, 478], ddd: [708, 480], bbs02: [900, 568], kh3: [720, 438],
+};
+const juegoPorId = Object.fromEntries(JUEGOS.map((j) => [j.id, j]));
+const logo3d = (src, w, h, alt = '', clase = '') => `
+  <span class="logo3d ${clase}" style="--img:url('${esc(new URL(src, location.href).href)}')">
+    <img src="${esc(src)}" alt="${esc(alt)}" width="${w}" height="${h}" loading="lazy" decoding="async">
+    <span class="logo3d-luz" aria-hidden="true"></span>
+  </span>`;
 
-function vistaJuegos() {
-  topbar([{ t: 'Juegos' }]);
-  const tile = (j) => {
+function vistaPortada() {
+  topbar([]);
+  const ficha = (id, k) => {
+    const j = juegoPorId[id];
     const meta = j.etiqueta
       ? `<p class="soon">${esc(j.etiqueta)}</p>`
       : `<div class="meters-2">${medidor(`juego-${j.id}-logros`, PROGRESO[j.id].logros(), ETQ_LOGROS)}
          ${medidor(`juego-${j.id}-100`, PROGRESO[j.id].juego(), ETQ_JUEGO)}</div>`;
     const inner = `
-      <img class="game-logo" src="${j.logo}" alt="" loading="lazy">
-      <span class="game-name">${esc(j.nombre)}</span>
-      ${meta}`;
+      ${logo3d(j.logo, ...TAM_LOGO[j.id], '', 'game-logo3d')}
+      <span class="juego-cuerpo"><span class="game-name">${esc(j.nombre)}</span>${meta}</span>`;
+    const estilo = `style="--k:${k};--tile:${ACENTO_JUEGO[j.id]}"`;
     return j.disponible
-      ? `<a class="game game-on" href="#/${j.id}">${inner}</a>`
-      : `<div class="game game-off" aria-disabled="true">${inner}</div>`;
+      ? `<a class="game juego-tile" href="#/${j.id}" data-tilt ${estilo}>${inner}</a>`
+      : `<div class="game juego-tile game-off" aria-disabled="true" ${estilo}>${inner}</div>`;
   };
+  const logrosCol = (c) => c.juegos.filter((id) => PROGRESO[id]).flatMap((id) => PROGRESO[id].logros());
+  // Portada: los tres logos son las puertas a cada colección, con los logros de Steam que llevas en ella.
+  const puerta = (c, i) => {
+    const ids = logrosCol(c);
+    const sinGuia = c.juegos.filter((id) => !PROGRESO[id]);
+    medidores[`col-${c.id}`] = ids;
+    return `
+      <a class="hero-col" href="#coleccion-${c.id}" data-goto="coleccion-${c.id}" data-tilt style="--k:${i}">
+        ${logo3d(c.logo, c.ancho, c.alto, c.nombre, 'hero-logo')}
+        <span class="hero-col-meta"><b data-count="col-${c.id}">${store.contar(ids)}/${ids.length}</b> logros de Steam${sinGuia.length ? `<small>Sin contar ${sinGuia.map((id) => esc(juegoPorId[id].nombre)).join(', ')}, aún sin guía</small>` : ''}</span>
+      </a>`;
+  };
+  const coleccion = (c) => `
+    <section class="coleccion col-${c.id}" id="coleccion-${c.id}" aria-labelledby="col-${c.id}">
+      <div class="coleccion-glass">${vidriera(c.colores, { porciones: 24, clase: 'spin' })}</div>
+      <header class="coleccion-cab">
+        <h2 id="col-${c.id}" class="coleccion-titulo">${esc(c.nombre)}</h2>
+        <p class="coleccion-sub">${c.juegos.length} ${c.juegos.length === 1 ? 'juego' : 'juegos'} con logros en Steam</p>
+      </header>
+      <div class="coleccion-juegos">${c.juegos.map(ficha).join('')}</div>
+    </section>`;
   return `
-  <section class="page games">
-    <h1 class="page-title">Elige un juego</h1>
-    <p class="lead">Birth by Sleep, Kingdom Hearts Final Mix, Kingdom Hearts III y Dream Drop Distance ya están en marcha. Kingdom Hearts II Final Mix y Kingdom Hearts 0.2 están en preparación, y Re:Chain of Memories llegará después.</p>
-    <div class="game-grid">${JUEGOS.map(tile).join('')}</div>
+  <section class="portada">
+    <header class="portada-hero">
+      <div class="hero-aurora" aria-hidden="true"></div>
+      <div class="hero-glass">${vidriera(['var(--khfm)', 'var(--ddd)', 'var(--kh3)', 'var(--aqua)'], { porciones: 24, clase: 'spin' })}</div>
+      <h1 class="sr-only">Guía al 100 % de Kingdom Hearts: logros de Steam y coleccionables de cada juego</h1>
+      <nav class="hero-cols" aria-label="Colecciones">${COLECCIONES.map(puerta).join('')}</nav>
+      <a class="hero-bajar" href="#colecciones" data-goto="colecciones" aria-label="Ver todos los juegos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+    </header>
+    <div class="colecciones" id="colecciones">${COLECCIONES.map(coleccion).join('')}</div>
   </section>`;
 }
+
+// Movimiento de la portada. Sin JS o con movimiento reducido todo se ve quieto y completo.
+let tiltActual = null;
+function activarPortada() {
+  const portada = document.querySelector('.portada');
+  if (!portada || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  portada.classList.add('js-portada');
+  const cols = [...portada.querySelectorAll('.coleccion')];
+  const encender = (el) => el.classList.add('is-in');
+  if (!('IntersectionObserver' in window)) { cols.forEach(encender); return; }
+  const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
+    if (e.isIntersecting) { encender(e.target); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  cols.forEach((c) => io.observe(c));
+  setTimeout(() => cols.forEach(encender), 2500); // por si el observador no llega a dispararse
+}
+function inclinarLogo(e) {
+  if (e.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const host = e.target.closest?.('[data-tilt]');
+  if (tiltActual && tiltActual !== host) { tiltActual.style.removeProperty('--rx'); tiltActual.style.removeProperty('--ry'); tiltActual.classList.remove('is-tilt'); }
+  tiltActual = host;
+  if (!host) return;
+  const r = host.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  host.style.setProperty('--ry', `${(x * 14).toFixed(2)}deg`);
+  host.style.setProperty('--rx', `${(-y * 10).toFixed(2)}deg`);
+  host.classList.add('is-tilt');
+}
+document.addEventListener('pointermove', inclinarLogo, { passive: true });
+document.addEventListener('pointerleave', () => inclinarLogo({ pointerType: 'mouse', target: document.body }));
 
 function subnav(secciones) {
   return `<nav class="subnav" aria-label="Secciones">${secciones
@@ -3900,14 +3956,14 @@ function vista404() {
 // ---------- router ----------
 let irA = null; // sección a la que bajar tras el siguiente cambio de página
 function render({ conservarScroll = false } = {}) {
-  const destino = irA;
+  let destino = irA;
   irA = null; // se consume en este render aunque no haya navegación (p. ej., Ctrl+clic)
   medidores = {};
   const y = window.scrollY;
   const ruta = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   let html;
-  if (ruta.length === 0) html = vistaTitulo();
-  else if (ruta[0] === 'juegos') html = vistaJuegos();
+  if (ruta.length === 0) html = vistaPortada();
+  else if (ruta[0] === 'juegos') { html = vistaPortada(); destino ??= 'colecciones'; }
   else if (ruta[0] === 'bbs' && !ruta[1]) html = vistaBBS();
   else if (ruta[0] === 'bbs' && PERSONAJES[ruta[1]]) html = vistaPersonaje(ruta[1]);
   else if (ruta[0] === 'khfm' && !ruta[1]) html = vistaKHFM();
@@ -3924,6 +3980,7 @@ function render({ conservarScroll = false } = {}) {
   document.body.dataset.view = ruta[0] || 'titulo';
   $main.innerHTML = html;
   refrescarMedidores();
+  activarPortada();
   if (conservarScroll) window.scrollTo(0, y);
   else if (destino && document.getElementById(destino)) {
     document.getElementById(destino).scrollIntoView();
