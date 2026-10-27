@@ -18,6 +18,8 @@ sobrio: listas tipo menú de KH, superficies translúcidas y mucho aire.
 | `--ventus` | `#7EE3A0` | `#1E7A43` | Acento de Ventus |
 | `--aqua` | `#63C9FF` | `#0B6EA8` | Acento de Aqua |
 | `--khfm` | `#6FA8FF` | `#1F55B8` | Acento de KH Final Mix: azul del corazón del logo (va con el dorado de la corona) |
+| `--kh3` | `#B9ABFF` | `#5A3DB8` | Acento de KH III: lila plateado del trazo del logo |
+| `--kh2fm` | `#8C9AFF` | `#3343B3` | Acento de KH II Final Mix: azul cobalto del «II» del logo |
 
 Cada página de personaje redefine `--accent` con su color. Máximo dos acentos visibles a la vez
 (`--accent` + `--gold`).

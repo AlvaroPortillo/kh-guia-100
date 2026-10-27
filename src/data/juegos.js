@@ -5,7 +5,7 @@ export const JUEGOS = [
   { id: 'khfm', nombre: 'Kingdom Hearts Final Mix', logo: 'assets/img/logos/khfm.png', disponible: true },
   // `etiqueta` sustituye al progreso en la ficha; `disponible` decide si es un enlace.
   { id: 'recom', nombre: 'Re:Chain of Memories', logo: 'assets/img/logos/recom.png', disponible: false, etiqueta: 'Próximamente' },
-  { id: 'kh2fm', nombre: 'Kingdom Hearts II Final Mix', logo: 'assets/img/logos/kh2fm.png', disponible: false, etiqueta: 'Próximamente' },
+  { id: 'kh2fm', nombre: 'Kingdom Hearts II Final Mix', logo: 'assets/img/logos/kh2fm.png', disponible: true, etiqueta: 'En preparación' },
   // Juego aparte en Steam (app 2552450), no forma parte de la colección HD 1.5+2.5.
-  { id: 'kh3', nombre: 'Kingdom Hearts III + Re Mind', logo: 'assets/img/logos/kh3.webp', disponible: true, etiqueta: 'En preparación' },
+  { id: 'kh3', nombre: 'Kingdom Hearts III + Re Mind', logo: 'assets/img/logos/kh3.webp', disponible: true },
 ];

@@ -89,7 +89,7 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    cristal. Coso con emblemas, rondas, reto extra y estrategia (también pendiente de revisión).
    Jefes de la historia de los tres personajes hechos (pendiente de revisión).
 1. **Comandos de cada personaje y Nexos-D hechos** (pendiente de revisión). Los comandos se marcan (21-10-2026):
-   ids `bbs.cmd.<pj>.<slug>`, salvo los que solo salen de un tablero, que usan `bbs.tablero.cmd.<pj>.<slug>` (una sola
+   ids `bbs.cmd.<pj>.<slug>` (`slugCmd`: «+» = «-mas», arreglado el 26-10-2026 porque Piro, Piro+ y Piro++ compartían marca), salvo los que solo salen de un tablero, que usan `bbs.tablero.cmd.<pj>.<slug>` (una sola
    marca); cuentan para el 100 % del personaje. Nexos-D: solo cómo se consigue cada uno
    (`src/data/bbs-nexos.js`); el usuario no quiere la lista de comandos de cada Nexo. Si no hay datos, no se pone nada.
 1b. **Tesoros de BBS hechos** (21-10-2026, pendiente de revisión): `src/data/bbs-tesoros.js` (**generado** con
@@ -163,4 +163,53 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    `#/kh3/jefes` (`kh3-jefes.js`, a mano: jefes por mundo con premio y estrategia de KHWiki, `kh3.jefe.<id>`; datos de Re
    Mind con estrategia, mismas marcas `kh3.datos.<id>`; Yozora usa el id de su logro). Lightning Angler = Rape Eléctrico,
    Grim Guardianess = Madre Enloquecida (Wiki ES). **KH III queda completo** (logros y 100 %).
-   **Siguiente juego:** Re:Chain of Memories o KH II FM (preguntar al usuario).
+   **Siguiente juego: KH II Final Mix** (elegido el 26-10-2026). **Plan en `notas/plan-kh2fm.md`** (aprobado el 26-10-2026):
+   logros ACH_103…ACH_152, ruta `#/kh2fm`, ids `kh2fm.*`, 9 entregas. Fuente base: guía de logros en castellano de
+   Steam 3298321979. **Entrega 1 hecha** (26-10-2026, pendiente de revisión): `kh2fm-logros.js` (**generado** con
+   `notas/herramientas/genera_kh2fm_logros.py`), `kh2fm.js` (fuentes, grupos, ruta, consejos y mundos) y la sección
+   `#/kh2fm/mundos` (logros de historia de cada mundo + Esencias intangibles, setas, minijuegos y jefes con Mickey).
+   Ids `kh2fm.logro.ACH_xxx`; los mundos usan las marcas de sus logros. Acento `--kh2fm` (cobalto del «II» del logo).
+   **Entrega 2 hecha** (26-10-2026, pendiente de revisión): `#/kh2fm/diario` (`kh2fm-diario.js`, a mano): 13 Informes Ansem
+   (`kh2fm.ansem.<n>`), 82 sincorazón (`kh2fm.sincorazon.<slug>`: los 71 de la guía ES + 11 jefes; Anzuelo = Perplex/Beffudler),
+   11 incorpóreos (`kh2fm.incorporeo.<slug>`), 21 límites (`kh2fm.limite.<slug>`). Personajes y Relaciones no tienen lista con
+   fuente: solo su logro. Nombres comprobados con el campo «ingles» de las fichas de la Wiki ES.
+   **Entrega 3 hecha** (26-10-2026, pendiente de revisión): `#/kh2fm/tesoros` con `kh2fm-tesoros.js` (**generado** con
+   `notas/herramientas/genera_kh2fm_tesoros.py`: 301 cofres de Fandom inglés «Kingdom Hearts II item locations», 144 piezas y
+   40 mapas de KHWiki) y `kh2fm-tesoros-info.js` (textos). Indicaciones traducidas en `kh2fm_trad_cofres.py` y `kh2fm_trad_puzles.py`;
+   objetos en `kh2_objetos.py` (KH II: Shard = Guijarro, Stone = Roca, Gem = Piedra, Crystal = Cristal; Mythril Shard = Trozo de
+   mitrilo). Zonas: diccionario `ZONAS` del generador con su fuente; las traducidas (marcadas `zt`) por petición del usuario.
+   Ids `kh2fm.tesoro.<mundo>.<n>`, `kh2fm.puzle.<puzle>.<n>` y `.resuelto`, `kh2fm.mapa.<slug>`; los mapas de cofre usan el id del cofre.
+   **Fuente en castellano:** guía de Megido en GameFAQs (82144, todo KH II con nombres oficiales; v0.3, incompleta). GameFAQs
+   bloquea curl y WebFetch (Cloudflare): bajarla con Playwright (`fetch` desde la propia página).
+   **Entrega 4 hecha** (26-10-2026, pendiente de revisión): `#/kh2fm/orfebreria` con `kh2fm-orfebreria.js` (**generado** con
+   `notas/herramientas/genera_kh2fm_orfebreria.py`: 59 objetos de la plantilla `SynthKHII` de KHWiki y 60 materiales con enemigos
+   y % de Fandom) y `kh2fm-artema.js` (a mano: niveles moguri, listas de colección, 7 Orichalcum+, Arma Artema). Imágenes de
+   KHWiki en `assets/img/kh2fm/orfebreria/`. Ids `kh2fm.sintesis.<slug>`, `kh2fm.material.<slug>`, `kh2fm.oricalco.<id>`; los
+   Orichalcum+ de cofre usan el id del cofre y el de la Copa Diosa del Destino, el de ACH_115. En los slugs, «+» = «-plus».
+   **Entrega 5 hecha** (26-10-2026, pendiente de revisión): `#/kh2fm/sora` (`kh2fm-sora.js`, a mano): 5 formas con una casilla por
+   nivel y lo que aprende Sora (`kh2fm.fusion.<forma>.<1-7>`), invocaciones (`kh2fm.invoc.<id>`, `kh2fm.invoc.nivel.<2-7>`), magia
+   (`kh2fm.magia.<id>.<1-3>`), antiforma y nivel 99 con sus logros. Fuentes: KHWiki, guía de Steam 3268532837 y Megido.
+   **Armas hechas** (26-10-2026, pendiente de revisión): `#/kh2fm/armas` con `kh2fm-armas.js` (**generado** con
+   `notas/herramientas/genera_kh2fm_armas.py`: 64 armas de Fandom con valores de Final Mix; imágenes de KHWiki en
+   `assets/img/kh2fm/armas/`). Nombres solo de fuentes en castellano: página de cada arma en la Wiki ES (enlace `[[en:...]]`) y
+   guías. **El usuario no quiere traducciones propias:** buscar siempre el nombre en guías y foros en castellano (EliteGuías,
+   KHWorld, blog de Joakokh, Megido, Wiki ES) antes de traducir. Ids `kh2fm.arma.<slug>`; las fabricadas usan el
+   id de Orfebrería y las de cofre, el del cofre. MP Haste = Prisa PM (no Prisa Mágica, que es Magic Haste).
+   **Entrega 6 hecha** (26-10-2026, pendiente de revisión): `#/kh2fm/minijuegos` (`kh2fm-minijuegos.js`, a mano): 40 minijuegos
+   (`kh2fm.minijuego.<id>`) y 76 misiones del diario (`kh2fm.mision.<id>.<n>`); las setas usan `kh2fm.seta.<n>`, las Esencias
+   `kh2fm.esencia.<id>` y las réplicas `kh2fm.replica.<id>` para compartirlas con la futura sección Jefes. Requisitos: guía de Steam
+   3294034108; nombres y consejos: guía de logros en castellano; canciones de Atlántica: blog de Joakokh.
+   Nombres de KH II que antes eran traducción propia, ya de guías en castellano (EliteGuías, KHWorld, Joakokh): solo quedan sin
+   fuente 5 zonas y los 3 mapas de la Gruta. `server.py`: `request_queue_size = 128` (con la cola por defecto rechazaba módulos).
+   La API de KHWiki vuelve a responder. **Entrega 7 hecha** (27-10-2026, pendiente de revisión): `#/kh2fm/coliseo`
+   (`kh2fm-coliseo.js`, a mano: 8 copas con desbloqueo, reglas, premios y combates clave de KHWiki; trofeos en
+   `assets/img/kh2fm/coliseo/`). Sin ids nuevos: cada copa usa su logro y las marcas de su entrada en Minijuegos (`mini`).
+   **Entrega 8 hecha** (27-10-2026, pendiente de revisión): `#/kh2fm/jefes` (`kh2fm-jefes.js`, a mano): 38 jefes de la historia
+   (tabla de la Wiki ES con bonificación + estrategia resumida de KHWiki; imágenes de KHWiki en `assets/img/kh2fm/jefes/`, la CDN
+   de Fandom da 403), ids `kh2fm.jefe.<id>`. Secretos con las marcas ya existentes (logros ACH_108–111, `kh2fm.esencia.*`,
+   `kh2fm.replica.*`, `kh2fm.seta.*`) y estrategias de la guía de Steam en castellano. Barbossa sin estrategia (KHWiki no tiene).
+   Siguiente: entrega 9 (Nave gumi), la última de KH II FM. Plan y pendientes en `notas/plan-kh2fm.md`.
+   **Plan maestro de todos los KH** (317 logros, guía de cada logro y de cada «100 %»): `notas/plan-todos-kh.md`.
+   **Después: KH HD 2.8 Final Chapter Prologue, Dream Drop Distance (KH DDD)**, plan en `notas/plan-ddd.md`
+   (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). Aún sin
+   empezar. Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).

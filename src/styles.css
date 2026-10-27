@@ -14,6 +14,7 @@
   --aqua: #63C9FF;
   --khfm: #6FA8FF;
   --kh3: #B9ABFF;
+  --kh2fm: #8C9AFF;
   --danger: #FF8A8A;
   --lead: #050816;
   --accent: var(--gold);
@@ -46,6 +47,7 @@
   --aqua: #0B6EA8;
   --khfm: #1F55B8;
   --kh3: #5A3DB8;
+  --kh2fm: #3343B3;
   --danger: #B42323;
   --lead: #FFFFFF;
   color-scheme: light;
@@ -88,6 +90,7 @@ p { margin: 0; }
 body[data-view="bbs"] .sky,
 body[data-view="khfm"] .sky,
 body[data-view="kh3"] .sky,
+body[data-view="kh2fm"] .sky,
 body[data-view="juegos"] .sky { opacity: .9; }
 
 /* ---------- barra superior ---------- */
@@ -551,6 +554,8 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .copa-rivales li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; font-size: .875rem; }
 .copa-rivales img { width: 56px; height: 56px; object-fit: contain; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
 .copa-rivales p { color: var(--text-2); margin-top: 2px; }
+.copa-rondas li { grid-template-columns: 64px 1fr; }
+.copa-rondas b { color: var(--kh2fm, var(--text)); font-variant-numeric: tabular-nums; }
 .copa-sub { margin-top: 40px; }
 .boss-khfm .boss-abre { margin-top: 8px; font-size: .875rem; color: var(--text-2); }
 .boss-khfm .boss-marca { margin-top: 12px; width: fit-content; }
@@ -1384,3 +1389,62 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .exp-suma { display: grid; justify-items: start; gap: 2px; margin: 0 0 16px; padding: 16px 20px; border-radius: var(--r-m);
   border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, transparent), var(--surface)); color: var(--text-2); }
 .exp-suma b { font-size: 2rem; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; line-height: 1.1; }
+
+/* KH II Final Mix: azul cobalto del «II» del logo (entre el azul de KH FM y el lila de KH III) */
+.juego-kh2fm { --accent: var(--kh2fm); --pj: var(--kh2fm); }
+.juego-kh2fm .info-card h3 { color: var(--accent); }
+.mundos-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr)); gap: 16px; margin-top: 24px; align-items: start; }
+.mundo-kh2 {
+  position: relative; padding: 18px 20px 20px; border-radius: var(--r-m); border: 1px solid var(--line); scroll-margin-top: 130px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 55%), var(--surface);
+}
+.mundo-kh2::before {
+  content: ''; position: absolute; inset: 0 20px auto; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .7;
+}
+.mundo-kh2 h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 1.125rem; margin: 0 0 10px; color: var(--text); }
+.mundo-kh2 .list { margin: 0; }
+.mundo-sin { color: var(--text-2); font-size: .875rem; margin: 0; }
+.mundo-datos { display: grid; gap: 10px; margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
+.mundo-datos div { display: grid; grid-template-columns: 11rem 1fr; gap: 4px 14px; }
+.mundo-datos dt { font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); padding-top: 2px; }
+.mundo-datos dd { margin: 0; color: var(--text-2); font-size: .875rem; line-height: 1.55; }
+.mundo-datos dd b { color: var(--text); font-weight: 700; }
+@media (max-width: 560px) {
+  .mundo-kh2 { padding: 16px; }
+  .mundo-datos div { grid-template-columns: 1fr; }
+}
+/* KH II FM · diario: casillas compactas para las listas sin descripción */
+.marcas-diario { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0; list-style: none; }
+/* KH II FM · tesoros, puzles y mapas (reutiliza el desplegable de tesoros de BBS) */
+.tes-premio { margin-left: 6px; font-size: .8125rem; font-weight: 500; color: var(--text-2); }
+.tes-resuelto { padding: 4px 16px 0; }
+.tes-mapas { padding: 0; margin-top: 8px; }
+/* BBS · recetas: probabilidad y otros comandos que puede dar la misma mezcla */
+.cmd-receta-otros { display: block; margin-top: 4px; font-size: .8125rem; color: var(--text-2); }
+.cmd-receta-otros b { color: var(--text); }
+.cmd-receta-baja .eq-box { border-style: dashed; }
+/* KH II FM · Orfebrería: título del Arma Artema junto al anillo */
+.forja-tit { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+/* KH II FM · Sora: formas de fusión, invocaciones y magia */
+.info-cards.info-cards-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.formas-kh2 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); }
+.forma-head { display: flex; align-items: center; gap: 10px; }
+.forma-head h3 { margin: 0; font-size: 1.125rem; color: var(--accent); }
+.forma-kh2 .mundo-datos div { grid-template-columns: 9rem 1fr; }
+.niveles-forma { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.niveles-forma .marca { font-weight: 500; }
+.niveles-forma .marca b { font-weight: 700; }
+.magias-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 0 24px; }
+.magias-kh2 .group { margin-top: 18px; }
+.magias-kh2 .bullets { margin-bottom: 4px; font-size: .9375rem; }
+@media (max-width: 560px) { .forma-kh2 .mundo-datos div { grid-template-columns: 1fr; } }
+.forma-kh2 { padding: 18px 20px 20px; gap: 12px; align-content: start; }
+.forma-kh2 .mundo-datos { margin-top: 0; }
+/* KH II FM · minijuegos y misiones */
+.minis-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-top: 12px; }
+.mini-kh2 { padding: 14px 16px 16px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.mini-kh2 h4 { margin: 0; font-size: 1rem; color: var(--text); }
+.mini-consejo { margin: 6px 0 0; font-size: .875rem; color: var(--text-2); line-height: 1.5; }
+.mini-kh2 .niveles-forma { margin-top: 10px; }
+.marca.marca-juego { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
