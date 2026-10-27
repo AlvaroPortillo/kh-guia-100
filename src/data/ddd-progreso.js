@@ -94,7 +94,7 @@ export const HABILIDADES_DDD = {
 };
 
 // ---------- Textos de las secciones ----------
-export const INTRO_PORTALES_DDD = 'Cada mundo tiene 6 portales especiales por personaje (3 en El Mundo Inexistente) y un portal secreto que se abre al terminar el juego. Los logros de «Campeones…» piden completar todos los de un mundo con Sora y con Riku, y el 100 % del juego, también los secretos.';
+export const INTRO_PORTALES_DDD = 'Cada mundo tiene 6 portales especiales por personaje (3 en El Mundo Inexistente) y, al terminar el juego, se abre un portal secreto por personaje con la revancha del jefe del mundo: 11 en total, porque no hay en El Mundo Inexistente ni en Sinfonía del Brujo con Riku (KHWiki). Los logros de «Campeones…» piden completar todos los de un mundo con Sora y con Riku, y el 100 % del juego, también los secretos.';
 export const COMO_PORTALES_DDD = [
   { t: 'Qué portal está abierto', d: 'En la pantalla de pronóstico (Forecast) del menú Start y del mapamundi aparece la silueta de un Luciente: es el del portal activo. Algunos mundos tienen dos portales con el mismo Luciente, así que a veces hay que mirar en más de un sitio. Al completarlo, la silueta muestra al Luciente con «¡Hecho!».' },
   { t: 'Cómo cambiarlo', d: 'Solo puedes completar un portal por mundo cada vez que caes en Sopor. Para que cambie, hay que cambiar de personaje (a mano o automáticamente). El portal 6 (y el 3 de El Mundo Inexistente) no aparece hasta completar los anteriores.' },

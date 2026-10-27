@@ -16,7 +16,7 @@ sobrio: listas tipo menú de KH, superficies translúcidas y mucho aire.
 | `--gold` | `#EBC765` | `#9A6B00` | Corona, completado, foco |
 | `--terra` | `#E7A35E` | `#9A5412` | Acento de Terra |
 | `--ventus` | `#7EE3A0` | `#1E7A43` | Acento de Ventus |
-| `--aqua` | `#63C9FF` | `#0B6EA8` | Acento de Aqua |
+| `--aqua` | `#63C9FF` | `#0B6EA8` | Acento de Aqua; también de KH 0.2 Birth by Sleep (`.juego-bbs02`), que es su juego |
 | `--khfm` | `#6FA8FF` | `#1F55B8` | Acento de KH Final Mix: azul del corazón del logo (va con el dorado de la corona) |
 | `--kh3` | `#B9ABFF` | `#5A3DB8` | Acento de KH III: lila plateado del trazo del logo |
 | `--kh2fm` | `#8C9AFF` | `#3343B3` | Acento de KH II Final Mix: azul cobalto del «II» del logo |

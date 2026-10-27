@@ -102,7 +102,7 @@ i = 0
 while i < len(raw):
     m = re.match(r'^\s*\|\s*(\d+)\s*$', raw[i])
     if m and i + 3 < len(raw):
-        filas.append({'n': int(m.group(1)), 'es': raw[i + 2].strip(' |').strip(), 'como': re.sub(r'\s+', ' ', raw[i + 3].strip(' |').strip())})
+        filas.append({'n': int(m.group(1)), 'es': raw[i + 2].strip(' |').strip(), 'como': re.sub(r'\s+', ' ', raw[i + 3].strip(' |').strip()).replace('Cudad', 'Ciudad')})  # errata de Gamerbase
         i += 4
     else:
         i += 1

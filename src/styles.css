@@ -94,6 +94,7 @@ body[data-view="khfm"] .sky,
 body[data-view="kh3"] .sky,
 body[data-view="kh2fm"] .sky,
 body[data-view="ddd"] .sky,
+body[data-view="bbs02"] .sky,
 body[data-view="juegos"] .sky { opacity: .9; }
 
 /* ---------- barra superior ---------- */
@@ -496,7 +497,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tes-mundo[data-extra] .tes-nombre::after { content: ' · Final Mix'; color: var(--text-2); font-weight: 500; }
 .tes-zonas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 6px 22px; padding: 4px 16px 16px; }
 .tes-zona h4 { margin: 10px 0 4px; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; color: var(--accent); width: fit-content; }
-.tes-zona h4.tes-trad { text-decoration: underline dotted color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; cursor: help; }
+.tes-zona h4.tes-trad, .obj-bbs02-premio .tes-trad, .obj-bbs02-prendas .tes-trad { text-decoration: underline dotted color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; cursor: help; }
 .tes-lista .item-row { grid-template-columns: 28px 1fr; padding: 8px 4px; gap: 12px; align-items: center; }
 .tes-lista .item-body { grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
 .tes-lista .item-meta { justify-content: flex-end; }
@@ -1454,6 +1455,36 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 
 /* KH Dream Drop Distance: fucsia del logo y de los marcos de los logros (el azul eléctrico del Nexo, solo en detalles) */
 .juego-ddd { --accent: var(--ddd); --pj: var(--ddd); }
+.juego-bbs02 { --accent: var(--aqua); --pj: var(--aqua); }
+.juego-bbs02 .info-card h3 { color: var(--accent); }
+/* 0.2 · Objetivos: tarjeta por objetivo, chip de la partida en que conviene, prendas por ranura */
+.obj-bbs02-leyenda { display: grid; gap: 8px; margin: 14px 0 16px; }
+.obj-bbs02-leyenda div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.obj-bbs02-leyenda dt { flex: none; }
+.obj-bbs02-leyenda dd { margin: 0; flex: 1 1 240px; font-size: .875rem; color: var(--text-2); line-height: 1.5; }
+.obj-bbs02-filtros { margin-bottom: 4px; }
+.obj-bbs02 { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
+  transition: border-color var(--t) var(--ease); }
+.obj-bbs02:has(.is-done) { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.obj-bbs02 h4 { margin: 2px 0 0; font-size: 1rem; line-height: 1.4; color: var(--text); }
+.obj-bbs02 .mini-consejo { margin: 0; }
+.obj-bbs02 .niveles-forma { margin-top: auto; padding-top: 6px; }
+.obj-bbs02-cab { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.obj-bbs02-n { font: 800 .8125rem/1 var(--f-ui); letter-spacing: .04em; color: var(--accent); margin-right: 4px; }
+.chip-cuando.chip-primera { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.chip-cuando.chip-final { border-color: color-mix(in srgb, var(--gold) 60%, transparent); color: var(--gold); }
+.chip-cuando.chip-plus { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.chip-guarda { border-style: dashed; border-color: var(--text-2); color: var(--text-2); }
+.obj-bbs02-premio { margin: 0; font-size: .875rem; color: var(--text); }
+.obj-bbs02-premio span { margin-right: 6px; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+.obj-bbs02-ranuras { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.obj-bbs02-ranuras h3 small { margin-left: 6px; font-size: .8125rem; color: var(--text-2); }
+.obj-bbs02-prendas { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; font-size: .875rem; }
+.obj-bbs02-prendas .marca { display: flex; width: 100%; padding: 5px 8px 5px 4px; border-color: transparent; border-radius: var(--r-s, 10px); background: transparent; font-weight: 500; }
+.obj-bbs02-prendas .marca > span:last-child { flex: 1; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.obj-bbs02-prendas .marca:hover { background: var(--surface-2); }
+.obj-bbs02-prendas .marca.is-done { border-color: transparent; background: color-mix(in srgb, var(--gold) 10%, transparent); }
+.obj-bbs02-prendas small { flex: none; color: var(--text-2); font-size: .75rem; }
 .juego-ddd .info-card h3 { color: var(--accent); }
 .lucientes-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin-top: 18px; align-items: start; }
 .luciente-ddd { display: grid; gap: 10px; align-content: start; padding: 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
@@ -1466,8 +1497,51 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .luciente-ddd details summary { cursor: pointer; font-weight: 600; font-size: .875rem; width: fit-content; }
 .luciente-ddd details ul { margin: 8px 0 0; padding-left: 18px; font-size: .8125rem; color: var(--text-2); }
 .portales-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; margin-top: 12px; }
-.portales-ddd .marca { align-items: start; }
+.portales-ddd .marca { align-items: start; border-radius: var(--r-m); padding: 8px 12px 8px 8px; }
 .portales-ddd .marca > span:last-child { display: grid; gap: 2px; }
 .portales-ddd small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.transitos-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-top: 14px; }
+.transito-ddd { padding: 12px 14px 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.transito-ddd h4 { margin: 0; font-size: 1rem; color: var(--text); }
+.transito-ddd .portales-ddd { grid-template-columns: 1fr 1fr; margin-top: 10px; }
 .sub-pj { margin: 18px 0 0; font-size: 1.0625rem; font-weight: 800; color: var(--accent); }
 .ddd-estrellas { color: var(--gold); letter-spacing: 1px; }
+/* 0.2 · Cofres: cada cofre con su número, contenido, lugar y tipo; columnas por visita */
+.cof02-zonas { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 4px 28px; }
+.cof02-zonas .item-row { align-items: start; }
+.cof02-zonas .crown { margin-top: 2px; }
+.cof02-zonas .item-desc { font-size: .875rem; line-height: 1.5; }
+.cof02-zonas .item-meta { margin-top: 4px; }
+.cof02-n {
+  display: inline-grid; place-items: center; min-width: 24px; height: 22px; margin-right: 8px; padding: 0 6px; border-radius: 99px;
+  font: 800 .75rem/1 var(--f-ui); color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); vertical-align: 2px;
+}
+.cof02-cuenta { margin-left: 4px; color: var(--text-2); font-weight: 600; }
+.cof02-obj { margin: 2px 16px 0; font-size: .875rem; color: var(--text-2); }
+.chip-cof02-mapa { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+.chip-cof02-reliquia { border-color: color-mix(in srgb, var(--gold) 60%, transparent); color: var(--gold); }
+#cofres-bbs02 .tes-nombre small { display: block; margin: 3px 0 0; }
+/* 0.2 · Combate: la casilla de cada comando siempre al pie de la tarjeta */
+.cmd02 { display: flex; flex-direction: column; }
+.cmd02 .niveles-forma { margin-top: auto; padding-top: 10px; }
+.perd02-cab { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+/* 0.2 · Encabezados: las tarjetas y subgrupos son h3 (cuelgan del h2 del bloque) con el aspecto de los h4 del resto de la guía.
+   Texto corrido a 54ch (unos 75-80 caracteres de Sora por línea; DESIGN.md pide líneas cortas). */
+.juego-bbs02 .mini-kh2 h3 { margin: 0; font-size: 1rem; color: var(--text); }
+.juego-bbs02 .obj-bbs02 h3 { margin: 2px 0 0; font-size: 1rem; line-height: 1.4; color: var(--text); }
+.juego-bbs02 .tes-zona h3 { margin: 10px 0 4px; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; color: var(--accent); width: fit-content; }
+.juego-bbs02 .mundo-kh2 .mini-kh2 h3 { display: block; margin: 0; font-size: 1rem; }
+.juego-bbs02 :is(.seccion-lead, .lead, .group-intro, .hint, .nota-fuente, .obj-bbs02-leyenda dd, .steps p, .item-desc) { max-width: 54ch; }
+/* 0.2 · Ruta al 100 %: tres fases en columna (una debajo de otra en móvil), número grande, progreso y pasos */
+.fases02 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 12px; align-items: start; }
+.fase02 { display: grid; gap: 14px; padding: 18px 18px 20px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.fase02-cab { display: flex; align-items: center; gap: 14px; }
+.fase02-n {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  font: 700 1.375rem/1 var(--f-display); color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.fase02-cab h3 { margin: 0; font-size: 1.125rem; font-weight: 800; color: var(--text); }
+.fase02-cab p { margin: 2px 0 0; font-size: .8125rem; color: var(--text-2); }
+.fase02-pasos { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; font-size: .9375rem; line-height: 1.5; color: var(--text); }
+.fase02-pasos li::marker { color: var(--accent); font-weight: 700; }

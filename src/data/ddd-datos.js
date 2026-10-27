@@ -780,7 +780,7 @@ export const LUCIENTES_DDD = [
   "nombre": "Cabricorno",
   "en": "Yoggy Ram",
   "img": "cabricorno",
-  "como": "La fórmula se obtiene en un Tesoro del Segundo Distrito de Cudad de Paso con Riku.",
+  "como": "La fórmula se obtiene en un Tesoro del Segundo Distrito de Ciudad de Paso con Riku.",
   "recetas": [
    [
     "Ilusión gélida",

@@ -124,41 +124,14 @@ Al acabar todos los juegos: una sola página «KH Collection» con tres coleccio
 DDD y 0.2 quedarán bajo la de 2.8; por eso sus ids llevan prefijo propio (`ddd.`, y `bbs02.` para 0.2) y cada uno va en su
 archivo.
 
-## Estado a 27-10-2026: datos preparados, falta enganchar la interfaz (siguiente sesión)
-**Hecho (sin tocar `app.js`; DDD sale en «Elige un juego» como «En preparación» y no es enlace):**
-- `notas/herramientas/genera_ddd_logros.py` → `src/data/ddd-logros.js` (54 logros, ACH_16–69) y `src/data/bbs02-logros.js` (15 de
-  0.2, ACH_01–15); iconos en `assets/img/ddd/logros/` y `assets/img/bbs02/logros/`.
-- `notas/herramientas/genera_ddd_datos.py` (+ `ddd_totext.py`) → `src/data/ddd-datos.js` (124 comandos, 36 oniritas, 24 juguetes,
-  15 Llaves Espada, 54 Lucientes con recetas y ataque Nexo, Nexos), `src/data/ddd-portales.js` (78 portales y 11 secretos) y
-  `assets/img/ddd/lucientes/` (51 imágenes de KHWiki). Las fuentes (Gamerbase y KHWorld) se bajan con los curl del docstring y no se
-  guardan en el repo: Gamerbase prohíbe copiar sus textos; solo se extraen datos.
-- A mano: `ddd.js` (fuentes, grupos, ruta, consejos de los 54 logros), `ddd-mundos.js` (7 mundos, jefes con nombres de la Wiki ES,
-  jefes secretos), `ddd-progreso.js` (tránsitos, 100 %, final secreto, Naiperama, minijuegos, Realidad Alterna, habilidades,
-  textos de sección).
-- Diseño: `--ddd` (`#FF66B2` / `#B3105F`) en `src/styles.css` y `DESIGN.md`, más clases `.juego-ddd`, `.lucientes-ddd`, `.luciente-ddd*`,
-  `.portales-ddd`, `.sub-pj`, `.ddd-estrellas`. Logo `assets/img/logos/ddd.webp`.
-- `notas/ddd-vistas-borrador.js`: código de las vistas de `app.js` ya escrito (portada, 7 secciones, navegación). **No está probado.**
-- Corregido de paso: `juegoKH2FM` no sumaba las marcas de Coliseo y Jefes de KH II FM.
-
-**Pendiente (en este orden):**
-1. En `src/app.js`: importar `ddd*.js` (DDD, GRUPOS_LOGROS_DDD, RUTA_DDD, CONSEJOS_DDD, FUENTES_DDD, MUNDOS_DDD, SECRETOS_DDD,
-   FUENTES_MUNDOS_DDD, INTRO_MUNDOS_DDD, TRANSITOS_DDD… y todo lo de `ddd-progreso.js`, `ddd-datos.js`, `ddd-portales.js`); añadir
-   `...FUENTES_DDD` a `TODAS_FUENTES`; `const logroDdd = Object.fromEntries(DDD.logros.map((l) => [l.id, l]))`; entrada `ddd` en `LOGROS_DE`
-   (carpeta `assets/img/ddd/logros`, `consejos: CONSEJOS_DDD`) y en `PROGRESO` (`logros: logrosDdd`, `juego: juegoDDD`).
-2. Añadir a `ID` las claves: `dddLogro, dddJefe, dddSecreto(id,k), dddPortal(mundo,pj,n) (pj en minúsculas), dddFormula, dddLuciente, dddNexo(grupo,n),
-   dddNexoObj(i), dddCmd(cat,n), dddOnirita, dddJuguete, dddLlave(n,pj), dddTransito(mundo,pj), dddRealidad, dddDescifrado, dddHistorieta,
-   dddAcrobata, dddMinijuego, dddCien, dddHabilidad` (prefijo `ddd.`, `slug`/`slugCmd` como en el resto).
-3. Definir, antes de `PROGRESO`, los helpers que usa el borrador: `logrosDdd`, `logrosGrupoDdd`, `PJ_DDD`, `MUNDOS_PORTALES_DDD` (7 ids de mundo),
-   `GRUPOS_NEXO_DDD` (`ataquesSora`, `dualesSora`, `fusionesRiku`, `dualesRiku`), `idCienDdd` (Julius comparte la marca de `ddd.secreto.julius.<pj>`),
-   `idsJefesDdd, idsSecretosDdd, idsPortalesDdd, idsPortalesSecretosDdd, idsNexoObjDdd, idsNexosDdd, idsFormulasDdd, idsCreadosDdd, idsHabilidadesDdd,
-   idsMinijuegosDdd, idsRealidadDdd, acrobatasDdd, idsTransitosDdd, idsCienDdd, idsComandosDdd, llavesDdd, idsLlavesDdd, idsOniritasDdd, idsJuguetesDdd`,
-   los `idsSec*Ddd` por sección y `juegoDDD` (unión de todas; usar `Set`).
-4. Pegar el borrador de vistas antes de `vista404()`, añadir las dos líneas del router (`ddd` y `ddd/<sección>`) y poner `disponible: true`
-   (sin etiqueta) en `juegos.js`.
-5. Probar con Playwright en el puerto 5174 (guardar antes `GET /api/estado`), a 390 y 1280 px: sin errores en consola, sin scroll horizontal,
-   marcas que se guardan, medidores que cuentan, contraste del acento. Usar `revisar-diseno`.
-6. Texto de «Elige un juego» (`vistaJuegos`) y `CLAUDE.md`.
-7. Luego, Kingdom Hearts 0.2 (`bbs02-logros.js` ya generado; ver decisión 1).
+## Estado a 27-10-2026: interfaz enganchada (pendiente de revisión del usuario)
+- `#/ddd` (portada, modos Logros e Informes) y `#/ddd/<sección>` (historia, portales, lucientes, minijuegos, realidad, progreso,
+  coleccion) en `src/app.js`; DDD ya es enlace en «Elige un juego». Ids `ddd.*` en `ID` (ver `dddLogro`…`dddCien`); el 100 % suma 548 marcas.
+- **Portales secretos: 11, no 14** (KHWiki «Portal»: no hay en El Mundo Inexistente ni en Sinfonía del Brujo con Riku). Solo se
+  marcan los que hay en `SECRETOS_PORTALES_DDD`.
+- Tránsitos en tarjetas (una por mundo) en vez de tabla: la tabla con casillas ocultas desbordaba la página a 390 px.
+- Probado con Playwright (5174) a 1280 y 390 px, tema oscuro y claro: sin errores, sin scroll horizontal, las marcas se guardan.
+- Siguiente: que el usuario lo revise; luego Kingdom Hearts 0.2 (`bbs02-logros.js` ya generado; ver decisión 1).
 
 **Huecos conocidos (se muestran en la web, no se inventan):** cofres (Tesoros), objetos generales, recuerdos, tiendas Moguri; nombres de Vapogüino y
 Pterodermo en inglés y de 3 lugares/portales; 6 de 51 recetas de KHWorld descartadas (abreviaturas ambiguas); lugares de portales en inglés

@@ -16,6 +16,7 @@ export const FUENTES_DDD = {
   wikiEsOnirita: { nombre: 'Wiki ES — Onirita', url: `${WES}Onirita` },
   wikiEsNaiperama: { nombre: 'Wiki ES — Naiperama', url: `${WES}Naiperama` },
   wikiEsNexario: { nombre: 'Wiki ES — Nexario', url: `${WES}Nexario` },
+  khwikiPortal: { nombre: 'KHWiki — Portal (portales secretos)', url: 'https://www.khwiki.com/Portal#Secret_Portal' },
   khwikiDreamEater: { nombre: 'KHWiki — Dream Eater (imágenes y nombres en inglés)', url: 'https://www.khwiki.com/Dream_Eater' },
   laps4: { nombre: 'Laps4 — Guía de trofeos de KH Dream Drop Distance (contraste)', url: 'https://www.laps4.com/comunidad/threads/guia-trofeos-kingdom-hearts-dream-drop-distance.432266/' },
   guiasxamonicas: { nombre: 'Guías Xamónicas — Kingdom Hearts: Dream Drop Distance (contraste)', url: 'https://guiasxamonicas.com/2019/02/23/kingdom-hearts-dream-drop-distance-guia-de-trofeos/' },

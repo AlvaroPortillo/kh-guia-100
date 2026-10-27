@@ -9,5 +9,6 @@ export const JUEGOS = [
   // Juego aparte en Steam (app 2552450), no forma parte de la colección HD 1.5+2.5.
   { id: 'kh3', nombre: 'Kingdom Hearts III + Re Mind', logo: 'assets/img/logos/kh3.webp', disponible: true },
   // Colección KH HD 2.8 Final Chapter Prologue (Steam app 2552440).
-  { id: 'ddd', nombre: 'Kingdom Hearts Dream Drop Distance', logo: 'assets/img/logos/ddd.webp', disponible: false, etiqueta: 'En preparación' },
+  { id: 'ddd', nombre: 'Kingdom Hearts Dream Drop Distance', logo: 'assets/img/logos/ddd.webp', disponible: true },
+  { id: 'bbs02', nombre: 'Kingdom Hearts 0.2 Birth by Sleep', logo: 'assets/img/logos/bbs02.webp', disponible: true },
 ];

@@ -211,5 +211,15 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    Siguiente: entrega 9 (Nave gumi), la última de KH II FM. Plan y pendientes en `notas/plan-kh2fm.md`.
    **Plan maestro de todos los KH** (317 logros, guía de cada logro y de cada «100 %»): `notas/plan-todos-kh.md`.
    **Después: KH HD 2.8 Final Chapter Prologue, Dream Drop Distance (KH DDD)**, plan en `notas/plan-ddd.md`
-   (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). **Datos preparados el 27-10-2026
-   (generadores, `ddd*.js`, imágenes, acento, logo); falta enganchar la interfaz: ver «Estado… (siguiente sesión)» en `notas/plan-ddd.md`.** Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).
+   (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). **Hecho el 27-10-2026 (pendiente de revisión):** `#/ddd` y `#/ddd/<sección>`
+   (historia, portales, lucientes, minijuegos, realidad, progreso, coleccion); ids `ddd.*`. Portales secretos: 11 (KHWiki). Estado en `notas/plan-ddd.md`. Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).
+5. **KH 0.2 Birth by Sleep -A fragmentary passage-** (juego de Aqua, misma app 2552440, ACH_01…ACH_15). **Plan en
+   `notas/plan-bbs02.md`** (aprobado el 27-10-2026). **Entrega 1 hecha** (27-10-2026, pendiente de revisión): `#/bbs02` con los 15
+   logros y «Antes de empezar» (`bbs02.js`), y `#/bbs02/historia` (`bbs02-historia.js`: zonas, jefes con estrategia, jefe secreto;
+   ids `bbs02.logro.ACH_xx`, `bbs02.jefe.<id>`). Acento `--aqua`. Fuente en castellano: guía de trofeos de Laps4 (51 objetivos con
+   el texto del juego; Playwright la abre sin problema). **Entrega 2 hecha** (27-10-2026, pendiente de revisión): `#/bbs02/objetivos`
+   (`bbs02-objetivos.js`, a mano): 51 objetivos con premio y ranura de KHWiki, filtro por partida y recuerdos persistentes; ids
+   `bbs02.objetivo.<n>`. **El usuario no quiere copiar contenido ajeno:** sin imágenes de prendas, sin vídeos; como mucho un enlace
+   directo con el autor como crédito. **Entrega 3 hecha** (27-10-2026, pendiente de revisión): `#/bbs02/cofres` (41 cofres al estilo
+   de BBS, con contenido y lugar; ids `bbs02.cofre.<zona>.<n>`) y `#/bbs02/combate` (comandos de magia `bbs02.magia.<id>`).
+   Portada con «Ruta al 100 %» (3 fases con progreso) y «Lo que se puede perder». **0.2 queda completo** (119 elementos). El usuario quiere que todo lo que falte se haga como BBS, el primero: metódico y bien organizado.
