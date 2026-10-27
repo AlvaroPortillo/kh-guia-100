@@ -143,6 +143,8 @@ if __name__ == '__main__':
     conectar().close()
     # En Windows, SO_REUSEADDR deja que dos servidores compartan el puerto: mejor fallar.
     ThreadingHTTPServer.allow_reuse_address = False
+    # La web carga unos 70 módulos a la vez; con la cola por defecto (5) el sistema rechaza conexiones.
+    ThreadingHTTPServer.request_queue_size = 128
     servidor = ThreadingHTTPServer((HOST, puerto), partial(Manejador, directory=str(RAIZ)))
     print(f'Guía en http://{HOST}:{puerto}  ·  progreso en {DB.relative_to(RAIZ)}')
     servidor.serve_forever()

@@ -1,5 +1,5 @@
 import { store } from './store.js';
-import { JUEGOS } from './data/juegos.js';
+import { JUEGOS, COLECCIONES } from './data/juegos.js';
 import {
   BBS, PERSONAJES, GRUPOS_LOGROS, RUTA, GOLPES_FINALES, ESTILOS, CUARTELILLO, COSO, COSO_INFO,
   CONSEJOS, FUENTES, NIVELES_COSO, NIVELES_COSO_INTRO, FUENTES_NIVELES_COSO,
@@ -57,6 +57,44 @@ import {
 import { ADVERSARIOS_KH3 } from './data/kh3-adversarios.js';
 import { IMG_JEFES_KH3, JEFES_KH3, DATOS_ESTRATEGIA, YOZORA, FUENTES_JEFES_KH3 } from './data/kh3-jefes.js';
 import { RUTAS_GUMI, INTRO_CONST, INTRO_TES_GUMI, SCHWARZGEIST, FUENTES_GUMI as FUENTES_GUMI_KH3 } from './data/kh3-gumi.js';
+import {
+  FUENTES_KH2FM, KH2FM, GRUPOS_LOGROS_KH2FM, RUTA_KH2FM, CONSEJOS_KH2FM, FUENTES_CONSEJOS_KH2FM, MUNDOS_KH2FM, FUENTES_MUNDOS_KH2FM,
+} from './data/kh2fm.js';
+import {
+  FUENTES_DIARIO_KH2FM, INTRO_DIARIO_KH2FM, INFORMES_ANSEM_KH2FM, SINCORAZON_KH2FM, NOTA_SINCORAZON, INCORPOREOS_KH2FM, LIMITES_KH2FM, APARTADOS_SIN_LISTA,
+} from './data/kh2fm-diario.js';
+import { TESOROS_KH2FM, PUZLES_KH2FM, MAPAS_KH2FM } from './data/kh2fm-tesoros.js';
+import {
+  FUENTES_TESOROS_KH2FM, INTRO_TESOROS_KH2FM, NOTA_TESOROS_KH2FM, INTRO_PUZLES_KH2FM, NOTA_PUZLES_KH2FM, INTRO_MAPAS_KH2FM,
+} from './data/kh2fm-tesoros-info.js';
+import { GRUPOS_LIBRE_KH2FM, SINTESIS_KH2FM, MATERIALES_KH2FM } from './data/kh2fm-orfebreria.js';
+import {
+  IMG_ORF_KH2, FUENTES_ORF_KH2FM, INTRO_ORF_KH2FM, NIVELES_MOGURI, NOTA_ESPECIALES, COLECCION_KH2FM, NOTA_COLECCION, ORICALCOS_KH2FM,
+  ARMA_ARTEMA_KH2FM, FUENTES_ARTEMA_KH2FM,
+} from './data/kh2fm-artema.js';
+import {
+  FUENTES_SORA_KH2FM, BARRA_FUSION, FUSIONES_KH2FM, NOTA_FUSIONES, INVOCACIONES_KH2FM, NIVEL_INVOC, MAGIAS_KH2FM, NOTA_MAGIAS_KH2FM,
+} from './data/kh2fm-sora.js';
+import { ARMAS_KH2FM } from './data/kh2fm-armas.js';
+import { FUENTES_MINI_KH2FM, INTRO_MINI_KH2FM, MINIJUEGOS_KH2FM, NOTA_SETAS } from './data/kh2fm-minijuegos.js';
+import {
+  FUENTES_JEFES_KH2FM, IMG_JEFES_KH2, INTRO_JEFES_KH2FM, JEFES_HISTORIA_KH2FM, SEPHIROTH, CONSCIENCIA, METODO_FENRIR, REPLICAS_INTRO, ORGANIZACION_KH2FM, SETAS_KH2FM,
+} from './data/kh2fm-jefes.js';
+import { FUENTES_COLISEO_KH2FM, IMG_COLISEO_KH2, INTRO_COLISEO_KH2FM, COPAS_KH2FM } from './data/kh2fm-coliseo.js';
+import { FUENTES_DDD, DDD, GRUPOS_LOGROS_DDD, RUTA_DDD, CONSEJOS_DDD } from './data/ddd.js';
+import { FUENTES_MUNDOS_DDD, INTRO_MUNDOS_DDD, MUNDOS_DDD, SECRETOS_DDD } from './data/ddd-mundos.js';
+import {
+  TRANSITOS_DDD, NOTA_TRANSITOS, CIEN_DDD, NOTA_CIEN, FINAL_SECRETO_DDD, NAIPERAMA_DDD, MINIJUEGOS_DDD, REALIDAD_DDD, NOTA_REALIDAD,
+  DESCIFRADO_DDD, HISTORIETA_DDD, NEXO_OBJETIVOS_DDD, NOTA_NEXO_OBJ, HABILIDADES_DDD, INTRO_PORTALES_DDD, COMO_PORTALES_DDD, NOTA_PORTALES_DDD,
+  INTRO_LUCIENTES_DDD, NOTA_LUCIENTES_DDD, INTRO_COLECCION_DDD, NOTA_COMANDOS_DDD, NOTA_LLAVES_DDD, NOTA_ONIRITAS_DDD, HUECOS_DDD,
+} from './data/ddd-progreso.js';
+import { COMANDOS_DDD, ONIRITAS_DDD, JUGUETES_DDD, LLAVES_DDD, LUCIENTES_DDD, NEXOS_DDD } from './data/ddd-datos.js';
+import { PORTALES_DDD, SECRETOS_PORTALES_DDD } from './data/ddd-portales.js';
+import { FUENTES_BBS02, BBS02, GRUPOS_LOGROS_BBS02, RUTA_BBS02, CONSEJOS_BBS02, PERDIBLES_BBS02, INTRO_PERDIBLES_BBS02, FASES_BBS02 } from './data/bbs02.js';
+import { FUENTES_HISTORIA_BBS02, INTRO_HISTORIA_BBS02, ZONAS_BBS02, JEFE_SECRETO_BBS02 } from './data/bbs02-historia.js';
+import { FUENTES_OBJETIVOS_BBS02, INTRO_OBJETIVOS_BBS02, CUANDO_BBS02, RANURAS_BBS02, ZONAS_OBJ_BBS02, OBJETIVOS_BBS02, RECUERDOS_BBS02, INTRO_RECUERDOS_BBS02, INTRO_ARMARIO_BBS02, PRENDAS_ES } from './data/bbs02-objetivos.js';
+import { FUENTES_COFRES_BBS02, INTRO_COFRES_BBS02, TIPOS_COFRE_BBS02, ZONAS_COFRES_BBS02 } from './data/bbs02-cofres.js';
+import { FUENTES_COMBATE_BBS02, INTRO_COMBATE_BBS02, BARRA_BBS02, COMANDOS_BBS02, NOTA_MAGIA_BBS02, TIRO_BBS02 } from './data/bbs02-combate.js';
 import { iniciarEstela } from './cursor.js';
 
 const $main = document.getElementById('main');
@@ -65,11 +103,15 @@ const $top = document.getElementById('topbar');
 // ---------- utilidades ----------
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const slugCmd = (n) => slug(n.replace(/\+/g, ' mas '));
 const pctFmt = (n) => (n == null ? '' : `${n.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de jugadores en Steam`);
 const logroPorId = Object.fromEntries(BBS.logros.map((l) => [l.id, l]));
 const logroKhfm = Object.fromEntries(KHFM.logros.map((l) => [l.id, l]));
+const logroKh2fm = Object.fromEntries(KH2FM.logros.map((l) => [l.id, l]));
 const logroKh3 = Object.fromEntries(KH3.logros.map((l) => [l.id, l]));
-const TODAS_FUENTES = { ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO, ...FUENTES_ARMAS, ...FUENTES_GUMI, ...FUENTES_COLISEO, ...FUENTES_SORA, ...FUENTES_JEFES_HISTORIA, ...FUENTES_KH3 };
+const logroDdd = Object.fromEntries(DDD.logros.map((l) => [l.id, l]));
+const logroBbs02 = Object.fromEntries(BBS02.logros.map((l) => [l.id, l]));
+const TODAS_FUENTES = { ...FUENTES_BBS02, ...FUENTES_DDD, ...FUENTES, ...FUENTES_KHFM, ...FUENTES_SINTESIS, ...FUENTES_DIARIO, ...FUENTES_ARMAS, ...FUENTES_GUMI, ...FUENTES_COLISEO, ...FUENTES_SORA, ...FUENTES_JEFES_HISTORIA, ...FUENTES_KH3, ...FUENTES_KH2FM, ...FUENTES_DIARIO_KH2FM, ...FUENTES_TESOROS_KH2FM, ...FUENTES_ORF_KH2FM, ...FUENTES_SORA_KH2FM, ...FUENTES_MINI_KH2FM, ...FUENTES_COLISEO_KH2FM, ...FUENTES_JEFES_KH2FM };
 const IMG_JEFES = 'assets/img/khfm/coliseo/jefe-';
 const PJS = Object.values(PERSONAJES);
 
@@ -88,8 +130,9 @@ const ID = {
   tablero: (pj, t) => `bbs.tablero.${pj}.${t}`,
   tableroCoso: (pj, t) => `bbs.tablero.coso.${pj}.${t}`,
   cosoNivel: (pj, m) => `bbs.cosonivel.${pj}.${m}`,
-  tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slug(n)}`,
-  cmd: (pj, n) => `bbs.cmd.${pj}.${slug(n)}`,
+  // slug() quita los «+»: Piro, Piro+ y Piro++ compartían marca. La versión base conserva su id de siempre.
+  tableroCmd: (pj, n) => `bbs.tablero.cmd.${pj}.${slugCmd(n)}`,
+  cmd: (pj, n) => `bbs.cmd.${pj}.${slugCmd(n)}`,
   khfmLogro: (id) => `khfm.logro.${id}`,
   khfmAnsem: (n) => `khfm.ansem.${n}`,
   khfmDalmata: (n) => `khfm.dalmata.${n}`,
@@ -124,6 +167,53 @@ const ID = {
   kh3JefeExp: (id) => `kh3.jefe-exp.${id}`,
   kh3Ingrediente: (id) => `kh3.ingrediente.${id}`,
   kh3GumiTes: (ruta, n) => `kh3.gumi.tesoro.${ruta}.${n}`,
+  kh2fmLogro: (id) => `kh2fm.logro.${id}`,
+  kh2fmAnsem: (n) => `kh2fm.ansem.${n}`,
+  kh2fmSincorazon: (n) => `kh2fm.sincorazon.${slug(n)}`,
+  kh2fmIncorporeo: (n) => `kh2fm.incorporeo.${slug(n)}`,
+  kh2fmLimite: (n) => `kh2fm.limite.${slug(n)}`,
+  kh2fmTesoro: (mundo, n) => `kh2fm.tesoro.${mundo}.${n}`,
+  kh2fmPieza: (puzle, n) => `kh2fm.puzle.${puzle}.${n}`,
+  kh2fmMapa: (en) => `kh2fm.mapa.${slug(en)}`,
+  kh2fmSintesis: (id) => `kh2fm.sintesis.${id}`,
+  kh2fmMaterial: (id) => `kh2fm.material.${id}`,
+  kh2fmOricalco: (id) => `kh2fm.oricalco.${id}`,
+  kh2fmFusion: (forma, n) => `kh2fm.fusion.${forma}.${n}`,
+  kh2fmInvoc: (id) => `kh2fm.invoc.${id}`,
+  kh2fmInvocNivel: (n) => `kh2fm.invoc.nivel.${n}`,
+  kh2fmMagia: (id, n) => `kh2fm.magia.${id}.${n}`,
+  kh2fmArma: (id) => `kh2fm.arma.${id}`,
+  kh2fmMinijuego: (id) => `kh2fm.minijuego.${id}`,
+  kh2fmMision: (id, i) => `kh2fm.mision.${id}.${i}`,
+  kh2fmSeta: (n) => `kh2fm.seta.${n}`,
+  kh2fmEsencia: (id) => `kh2fm.esencia.${id}`,
+  kh2fmReplica: (id) => `kh2fm.replica.${id}`,
+  kh2fmJefe: (id) => `kh2fm.jefe.${id}`,
+  dddLogro: (id) => `ddd.logro.${id}`,
+  dddJefe: (id) => `ddd.jefe.${id}`,
+  dddSecreto: (id, k) => `ddd.secreto.${id}.${k}`,
+  dddPortal: (mundo, pj, n) => `ddd.portal.${mundo}.${pj.toLowerCase()}.${n}`,
+  dddNexoObj: (i) => `ddd.nexoobj.${i}`,
+  dddFormula: (id) => `ddd.formula.${id}`,
+  dddLuciente: (id) => `ddd.luciente.${id}`,
+  dddNexo: (grupo, n) => `ddd.nexo.${grupo}.${slugCmd(n)}`,
+  dddHabilidad: (n) => `ddd.habilidad.${slugCmd(n)}`,
+  dddMinijuego: (id) => `ddd.minijuego.${id}`,
+  dddRealidad: (id) => `ddd.realidad.${id}`,
+  dddDescifrado: (n) => `ddd.descifrado.${slug(n)}`,
+  dddHistorieta: (n) => `ddd.historieta.${slug(n)}`,
+  dddAcrobata: (n) => `ddd.acrobata.${slugCmd(n)}`,
+  dddTransito: (mundo, pj) => `ddd.transito.${mundo}.${pj}`,
+  dddCmd: (cat, n) => `ddd.cmd.${slug(cat)}.${slugCmd(n)}`,
+  dddLlave: (n, pj) => `ddd.llave.${pj}.${slugCmd(n)}`,
+  dddOnirita: (n) => `ddd.onirita.${slug(n)}`,
+  dddJuguete: (n) => `ddd.juguete.${slugCmd(n)}`,
+  dddCien: (id) => `ddd.cien.${id}`,
+  bbs02Logro: (id) => `bbs02.logro.${id}`,
+  bbs02Jefe: (id) => `bbs02.jefe.${id}`,
+  bbs02Objetivo: (n) => `bbs02.objetivo.${n}`,
+  bbs02Cofre: (zona, n) => `bbs02.cofre.${zona}.${n}`,
+  bbs02Magia: (id) => `bbs02.magia.${id}`,
 };
 
 // Dos progresos independientes: logros de Steam y 100 % del juego (menú Informes).
@@ -208,10 +298,130 @@ const idsCocinaKh3 = () => [...PLATOS_KH3.map((p) => ID.kh3Plato(p.id)), ...INGR
 const idsRemindKh3 = () => [...DATOS_ORG.map((d) => ID.kh3Datos(d.id)), ...MERITOS_PRIN.map((m) => ID.kh3Merito(m.id))];
 const juegoKH3 = () => [...new Set([...idsPf(), ...idsTesKh3(), ...idsOrf(), ...idsMiniKh3(), ...idsGumiKh3(), ...idsCocinaKh3(), ...idsRemindKh3(), ...ADVERSARIOS_KH3.map((a) => ID.kh3Adversario(a.id)), ...idsJefesKh3(), ...idsArtema()])];
 const idsJefesKh3 = () => JEFES_KH3.flatMap((g) => g.jefes.map((j) => ID.kh3Jefe(j.id)));
+// KH II FM: el 100 % crece con cada entrega. Los mundos, Personajes y Relaciones usan las marcas de sus logros.
+const logrosKH2FM = () => KH2FM.logros.map((l) => ID.kh2fmLogro(l.id));
+const idsMundosKh2fm = () => MUNDOS_KH2FM.flatMap((m) => m.logros.map(ID.kh2fmLogro));
+const idsAnsemKh2fm = () => INFORMES_ANSEM_KH2FM.map((x) => ID.kh2fmAnsem(x.n));
+const idsSincorazonKh2fm = (g) => (g ? [g] : SINCORAZON_KH2FM).flatMap((x) => x.items.map(([n]) => ID.kh2fmSincorazon(n)));
+const idsIncorporeosKh2fm = () => INCORPOREOS_KH2FM.map(ID.kh2fmIncorporeo);
+const idsLimitesKh2fm = (g) => (g ? [g] : LIMITES_KH2FM).flatMap((x) => x.items.map((l) => ID.kh2fmLimite(l.n)));
+const idsDiarioKh2fm = () => [...idsAnsemKh2fm(), ...idsSincorazonKh2fm(), ...idsIncorporeosKh2fm(), ...idsLimitesKh2fm(), ...APARTADOS_SIN_LISTA.map((a) => ID.kh2fmLogro(a.logro))];
+// Los mapas que salen de un cofre usan la marca de ese cofre; cada puzle tiene además su marca de «resuelto».
+const idsTesorosKh2fm = (w) => (w ? [w] : TESOROS_KH2FM).flatMap((x) => x.cofres.map((c) => ID.kh2fmTesoro(x.id, c.n)));
+const idPuzleResuelto = (p) => ID.kh2fmPieza(p.id, 'resuelto');
+const idsPuzlesKh2fm = (p) => (p ? [p] : PUZLES_KH2FM).flatMap((x) => [...x.piezas.map((c) => ID.kh2fmPieza(x.id, c.n)), idPuzleResuelto(x)]);
+const idMapaKh2fm = (m) => (m.cofre ? ID.kh2fmTesoro(...m.cofre.split('.')) : ID.kh2fmMapa(m.en));
+const idsMapasKh2fm = () => MAPAS_KH2FM.map(idMapaKh2fm);
+const idsSecTesorosKh2fm = () => [...new Set([...idsTesorosKh2fm(), ...idsPuzlesKh2fm(), ...idsMapasKh2fm()])];
+const idsSintesisKh2fm = () => SINTESIS_KH2FM.flatMap((o) => [ID.kh2fmSintesis(o.id), ...(o.mejora ? [ID.kh2fmSintesis(o.mejora.id)] : [])]);
+const matKh2PorNombre = Object.fromEntries(MATERIALES_KH2FM.map((m) => [m.nombre, m]));
+const idsOrfKh2fm = () => [...new Set([...idsSintesisKh2fm(), ...MATERIALES_KH2FM.map((m) => ID.kh2fmMaterial(m.id)), ...idsOricalcosKh2()])];
+const idsFusionKh2 = (f) => [1, 2, 3, 4, 5, 6, 7].map((n) => ID.kh2fmFusion(f.id, n));
+const idsInvocKh2 = () => [...INVOCACIONES_KH2FM.map((x) => ID.kh2fmInvoc(x.id)), ...[2, 3, 4, 5, 6, 7].map(ID.kh2fmInvocNivel)];
+const idsMagiaKh2 = () => MAGIAS_KH2FM.flatMap((m) => [1, 2, 3].map((n) => ID.kh2fmMagia(m.id, n)));
+// Sora: niveles de forma, invocaciones, magia, antiforma (logro) y nivel 99 (logro).
+const idsSoraKh2fm = () => [...FUSIONES_KH2FM.flatMap(idsFusionKh2), ...idsInvocKh2(), ...idsMagiaKh2(), ID.kh2fmLogro('ACH_148'), ID.kh2fmLogro('ACH_106')];
+// Armas: las que se fabrican usan la marca de la Orfebrería y las que salen de un cofre, la de ese cofre de Tesoros.
+const SINT_POR_ID = new Set(SINTESIS_KH2FM.flatMap((o) => [o.id, ...(o.mejora ? [o.mejora.id] : [])]));
+function idArmaKh2(a) {
+  if (SINT_POR_ID.has(a.id)) return ID.kh2fmSintesis(a.id);
+  for (const w of TESOROS_KH2FM) {
+    const c = w.cofres.find((x) => x.obj && x.obj.toLowerCase() === a.nombre.toLowerCase());
+    if (c) return ID.kh2fmTesoro(w.id, c.n);
+  }
+  return ID.kh2fmArma(a.id);
+}
+const idsArmasKh2 = (g) => (g ? [g] : ARMAS_KH2FM).flatMap((x) => x.armas.map(idArmaKh2));
+// Minijuegos y misiones: las setas, Esencias y réplicas usan ids propios para compartirlos con la sección Jefes.
+const idRetoKh2 = (x, r, i) => (r.seta ? ID.kh2fmSeta(r.seta) : r.esencia ? ID.kh2fmEsencia(r.esencia) : r.replica ? ID.kh2fmReplica(r.replica) : ID.kh2fmMision(x.id, i + 1));
+const itemsMiniKh2 = (w) => (w ? [w] : MINIJUEGOS_KH2FM).flatMap((g) => g.items);
+const idsJuegosKh2 = (w) => itemsMiniKh2(w).filter((x) => x.juego).map((x) => ID.kh2fmMinijuego(x.id));
+const idsMisionesKh2 = (w) => itemsMiniKh2(w).flatMap((x) => x.retos.map((r, i) => idRetoKh2(x, r, i)));
+const idsMiniKh2 = (w) => [...new Set([...idsJuegosKh2(w), ...idsMisionesKh2(w)])];
+// Copa: su logro y las marcas de su entrada del diario (las mismas que en Minijuegos y misiones).
+const miniDeCopa = (c) => itemsMiniKh2().find((x) => x.id === c.mini);
+const idsCopaKh2 = (c) => [ID.kh2fmLogro(c.logro), ...idsMiniKh2({ items: [miniDeCopa(c)] })];
+const idsColiseoKh2 = () => COPAS_KH2FM.flatMap(idsCopaKh2);
+// Jefes: los de la historia tienen marca propia; los secretos reutilizan logros, Esencias, réplicas y setas.
+const idsHistoriaKh2 = () => JEFES_HISTORIA_KH2FM.map((j) => ID.kh2fmJefe(j.id));
+const idsOrgKh2 = () => ORGANIZACION_KH2FM.flatMap((o) => [...(o.esencia ? [ID.kh2fmEsencia(o.slug)] : []), ID.kh2fmReplica(o.slug)]);
+const idsSecretosKh2 = () => [...['ACH_108', 'ACH_109', 'ACH_110', 'ACH_111'].map(ID.kh2fmLogro), ...idsOrgKh2(), ...SETAS_KH2FM.map((s) => ID.kh2fmSeta(s.n))];
+const idsJefesKh2 = () => [...idsHistoriaKh2(), ...idsSecretosKh2()];
+const juegoKH2FM = () => [...new Set([...idsMundosKh2fm(), ...idsDiarioKh2fm(), ...idsSecTesorosKh2fm(), ...idsOrfKh2fm(), ...idsSoraKh2fm(), ...idsArmasKh2(), ...idsMiniKh2(), ...idsColiseoKh2(), ...idsJefesKh2()])];
+// KH DDD: el 100 % es lo que piden los logros. Los mundos usan la marca de su logro.
+const logrosDdd = () => DDD.logros.map((l) => ID.dddLogro(l.id));
+const PJ_DDD = ['sora', 'riku'];
+const MUNDOS_PORTALES_DDD = [...new Set(PORTALES_DDD.map((p) => p.mundo))];
+const GRUPOS_NEXO_DDD = [['ataquesSora', 'Ataques Nexo de Sora'], ['dualesSora', 'Nexos duales de Sora'], ['fusionesRiku', 'Fusiones Nexo de Riku'], ['dualesRiku', 'Nexos duales de Riku']];
+const idsJefesDdd = () => MUNDOS_DDD.flatMap((m) => m.jefes.map((j) => ID.dddJefe(j.id)));
+const idsSecretosDdd = () => SECRETOS_DDD.flatMap((s) => s.marcas.map(([k]) => ID.dddSecreto(s.id, k)));
+// Julius ya tiene su marca en Jefes secretos: el 100 % la reutiliza.
+const idCienDdd = (c) => (c.id.startsWith('julius-') ? ID.dddSecreto('julius', c.id.slice(7)) : ID.dddCien(c.id));
+const portalesDdd = (m, pj) => PORTALES_DDD.filter((p) => p.mundo === m && p.pj.toLowerCase() === pj);
+const secretoPortalDdd = (m, pj) => SECRETOS_PORTALES_DDD.find((s) => s.mundo === m && s.pj.toLowerCase() === pj);
+const idsPortalesMundoDdd = (m) => PJ_DDD.flatMap((pj) => [
+  ...portalesDdd(m, pj).map((p) => ID.dddPortal(p.mundo, p.pj, p.n)),
+  ...(secretoPortalDdd(m, pj) ? [ID.dddPortal(m, pj, 'secreto')] : []),
+]);
+const idsPortalesDdd = () => MUNDOS_PORTALES_DDD.flatMap(idsPortalesMundoDdd);
+const idsNexoObjDdd = () => NEXO_OBJETIVOS_DDD.map((_, i) => ID.dddNexoObj(i + 1));
+const idsNexosDdd = () => GRUPOS_NEXO_DDD.flatMap(([k]) => NEXOS_DDD[k].map((x) => ID.dddNexo(k, x.n)));
+const idsFormulasDdd = () => LUCIENTES_DDD.map((l) => ID.dddFormula(l.id));
+const idsCreadosDdd = () => LUCIENTES_DDD.map((l) => ID.dddLuciente(l.id));
+const idsHabilidadesDdd = () => [...HABILIDADES_DDD.apoyo, ...HABILIDADES_DDD.lucientes].map(ID.dddHabilidad);
+const idsMinijuegosDdd = () => MINIJUEGOS_DDD.map((m) => ID.dddMinijuego(m.id));
+const acrobatasDdd = () => COMANDOS_DDD.find((c) => c.cat === 'Modo Acróbata').items.map((x) => x.n);
+const idsRealidadDdd = () => [
+  ...REALIDAD_DDD.map((r) => ID.dddRealidad(r.id)), ...DESCIFRADO_DDD.map((x) => ID.dddDescifrado(x.n)),
+  ...HISTORIETA_DDD.map((x) => ID.dddHistorieta(x.n)), ...acrobatasDdd().map(ID.dddAcrobata),
+];
+const idsTransitosDdd = () => TRANSITOS_DDD.flatMap((t) => PJ_DDD.map((pj) => ID.dddTransito(t.id, pj)));
+const idsCienDdd = () => CIEN_DDD.filter((c) => c.marca).map(idCienDdd);
+const idsComandosDdd = () => COMANDOS_DDD.flatMap((c) => c.items.map((x) => ID.dddCmd(c.cat, x.n)));
+// Una entrada por Llave Espada y personaje («Sora/Riku» = dos marcas).
+const llavesDdd = () => LLAVES_DDD.flatMap((l) => l.pj.map((p) => ({ n: l.n, p: p.toLowerCase(), como: l.como })));
+const idsLlavesDdd = () => llavesDdd().map((l) => ID.dddLlave(l.n, l.p));
+const idsOniritasDdd = () => ONIRITAS_DDD.map(ID.dddOnirita);
+const idsJuguetesDdd = () => JUGUETES_DDD.map(ID.dddJuguete);
+const idsSecHistoriaDdd = () => [...MUNDOS_DDD.map((m) => ID.dddLogro(m.logro)), ...idsJefesDdd(), ...idsSecretosDdd()];
+const idsSecPortalesDdd = () => [...idsPortalesDdd(), ...idsNexoObjDdd()];
+const idsSecLucientesDdd = () => [...idsFormulasDdd(), ...idsCreadosDdd(), ...idsNexosDdd(), ...idsHabilidadesDdd()];
+const idsSecMinijuegosDdd = () => idsMinijuegosDdd();
+const idsSecRealidadDdd = () => idsRealidadDdd();
+const idsSecProgresoDdd = () => [...new Set([...idsCienDdd(), ...idsTransitosDdd()])];
+const idsSecColeccionDdd = () => [...idsComandosDdd(), ...idsLlavesDdd(), ...idsOniritasDdd(), ...idsJuguetesDdd()];
+const juegoDDD = () => [...new Set([
+  ...idsSecHistoriaDdd(), ...idsSecPortalesDdd(), ...idsSecLucientesDdd(), ...idsSecMinijuegosDdd(),
+  ...idsSecRealidadDdd(), ...idsSecProgresoDdd(), ...idsSecColeccionDdd(),
+])];
+// KH 0.2: el 100 % crece con cada entrega. Las zonas usan la marca de su logro.
+const logrosBbs02 = () => BBS02.logros.map((l) => ID.bbs02Logro(l.id));
+const idsJefesBbs02 = () => [...ZONAS_BBS02.flatMap((z) => z.jefes.map((j) => ID.bbs02Jefe(j.id))), ID.bbs02Jefe(JEFE_SECRETO_BBS02.id)];
+const idsSecHistoriaBbs02 = () => [...ZONAS_BBS02.filter((z) => z.logro).map((z) => ID.bbs02Logro(z.logro)), ...idsJefesBbs02(), ID.bbs02Logro('ACH_08'), ID.bbs02Logro('ACH_11')];
+const idsObjetivosBbs02 = () => OBJETIVOS_BBS02.map((o) => ID.bbs02Objetivo(o.n));
+const idsSecObjetivosBbs02 = () => [ID.bbs02Logro('ACH_07'), ID.bbs02Logro('ACH_15'), ...idsObjetivosBbs02()];
+const idsCofresZonaBbs02 = (z) => z.cofres.map((x) => ID.bbs02Cofre(z.id, x.n));
+const idsCofresBbs02 = () => ZONAS_COFRES_BBS02.flatMap(idsCofresZonaBbs02);
+const idsSecCofresBbs02 = () => [ID.bbs02Logro('ACH_06'), ...idsCofresBbs02()];
+const LOGROS_COMBATE_BBS02 = ['ACH_09', 'ACH_10', 'ACH_12', 'ACH_13', 'ACH_14'];
+const idsMagiaBbs02 = () => COMANDOS_BBS02.filter((x) => x.marca).map((x) => ID.bbs02Magia(x.id));
+const idsSecCombateBbs02 = () => [...LOGROS_COMBATE_BBS02.map(ID.bbs02Logro), ...idsMagiaBbs02()];
+const objetivosDeBbs02 = (c) => OBJETIVOS_BBS02.filter((o) => o.c === c).map((o) => ID.bbs02Objetivo(o.n));
+const cofresVisitaBbs02 = (v) => ZONAS_COFRES_BBS02.flatMap((z) => z.cofres.filter((x) => x.v === v).map((x) => ID.bbs02Cofre(z.id, x.n)));
+const IDS_FASE_BBS02 = {
+  primera: () => [...['ACH_01', 'ACH_02', 'ACH_03', 'ACH_04', 'ACH_05', 'ACH_08', 'ACH_09', 'ACH_10', 'ACH_12', 'ACH_13', 'ACH_14', 'ACH_15'].map(ID.bbs02Logro),
+    ...ZONAS_BBS02.flatMap((z) => z.jefes.map((j) => ID.bbs02Jefe(j.id))), ...cofresVisitaBbs02(1), ...objetivosDeBbs02('primera'), ...idsMagiaBbs02()],
+  final: () => [...cofresVisitaBbs02(2), ...objetivosDeBbs02('final'), ID.bbs02Jefe(JEFE_SECRETO_BBS02.id), ID.bbs02Logro('ACH_06')],
+  plus: () => [...objetivosDeBbs02('plus'), ID.bbs02Logro('ACH_11'), ID.bbs02Logro('ACH_07')],
+};
+const juegoBBS02 = () => [...new Set([...idsSecHistoriaBbs02(), ...idsSecObjetivosBbs02(), ...idsSecCofresBbs02(), ...idsSecCombateBbs02()])];
 const PROGRESO = {
   bbs: { logros: () => BBS.logros.map((l) => ID.logro(l.id)), juego: () => juegoBBS() },
   khfm: { logros: logrosKHFM, juego: juegoKHFM },
   kh3: { logros: () => logrosKH3(), juego: () => juegoKH3() },
+  kh2fm: { logros: logrosKH2FM, juego: juegoKH2FM },
+  ddd: { logros: logrosDdd, juego: juegoDDD },
+  bbs02: { logros: logrosBbs02, juego: juegoBBS02 },
 };
 const ETQ_LOGROS = 'Logros de Steam';
 const ETQ_JUEGO = '100 % del juego (Informes)';
@@ -339,6 +549,9 @@ const LOGROS_DE = {
   bbs: { id: ID.logro, carpeta: 'assets/img/bbs/logros', consejos: CONSEJOS },
   khfm: { id: ID.khfmLogro, carpeta: 'assets/img/khfm/logros', consejos: CONSEJOS_KHFM },
   kh3: { id: ID.kh3Logro, carpeta: 'assets/img/kh3/logros', consejos: CONSEJOS_KH3 },
+  kh2fm: { id: ID.kh2fmLogro, carpeta: 'assets/img/kh2fm/logros', consejos: CONSEJOS_KH2FM },
+  ddd: { id: ID.dddLogro, carpeta: 'assets/img/ddd/logros', consejos: CONSEJOS_DDD },
+  bbs02: { id: ID.bbs02Logro, carpeta: 'assets/img/bbs02/logros', consejos: CONSEJOS_BBS02 },
 };
 const itemLogro = (l, juego = 'bbs') => {
   const { id, carpeta, consejos } = LOGROS_DE[juego];
@@ -402,46 +615,102 @@ function selectorModo(clLogros, idsLogros, clJuego, idsJuego, { subLogros = 'Los
 }
 
 // ---------- vistas ----------
-function vistaTitulo() {
-  $top.hidden = true;
-  return `
-  <section class="title-screen">
-    <div class="title-glass">${vidriera(['var(--aqua)', 'var(--ventus)', 'var(--terra)'], { porciones: 18, clase: 'spin' })}</div>
-    <div class="title-copy">
-      <div class="title-logos">
-        <img class="title-logo" src="assets/img/logos/remix.png" alt="Kingdom Hearts HD 1.5+2.5 ReMIX" width="699" height="491">
-        <img class="title-logo" src="assets/img/logos/kh3-remind.webp" alt="Kingdom Hearts III Re Mind" width="720" height="460">
-      </div>
-      <h1 class="title-word">Guía al 100 %</h1>
-      <p class="title-sub">Logros de Steam, coleccionables y comandos de cada juego, en castellano. Marca lo que consigas y lleva tu propio registro.</p>
-      <a class="btn-start" href="#/juegos">Empezar</a>
-      <a class="title-proyectos" href="${PORTADA}">${ICONO_PROYECTOS}Mis proyectos</a>
-    </div>
-  </section>`;
-}
+// (La máscara del destello va con URL absoluta: en una variable CSS, una ruta relativa se resolvería desde src/styles.css.)
+// Portada única: título y las tres colecciones de Steam, cada una con su vidriera y sus juegos.
+// Movimiento (sin prefers-reduced-motion): la vidriera de cada colección gira despacio y se enciende al entrar en pantalla, sus
+// juegos suben escalonados y cada logo se inclina hacia el ratón con un destello que lo recorre (activarPortada).
+const ACENTO_JUEGO = { khfm: 'var(--khfm)', recom: 'var(--text-2)', kh2fm: 'var(--kh2fm)', bbs: 'var(--ventus)', ddd: 'var(--ddd)', bbs02: 'var(--aqua)', kh3: 'var(--kh3)' };
+const TAM_LOGO = {
+  khfm: [704, 478], recom: [738, 488], kh2fm: [708, 480], bbs: [652, 478], ddd: [708, 480], bbs02: [900, 568], kh3: [720, 438],
+};
+const juegoPorId = Object.fromEntries(JUEGOS.map((j) => [j.id, j]));
+const logo3d = (src, w, h, alt = '', clase = '') => `
+  <span class="logo3d ${clase}" style="--img:url('${esc(new URL(src, location.href).href)}')">
+    <img src="${esc(src)}" alt="${esc(alt)}" width="${w}" height="${h}" loading="lazy" decoding="async">
+    <span class="logo3d-luz" aria-hidden="true"></span>
+  </span>`;
 
-function vistaJuegos() {
-  topbar([{ t: 'Juegos' }]);
-  const tile = (j) => {
+function vistaPortada() {
+  topbar([]);
+  const ficha = (id, k) => {
+    const j = juegoPorId[id];
     const meta = j.etiqueta
       ? `<p class="soon">${esc(j.etiqueta)}</p>`
       : `<div class="meters-2">${medidor(`juego-${j.id}-logros`, PROGRESO[j.id].logros(), ETQ_LOGROS)}
          ${medidor(`juego-${j.id}-100`, PROGRESO[j.id].juego(), ETQ_JUEGO)}</div>`;
     const inner = `
-      <img class="game-logo" src="${j.logo}" alt="" loading="lazy">
-      <span class="game-name">${esc(j.nombre)}</span>
-      ${meta}`;
+      ${logo3d(j.logo, ...TAM_LOGO[j.id], '', 'game-logo3d')}
+      <span class="juego-cuerpo"><span class="game-name">${esc(j.nombre)}</span>${meta}</span>`;
+    const estilo = `style="--k:${k};--tile:${ACENTO_JUEGO[j.id]}"`;
     return j.disponible
-      ? `<a class="game game-on" href="#/${j.id}">${inner}</a>`
-      : `<div class="game game-off" aria-disabled="true">${inner}</div>`;
+      ? `<a class="game juego-tile" href="#/${j.id}" data-tilt ${estilo}>${inner}</a>`
+      : `<div class="game juego-tile game-off" aria-disabled="true" ${estilo}>${inner}</div>`;
   };
+  const logrosCol = (c) => c.juegos.filter((id) => PROGRESO[id]).flatMap((id) => PROGRESO[id].logros());
+  // Portada: los tres logos son las puertas a cada colección, con los logros de Steam que llevas en ella.
+  const puerta = (c, i) => {
+    const ids = logrosCol(c);
+    const sinGuia = c.juegos.filter((id) => !PROGRESO[id]);
+    medidores[`col-${c.id}`] = ids;
+    return `
+      <a class="hero-col" href="#coleccion-${c.id}" data-goto="coleccion-${c.id}" data-tilt style="--k:${i}">
+        ${logo3d(c.logo, c.ancho, c.alto, c.nombre, 'hero-logo')}
+        <span class="hero-col-meta"><b data-count="col-${c.id}">${store.contar(ids)}/${ids.length}</b> logros de Steam${sinGuia.length ? `<small>Sin contar ${sinGuia.map((id) => esc(juegoPorId[id].nombre)).join(', ')}, aún sin guía</small>` : ''}</span>
+      </a>`;
+  };
+  const coleccion = (c) => `
+    <section class="coleccion col-${c.id}" id="coleccion-${c.id}" aria-labelledby="col-${c.id}">
+      <div class="coleccion-glass">${vidriera(c.colores, { porciones: 24, clase: 'spin' })}</div>
+      <header class="coleccion-cab">
+        <h2 id="col-${c.id}" class="coleccion-titulo">${esc(c.nombre)}</h2>
+        <p class="coleccion-sub">${c.juegos.length} ${c.juegos.length === 1 ? 'juego' : 'juegos'} con logros en Steam</p>
+      </header>
+      <div class="coleccion-juegos">${c.juegos.map(ficha).join('')}</div>
+    </section>`;
   return `
-  <section class="page games">
-    <h1 class="page-title">Elige un juego</h1>
-    <p class="lead">Birth by Sleep y Kingdom Hearts Final Mix ya están en marcha. Kingdom Hearts III está en preparación, y el resto irá apareciendo según avance la guía.</p>
-    <div class="game-grid">${JUEGOS.map(tile).join('')}</div>
+  <section class="portada">
+    <header class="portada-hero">
+      <div class="hero-aurora" aria-hidden="true"></div>
+      <div class="hero-glass">${vidriera(['var(--khfm)', 'var(--ddd)', 'var(--kh3)', 'var(--aqua)'], { porciones: 24, clase: 'spin' })}</div>
+      <h1 class="sr-only">Guía al 100 % de Kingdom Hearts: logros de Steam y coleccionables de cada juego</h1>
+      <nav class="hero-cols" aria-label="Colecciones">${COLECCIONES.map(puerta).join('')}</nav>
+      <a class="hero-bajar" href="#colecciones" data-goto="colecciones" aria-label="Ver todos los juegos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+    </header>
+    <div class="colecciones" id="colecciones">${COLECCIONES.map(coleccion).join('')}</div>
   </section>`;
 }
+
+// Movimiento de la portada. Sin JS o con movimiento reducido todo se ve quieto y completo.
+let tiltActual = null;
+function activarPortada() {
+  const portada = document.querySelector('.portada');
+  if (!portada || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  portada.classList.add('js-portada');
+  const cols = [...portada.querySelectorAll('.coleccion')];
+  const encender = (el) => el.classList.add('is-in');
+  if (!('IntersectionObserver' in window)) { cols.forEach(encender); return; }
+  const io = new IntersectionObserver((entradas) => entradas.forEach((e) => {
+    if (e.isIntersecting) { encender(e.target); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  cols.forEach((c) => io.observe(c));
+  setTimeout(() => cols.forEach(encender), 2500); // por si el observador no llega a dispararse
+}
+function inclinarLogo(e) {
+  if (e.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const host = e.target.closest?.('[data-tilt]');
+  if (tiltActual && tiltActual !== host) { tiltActual.style.removeProperty('--rx'); tiltActual.style.removeProperty('--ry'); tiltActual.classList.remove('is-tilt'); }
+  tiltActual = host;
+  if (!host) return;
+  const r = host.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  host.style.setProperty('--ry', `${(x * 14).toFixed(2)}deg`);
+  host.style.setProperty('--rx', `${(-y * 10).toFixed(2)}deg`);
+  host.classList.add('is-tilt');
+}
+document.addEventListener('pointermove', inclinarLogo, { passive: true });
+document.addEventListener('pointerleave', () => inclinarLogo({ pointerType: 'mouse', target: document.body }));
 
 function subnav(secciones) {
   return `<nav class="subnav" aria-label="Secciones">${secciones
@@ -1220,11 +1489,22 @@ function elegirHabilidad(boton) {
   ficha.innerHTML = quitar ? '' : fichaHabilidad(h);
 }
 
+// Una misma mezcla puede dar varios comandos (p. ej. Poder Desatado + Gravedad++: Sismo 90 %, Meteo 10 %).
+// Índice por ingredientes, tipo y exclusividad para enseñar en cada receta qué más puede salir.
+const claveMezcla = (r) => [r.a, r.b, r.tipo ?? '', r.excl ?? ''].join('|');
+const RESULTADOS_MEZCLA = Object.entries(COMANDOS).reduce((idx, [n, c]) => {
+  c.recetas.forEach((r) => { (idx[claveMezcla(r)] ??= []).push({ n, pct: Number(r.pct) || 0 }); });
+  return idx;
+}, {});
+const probReceta = (r) => (r.pct ? Number(r.pct) : 100);
+
 function filaComando(n, cat, pj) {
   const c = COMANDOS[n];
   const vias = c.vias.filter((x) => !x.pj || x.pj.includes(pj));
-  const recetas = c.recetas.filter((r) => !r.excl || r.excl.toLowerCase().includes(pj));
+  // Las recetas seguras primero.
+  const recetas = c.recetas.filter((r) => !r.excl || r.excl.toLowerCase().includes(pj)).sort((x, y) => probReceta(y) - probReceta(x));
   const tipos = [...new Set([...(recetas.length ? ['sintesis'] : []), ...vias.map((v) => VIA_FILTRO[v.v] ?? v.v)])];
+  const otros = (r) => (RESULTADOS_MEZCLA[claveMezcla(r)] ?? []).filter((x) => x.n !== n).sort((x, y) => y.pct - x.pct);
   const dato = (etq, val) => (val ? `<span class="cmd-dato">${etq ? `<span>${etq}</span> ` : ''}${esc(val)}</span>` : '');
   const ing = (x) => (PROPIOS[pj].has(x)
     ? `<button type="button" class="eq-box cmd-ing" data-ir-cmd="${esc(x)}">${esc(x)}</button>`
@@ -1253,8 +1533,9 @@ function filaComando(n, cat, pj) {
             ${recetas.length ? `<div>
               <h4 class="bx-h">Síntesis</h4>
               <ul class="cmd-recetas">${recetas.map((r) => `
-                <li><span class="eq">${ing(r.a)}<span class="eq-op">+</span>${ing(r.b)}</span>
-                  <span class="cmd-receta-meta">${[r.tipo ? `tipo ${esc(r.tipo)}` : '', r.pct ? `<b>${esc(r.pct)} %</b>` : '', r.excl ? `solo ${esc(r.excl.replace('/', ' y '))}` : ''].filter(Boolean).join(' · ')}</span>
+                <li${probReceta(r) < 50 ? ' class="cmd-receta-baja"' : ''}><span class="eq">${ing(r.a)}<span class="eq-op">+</span>${ing(r.b)}</span>
+                  <span class="cmd-receta-meta">${[r.tipo ? `tipo ${esc(r.tipo)}` : '', r.pct ? `<b>${esc(r.pct)} %</b> de probabilidad` : '', r.excl ? `solo ${esc(r.excl.replace('/', ' y '))}` : ''].filter(Boolean).join(' · ')}</span>
+                  ${otros(r).length ? `<span class="cmd-receta-otros">Con esta mezcla también puede salir ${otros(r).map((x) => `<b>${esc(x.n)}</b> (${x.pct} %)`).join(' o ')}.</span>` : ''}
                   ${habsDe(r).length ? habsPorCristal(Number(r.tipo)) : ''}</li>`).join('')}</ul>
             </div>` : ''}
           </div>
@@ -2557,6 +2838,1116 @@ function vistaSeccionKH3(s) {
   </section>`;
 }
 
+// ---------- KH II Final Mix ----------
+const GRUPO_A_SECCION_KH2FM = { mundos: 'mundos', diario: 'diario', coleccion: 'sora' };
+function kh2fmLogros() {
+  const grupo = (g) => {
+    const ids = g.ids.map(ID.kh2fmLogro);
+    medidores[`kh2fm-g-${g.id}`] = ids;
+    const sec = seccionKh2fm(GRUPO_A_SECCION_KH2FM[g.id]);
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="kh2fm-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
+        ${sec ? `<a class="ir-seccion" href="#/kh2fm/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
+      <ul class="list">${g.ids.map((id) => itemLogro(logroKh2fm[id], 'kh2fm')).join('')}</ul>
+    </div>`;
+  };
+  return `
+    ${subnav([['ruta', 'Antes de empezar'], ['logros', 'Logros']])}
+    ${bloque('ruta', 'Antes de empezar', `<ol class="steps">${rutaPasos(RUTA_KH2FM, logroKh2fm)}</ol>`, { lead: 'Lo que conviene saber antes de la primera partida.' })}
+    ${bloque('logros', 'Los 50 logros', `${GRUPOS_LOGROS_KH2FM.map(grupo).join('')}${fuentes(FUENTES_CONSEJOS_KH2FM)}`, {
+      meter: medidor('kh2fm-logros-lista', logrosKH2FM(), 'Logros'),
+      lead: 'Abre «Cómo conseguirlo» donde lo haya. Los logros ocultos esconden su descripción hasta que la abras.',
+    })}`;
+}
+
+// Cofres y piezas de puzle de un mundo, con enlace a su sección.
+function tesorosDe(id) {
+  const cofres = TESOROS_KH2FM.find((w) => w.id === id)?.cofres.length ?? 0;
+  const piezas = PUZLES_KH2FM.reduce((n, p) => n + p.piezas.filter((x) => x.mundo === id).length, 0);
+  if (!cofres && !piezas) return null;
+  const partes = [cofres && `${cofres} ${cofres === 1 ? 'cofre' : 'cofres'}`, piezas && `${piezas} ${piezas === 1 ? 'pieza' : 'piezas'} de puzle`].filter(Boolean);
+  return ['Tesoros', `${partes.join(' y ')} · <a href="#/kh2fm/tesoros">sección Tesoros</a>`];
+}
+
+// Cada mundo: sus logros de historia (marcables) y lo que hay allí. Los que no tienen logro solo informan.
+function kh2fmMundos() {
+  const mundo = (m) => {
+    const ids = m.logros.map(ID.kh2fmLogro);
+    const clave = `kh2fm-mundo-${m.id}`;
+    medidores[clave] = ids;
+    const datos = [
+      m.esencia && ['Esencia intangible', esc(m.esencia)],
+      m.setas && ['Micorganización XIII', m.setas.map(([n, d]) => `<b>N.º ${n}</b> · ${esc(d)}`).join('<br>')],
+      m.mini && ['Minijuegos y misiones', m.mini.map(esc).join(' · ')],
+      m.secretos && ['Jefes secretos', esc(m.secretos)],
+      m.mickey && ['Mickey puede rescatarte en', m.mickey.map(esc).join(' · ')],
+      tesorosDe(m.id),
+    ].filter(Boolean);
+    return `
+    <article class="mundo-kh2" id="mundo-${m.id}">
+      <h3>${esc(m.nombre)}${ids.length ? ` <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span>` : ''}</h3>
+      ${ids.length ? `<ul class="list">${m.logros.map((id) => itemLogro(logroKh2fm[id], 'kh2fm')).join('')}</ul>` : '<p class="mundo-sin">Sin logro de historia propio.</p>'}
+      ${datos.length ? `<dl class="mundo-datos">${datos.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>` : ''}
+    </article>`;
+  };
+  return seccionSimple(`
+    <nav class="subnav" aria-label="Mundos">${MUNDOS_KH2FM.map((m) => `<a href="#mundo-${m.id}" data-goto="mundo-${m.id}">${esc(m.nombre)}</a>`).join('')}</nav>
+    <div class="mundos-kh2">${MUNDOS_KH2FM.map(mundo).join('')}</div>
+    ${fuentes(FUENTES_MUNDOS_KH2FM)}`,
+  'Los mundos en el orden de la Wiki ES. Cada logro de historia salta al terminar los episodios de su mundo; marcarlo aquí también lo marca en Logros, y al revés. Debajo, lo que hay en cada mundo: Esencias intangibles, setas de la Micorganización XIII, minijuegos y los jefes donde Mickey puede rescatarte.');
+}
+
+// Diario de Pepito: lo que tiene lista con fuente es marcable uno a uno; Personajes y Relaciones, solo su logro.
+const chipLogroKh2 = (id) => `<p class="info-logro"><span class="chip chip-logro">Logro: ${esc(logroKh2fm[id].nombre)}</span></p>`;
+function kh2fmDiario() {
+  const informes = INFORMES_ANSEM_KH2FM.map((x) => item({ id: ID.kh2fmAnsem(x.n), titulo: `Informe Ansem ${x.n}`, desc: x.como })).join('');
+  const sincorazon = SINCORAZON_KH2FM.map((g) => {
+    const ids = idsSincorazonKh2fm(g);
+    const intro = `<p class="group-intro">${esc(g.intro)}</p>`;
+    const filas = g.items.some(([, d]) => d)
+      ? g.items.map(([n, d]) => item({ id: ID.kh2fmSincorazon(n), titulo: n, desc: d })).join('')
+      : `<li class="marcas-diario">${g.items.map(([n]) => marca(ID.kh2fmSincorazon(n), esc(n))).join('')}</li>`;
+    return grupoKhfm(`kh2fm-sc-${g.id}`, esc(g.titulo), ids, filas, intro);
+  }).join('');
+  const limites = LIMITES_KH2FM.map((g) => grupoKhfm(`kh2fm-lim-${g.id}`, esc(g.titulo), idsLimitesKh2fm(g), g.items.map((l) => item({
+    id: ID.kh2fmLimite(l.n), titulo: l.n, desc: l.como ?? '', meta: `<span class="chip">${esc(l.quien)}</span>`,
+  })).join(''))).join('');
+  const apartados = APARTADOS_SIN_LISTA.map((a) => `
+    <div class="group"><h3>${esc(a.titulo)}</h3><p class="group-intro">${esc(a.texto)}</p>
+      <ul class="list">${itemLogro(logroKh2fm[a.logro], 'kh2fm')}</ul></div>`).join('');
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_DIARIO_KH2FM)}</p>
+    ${subnav([['diario-ansem', 'Informes Ansem'], ['diario-sincorazon', 'Sincorazón'], ['diario-incorporeos', 'Incorpóreos'], ['diario-limites', 'Límites'], ['diario-personajes', 'Personajes y relaciones']])}
+    ${bloque('diario-ansem', 'Informes Ansem', `<ul class="list">${informes}</ul>${chipLogroKh2('ACH_134')}${fuentes(['khwikiAnsem', 'guiaSteamKh2fmEn', 'guiaSteamKh2fm'])}`, {
+      meter: medidor('kh2fm-ansem', idsAnsemKh2fm(), 'Informes'),
+      lead: 'Los 13 salen solos con la historia: el último, al vencer a Xemnas por primera vez.',
+    })}
+    ${bloque('diario-sincorazon', 'Sincorazón', `${sincorazon}<p class="nota-fuente">${esc(NOTA_SINCORAZON)}</p>${chipLogroKh2('ACH_136')}${fuentes(['guiaSteamKh2fm', 'guiaSteamKh2fmEn', 'wikiEsJefesKh2', 'wikiEsIluminador', 'wikiEsSincorazon', 'khwikiPerplex'])}`, {
+      meter: medidor('kh2fm-sincorazon', idsSincorazonKh2fm(), 'Sincorazón'),
+      lead: 'Cada tipo con los mundos donde sale. Los de la Gruta de la Evocación y la Micorganización XIII son lo último.',
+    })}
+    ${bloque('diario-incorporeos', 'Incorpóreos', `<ul class="list"><li class="marcas-diario">${INCORPOREOS_KH2FM.map((n) => marca(ID.kh2fmIncorporeo(n), esc(n))).join('')}</li></ul>${chipLogroKh2('ACH_137')}${fuentes(['guiaSteamKh2fmEn', 'guiaSteamKh2fm', 'wikiEsIncorporeos'])}`, {
+      meter: medidor('kh2fm-incorporeos', idsIncorporeosKh2fm(), 'Incorpóreos'),
+      lead: 'Los 11 se completan solos al final de la historia principal.',
+    })}
+    ${bloque('diario-limites', 'Límites', `${limites}${chipLogroKh2('ACH_143')}${fuentes(['guiaSteamKh2fm', 'khwikiLimites', 'wikiEsJefesKh2'])}`, {
+      meter: medidor('kh2fm-limites', idsLimitesKh2fm(), 'Límites'),
+      lead: 'Hay que activar cada límite al menos una vez. Los de aliado piden tener su habilidad equipada en ese aliado; los de invocación gastan barra de invocación. El del Genio cambia según su forma.',
+    })}
+    ${bloque('diario-personajes', 'Personajes y relaciones', `${apartados}${fuentes(['guiaSteamKh2fm', 'khwikiDiario'])}`, {
+      lead: 'No hay una lista con fuente de cada ficha, así que aquí solo va lo que pide cada apartado. Marcar su logro aquí también lo marca en Logros.',
+    })}`;
+}
+
+// Tesoros, puzles y mapas. Las zonas traducidas por nosotros llevan subrayado de puntos y el inglés al pasar el ratón.
+const COFRE_GEN = '<svg class="tes-cofre tes-cofre-gen" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M4 11h16M10 11v3h4v-3"/></svg>';
+const PIEZA_GEN = '<svg class="tes-cofre tes-cofre-gen" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h5a2 2 0 1 1 4 0h5v5a2 2 0 1 0 0 4v6h-6a2 2 0 1 0-4 0H5v-6a2 2 0 1 1 0-4Z"/></svg>';
+const nombreMundoKh2 = Object.fromEntries(MUNDOS_KH2FM.map((m) => [m.id, m.nombre.replace(' / Vergel Radiante', '')]));
+const zonaTitKh2 = (x) => `<h4${x.zt ? ` class="tes-trad" title="Traducción propia; en inglés: ${esc(x.en)}"` : ''}>${esc(x.zona)}</h4>`;
+const notaTrad = (en, t = 'Nombre traducido') => `<span class="note" title="En inglés: ${esc(en)}">${t}</span>`;
+// Agrupa en tramos seguidos de la misma zona (mantiene el orden de la fuente).
+const tramosZona = (lista) => lista.reduce((acc, x) => {
+  const ult = acc.at(-1);
+  if (ult && ult.zona === x.zona) ult.items.push(x); else acc.push({ ...x, items: [x] });
+  return acc;
+}, []);
+function desplegableKh2(id, icono, titulo, clave, ids, cuerpo) {
+  medidores[clave] = ids;
+  return `
+    <details class="tes-mundo" id="${id}">
+      <summary>${icono}<span class="tes-nombre">${titulo}</span>
+        <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></summary>
+      ${cuerpo}
+    </details>`;
+}
+function kh2fmTesoros() {
+  const cofre = (w, c) => item({
+    id: ID.kh2fmTesoro(w.id, c.n),
+    titulo: c.obj ?? c.mapa,
+    desc: c.como,
+    meta: [c.mapa && '<span class="chip">Mapa</span>', c.visita && `<span class="chip">${esc(c.visita)}</span>`, c.fm && chipFM('Final Mix'),
+      c.objt && notaTrad(c.objt)].filter(Boolean).join(' '),
+  });
+  const mundos = TESOROS_KH2FM.map((w) => desplegableKh2(`tes-${w.id}`, COFRE_GEN, esc(w.nombre), `kh2fm-tes-${w.id}`, idsTesorosKh2fm(w),
+    `<div class="tes-zonas">${tramosZona(w.cofres).map((z) => `
+      <div class="tes-zona">${zonaTitKh2(z)}<ul class="list list-tight">${z.items.map((c) => cofre(w, c)).join('')}</ul></div>`).join('')}</div>`)).join('');
+  const puzles = PUZLES_KH2FM.map((p) => {
+    const porMundo = MUNDOS_KH2FM.map((m) => [m.id, p.piezas.filter((x) => x.mundo === m.id)]).filter(([, l]) => l.length);
+    return desplegableKh2(`puz-${p.id}`, PIEZA_GEN, `${esc(p.nombre)} <small class="tes-premio">${p.piezas.length} piezas · premio: ${esc(p.premio)}</small>`,
+      `kh2fm-puz-${p.id}`, idsPuzlesKh2fm(p), `
+      <div class="tes-resuelto">${marca(idPuzleResuelto(p), `Puzle resuelto en el diario · ${esc(p.premio)}`)}</div>
+      <div class="tes-zonas">${porMundo.map(([mid, l]) => `
+        <div class="tes-zona"><h4>${esc(nombreMundoKh2[mid])}</h4><ul class="list list-tight">${l.map((x) => item({
+          id: ID.kh2fmPieza(p.id, x.n), titulo: `Pieza ${x.n} · ${x.zona}`, desc: x.nota ?? '', meta: x.zt ? notaTrad(x.en, 'Zona traducida') : '',
+        })).join('')}</ul></div>`).join('')}</div>`);
+  }).join('');
+  const mapas = MUNDOS_KH2FM.map((m) => [m, MAPAS_KH2FM.filter((x) => x.mundo === m.id)]).filter(([, l]) => l.length).map(([m, l]) => `
+    <div class="tes-zona"><h4>${esc(nombreMundoKh2[m.id])}</h4><ul class="list list-tight">${l.map((x) => item({
+      id: idMapaKh2fm(x), titulo: x.nombre, desc: x.como,
+      meta: [x.fm && chipFM('Final Mix'), x.nt && notaTrad(x.en)].filter(Boolean).join(' '),
+    })).join('')}</ul></div>`).join('');
+  return `
+    <p class="lead seccion-lead">Todo lo que piden los apartados Tesoros, Puzles y Mapas del diario de Pepito.</p>
+    ${subnav([['kh2-tesoros', 'Tesoros'], ['kh2-puzles', 'Puzles'], ['kh2-mapas', 'Mapas']])}
+    ${bloque('kh2-tesoros', 'Tesoros', `<p class="nota-fuente">${esc(NOTA_TESOROS_KH2FM)}</p><div class="tes-mundos">${mundos}</div>${chipLogroKh2('ACH_138')}
+      ${fuentes(['fandomCofresKh2', 'guiaMegido', 'eliteguiasKh2', 'khworldKh2', 'joakokhKh2', 'wikiEsMateriales', 'wikiEsReceta', 'wikiEsViejaMansion', 'wikiEsCastilloInexistente', 'wikiEsGruta', 'wikiEsAmuletoPlumas', 'guiaSteamKh2fm'])}`, {
+      meter: medidor('kh2fm-tesoros', idsTesorosKh2fm(), 'Cofres'), lead: esc(INTRO_TESOROS_KH2FM),
+    })}
+    ${bloque('kh2-puzles', 'Puzles', `<p class="nota-fuente">${esc(NOTA_PUZLES_KH2FM)}</p><div class="tes-mundos">${puzles}</div>${chipLogroKh2('ACH_139')}
+      ${fuentes(['khwikiPuzzle', 'guiaMegido', 'eliteguiasKh2', 'joakokhKh2', 'wikiEsReceta', 'wikiEsAnilloSupremo', 'wikiEsCorona'])}`, {
+      meter: medidor('kh2fm-puzles', idsPuzlesKh2fm(), 'Piezas y puzles'), lead: esc(INTRO_PUZLES_KH2FM),
+    })}
+    ${bloque('kh2-mapas', 'Mapas', `<div class="tes-zonas tes-mapas">${mapas}</div>${chipLogroKh2('ACH_140')}${fuentes(['khwikiMap', 'guiaMegido', 'eliteguiasKh2'])}`, {
+      meter: medidor('kh2fm-mapas', idsMapasKh2fm(), 'Mapas'), lead: esc(INTRO_MAPAS_KH2FM),
+    })}`;
+}
+
+// Orfebrería Moguri: Arma Artema con sus 7 Orichalcum+, objetos por lo que los abre, materiales con sus enemigos y listas.
+const imgOrf = (id, n = 22) => `<img src="${IMG_ORF_KH2}${id}.webp" alt="" width="${n}" height="${n}" loading="lazy">`;
+// Orichalcum+ de un cofre: misma marca que ese cofre de Tesoros; el de la Copa Diosa del Destino, la de su logro.
+function idOricalcoKh2(o) {
+  if (o.logro) return ID.kh2fmLogro(o.logro);
+  if (o.cofre) {
+    const w = TESOROS_KH2FM.find((x) => x.id === o.cofre);
+    const c = w.cofres.find((x) => x.obj === 'Orichalcum+');
+    return ID.kh2fmTesoro(w.id, c.n);
+  }
+  return ID.kh2fmOricalco(o.id);
+}
+const idsOricalcosKh2 = () => ORICALCOS_KH2FM.map(idOricalcoKh2);
+function kh2fmOrfebreria() {
+  const idsOri = idsOricalcosKh2();
+  medidores['kh2-ori'] = idsOri;
+  const artema = SINTESIS_KH2FM.find((o) => o.en === 'Ultima Weapon');
+  const gemas = ORICALCOS_KH2FM.map((o, i) => {
+    const id = idOricalcoKh2(o);
+    return `<a class="gema${store.hecho(id) ? ' is-on' : ''}" data-gema="${id}" href="#ori2-${o.id}" data-goto="ori2-${o.id}" style="--i:${i}" title="${esc(o.titulo)}">
+      <img src="${IMG_ORF_KH2}orichalcum-plus.webp" alt="${esc(o.titulo)}" width="40" height="40"></a>`;
+  }).join('');
+  const receta = (o) => `<span class="rec">${o.mats.map((m) => `<span class="rec-mat">${imgOrf(matKh2PorNombre[m.m]?.img ?? '', 22)}${m.n} × ${esc(m.m)}</span>`).join('')}</span>`;
+  const objeto = (o) => [item({
+    id: ID.kh2fmSintesis(o.id), titulo: o.nombre, icono: `${IMG_ORF_KH2}${o.img}.webp`,
+    meta: `<span class="chip">Rango ${o.rangos ? o.rangos.join(' o ') : o.rango}</span>${o.rangos ? '<span class="note">Las páginas de KHWiki no coinciden en su rango.</span>' : ''}${o.receta ? `<span class="chip">${esc(o.receta)}</span>` : ''}${receta(o)}
+      ${o.donde ? `<span class="note">${esc(o.donde)}</span>` : ''}${o.en === 'Ultima Weapon' ? `<span class="note">${esc(ARMA_ARTEMA_KH2FM.truco)}</span>` : ''}`,
+  }), o.mejora ? item({
+    id: ID.kh2fmSintesis(o.mejora.id), titulo: o.mejora.nombre, icono: `${IMG_ORF_KH2}${o.mejora.img}.webp`,
+    meta: `<span class="chip">Mejora</span><span class="note">En Creaciones, a partir de ${esc(o.nombre)} añadiendo ${esc(o.mejora.con)} (moguri nivel 3).</span>`,
+  }) : ''].join('');
+  const grupo = (clave, titulo, lista, intro = '') => {
+    const ids = lista.flatMap((o) => [ID.kh2fmSintesis(o.id), ...(o.mejora ? [ID.kh2fmSintesis(o.mejora.id)] : [])]);
+    medidores[clave] = ids;
+    return `<div class="group orf-grupo"><h3>${titulo} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      ${intro ? `<p class="group-intro">${esc(intro)}</p>` : ''}<ul class="list orf-lista">${lista.map(objeto).join('')}</ul></div>`;
+  };
+  const objetos = [
+    grupo('kh2-orf-recetas', 'Con receta', SINTESIS_KH2FM.filter((o) => o.receta).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')),
+      'Cada receta abre un objeto y su mejora. Dónde está cada receta, debajo de sus materiales.'),
+    ...GRUPOS_LIBRE_KH2FM.map((g) => grupo(`kh2-orf-${g.id}`, esc(g.titulo), SINTESIS_KH2FM.filter((o) => o.libre === g.id), g.texto)),
+  ].join('');
+  const material = (m) => item({
+    id: ID.kh2fmMaterial(m.id), titulo: m.nombre, icono: `${IMG_ORF_KH2}${m.img}.webp`,
+    meta: `<span class="chip">Rango ${m.rango}</span><span class="mat-vias">${m.enem.length ? `<span><b>Enemigos:</b> ${m.enem.map((e) => `${esc(e.e)}${e.p ? ` (${esc(e.p)})` : ''}`).join(', ')}.</span>` : ''}
+      ${m.otra ? `<span>${esc(m.otra)}</span>` : ''}</span>`,
+  });
+  const idsMat = MATERIALES_KH2FM.map((m) => ID.kh2fmMaterial(m.id));
+  const oricalco = (o) => item({
+    id: idOricalcoKh2(o), titulo: o.titulo, desc: o.como, icono: `${IMG_ORF_KH2}orichalcum-plus.webp`,
+    meta: [o.cofre && '<span class="chip">Cofre de Tesoros (misma marca)</span>', o.logro && `<span class="chip chip-logro">Misma marca que el logro «${esc(logroKh2fm[o.logro].nombre)}»</span>`].filter(Boolean).join(''),
+  }).replace('<li class="item', `<li id="ori2-${o.id}" class="item`);
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_ORF_KH2FM)}</p>
+    <section class="forja">
+      <div class="anillo" style="--n:${ORICALCOS_KH2FM.length}">
+        <img class="anillo-arma" src="${IMG_ORF_KH2}arma-artema.webp" alt="Arma Artema de Kingdom Hearts II" width="480" height="480">
+        ${gemas}
+      </div>
+      <div class="forja-txt">
+        <h2 class="forja-tit">Arma Artema</h2>
+        <p class="lead">${esc(ARMA_ARTEMA_KH2FM.receta)}</p>
+        <p class="forja-n"><b data-count="kh2-ori">${store.contar(idsOri)}/${ORICALCOS_KH2FM.length}</b> Orichalcum+ conseguidos</p>
+        <ul class="receta forja-receta" aria-label="Receta">${artema.mats.map((m) => `<li class="mat-chip">${imgOrf(matKh2PorNombre[m.m]?.img ?? '', 22)}<b>×${m.n}</b> ${esc(m.m)}</li>`).join('')}</ul>
+        <p class="nota-fuente">${esc(ARMA_ARTEMA_KH2FM.truco)}</p>
+        <div class="forja-pasos">${marca(ID.kh2fmSintesis(artema.id), 'Fabricar el Arma Artema')}</div>
+      </div>
+    </section>
+    ${subnav([['kh2-oricalcos', 'Los 7 Orichalcum+'], ['kh2-objetos', 'Objetos'], ['kh2-materiales', 'Materiales'], ['kh2-moguri', 'Nivel y listas']])}
+    ${bloque('kh2-oricalcos', 'Los 7 Orichalcum+', `<ul class="list">${ORICALCOS_KH2FM.map(oricalco).join('')}</ul>${fuentes(FUENTES_ARTEMA_KH2FM)}`, {
+      meter: medidor('kh2-ori-lista', idsOri, 'Orichalcum+'), lead: 'Hay justo siete en todo el juego. Los de cofre comparten la marca con la sección Tesoros.',
+    })}
+    ${bloque('kh2-objetos', 'Los 59 objetos', `${objetos}${chipLogroKh2('ACH_144')}${fuentes(['khwikiSintesisKh2', 'guiaMegidoSintesis', 'wikiEsReceta', 'wikiEsArmaduras', 'wikiEsAnilloSupremo'])}`, {
+      meter: medidor('kh2-orf-objetos', idsSintesisKh2fm(), 'Fabricados'),
+      lead: 'Con sus materiales en Final Mix. Las mejoras salen en Creaciones añadiendo un material sereno de su mismo rango.',
+    })}
+    ${bloque('kh2-materiales', 'Los 60 materiales', `<ul class="list orf-lista">${MATERIALES_KH2FM.map(material).join('')}</ul>${fuentes(['fandomMaterialesKh2', 'guiaSteamKh2fm', 'guiaSteamSintesisKh2'])}`, {
+      meter: medidor('kh2-orf-materiales', idsMat, 'Entregados'),
+      lead: 'Probabilidad de que lo suelte cada enemigo (Fandom). Los materiales se entregan solos al abrir la orfebrería; entregar uno de cada tipo da un Orichalcum+.',
+    })}
+    ${bloque('kh2-moguri', 'Nivel del moguri y listas de colección', `
+      <div class="group"><h3>Niveles del moguri</h3><ul class="bullets">${NIVELES_MOGURI.map(([n, t]) => `<li><b>Nivel ${n}:</b> ${esc(t)}</li>`).join('')}</ul>
+        <p class="nota-fuente">${esc(NOTA_ESPECIALES)}</p></div>
+      <div class="group"><h3>Listas de colección</h3><div class="sx-tabla-wrap"><table class="sx-tabla">
+        <thead><tr><th scope="col">Requisito</th><th scope="col">Premio</th></tr></thead>
+        <tbody>${COLECCION_KH2FM.map(([r, p]) => `<tr><td>${esc(r)}</td><td>${esc(p)}</td></tr>`).join('')}</tbody></table></div>
+        <p class="nota-fuente">${esc(NOTA_COLECCION)}</p></div>
+      ${fuentes(['khwikiSintesisKh2', 'guiaMegidoSintesis', 'guiaSteamKh2fm'])}`, {
+      lead: 'Cada objeto fabricado da experiencia al moguri, y cada nivel abre ventajas.',
+    })}`;
+}
+
+// Sora: formas de fusión (una casilla por nivel), invocaciones, magia y nivel.
+const MARCA_NIVEL = ['Conseguida', 'Nivel 2', 'Nivel 3', 'Nivel 4', 'Nivel 5', 'Nivel 6', 'Nivel 7'];
+const NUM_CREC = { 3: 1, 5: 2, 7: 3 };
+function kh2fmSora() {
+  const forma = (f) => {
+    const ids = idsFusionKh2(f);
+    const clave = `kh2-fus-${f.id}`;
+    medidores[clave] = ids;
+    const premio = (n) => (n === 1 ? '' : f.habs[n] ?? `${f.crec} ${NUM_CREC[n]}`);
+    return `
+    <article class="boss forma-kh2" id="fus-${f.id}">
+      <header class="forma-head"><h3>${esc(f.nombre)}</h3><span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></header>
+      <dl class="mundo-datos">
+        <div><dt>Cómo se consigue</dt><dd>${esc(f.consigue)}</dd></div>
+        <div><dt>Cómo sube</dt><dd>${esc(f.exp)}</dd></div>
+        <div><dt>Dónde subirla</dt><dd>${esc(f.donde)}</dd></div>
+      </dl>
+      <div class="niveles-forma">${MARCA_NIVEL.map((t, i) => marca(ids[i], `<b>${t}</b>${premio(i + 1) ? ` · ${esc(premio(i + 1))}` : ''}`)).join('')}</div>
+    </article>`;
+  };
+  const invoc = INVOCACIONES_KH2FM.map((x) => item({
+    id: ID.kh2fmInvoc(x.id), titulo: x.nombre, desc: x.como,
+    meta: `<span class="chip">${esc(x.amuleto)}</span>${x.amuletoT ? `<span class="note" title="En inglés: ${esc(x.amuletoT)}">Nombre traducido</span>` : ''}`,
+  })).join('');
+  const nivelesInvoc = [2, 3, 4, 5, 6, 7].map((n) => marca(ID.kh2fmInvocNivel(n), `<b>Nivel ${n}</b>`)).join('');
+  medidores['kh2-invoc'] = idsInvocKh2();
+  const magia = (m) => {
+    const ids = [1, 2, 3].map((n) => ID.kh2fmMagia(m.id, n));
+    const clave = `kh2-mag-${m.id}`;
+    medidores[clave] = ids;
+    return `<div class="group"><h3>${esc(m.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/3</span></h3>
+      <ul class="bullets">${m.de.map((d) => `<li>${esc(d)}.</li>`).join('')}</ul>
+      <div class="niveles-forma">${[m.nombre, `${m.nombre}+`, `${m.nombre}++`].map((t, i) => marca(ids[i], `<b>${esc(t)}</b>`)).join('')}</div></div>`;
+  };
+  return `
+    <p class="lead seccion-lead">Las cinco formas de fusión con lo que da cada nivel, las cuatro invocaciones, los seis hechizos y el nivel 99. Muchas piezas de puzle y la Gruta de la Evocación piden las habilidades de crecimiento de las formas al máximo.</p>
+    ${subnav([['kh2-formas', 'Formas'], ['kh2-invoc', 'Invocaciones'], ['kh2-magia', 'Magia'], ['kh2-nivel', 'Nivel 99']])}
+    ${bloque('kh2-formas', 'Formas de fusión', `
+      <div class="info-cards info-cards-2">
+        <div class="info-card"><h3>La barra de fusión</h3><p>${esc(BARRA_FUSION.texto)} ${esc(BARRA_FUSION.coste)}</p></div>
+        <div class="info-card"><h3>Subir sin gastar barra</h3><p>${esc(BARRA_FUSION.tope)} ${esc(BARRA_FUSION.truco)}</p></div>
+      </div>
+      <div class="bosses formas-kh2">${FUSIONES_KH2FM.map(forma).join('')}</div>
+      <p class="nota-fuente">${esc(NOTA_FUSIONES)}</p>
+      <div class="group"><h3>Antiforma</h3><p class="group-intro">No se elige: sale al azar si abusas de las otras formas. El logro pide activarla 13 veces; la llave espada Dos Serán Uno la fuerza.</p>
+        <ul class="list">${itemLogro(logroKh2fm.ACH_148, 'kh2fm')}</ul></div>
+      ${fuentes(['khwikiFormas', 'guiaSteamFusiones', 'guiaMegidoFusiones', 'guiaSteamKh2fm'])}`, {
+      meter: medidor('kh2-formas', FUSIONES_KH2FM.flatMap(idsFusionKh2), 'Niveles'),
+      lead: 'Cada casilla es un nivel de la forma y lo que aprende Sora con él. La habilidad de crecimiento sube a los niveles 3, 5 y 7.',
+    })}
+    ${bloque('kh2-invoc', 'Invocaciones', `<ul class="list">${invoc}</ul>
+      <div class="group"><h3>Nivel de las invocaciones</h3><p class="group-intro">${esc(NIVEL_INVOC)}</p><div class="niveles-forma">${nivelesInvoc}</div></div>
+      ${fuentes(['khwikiInvoc', 'guiaMegidoFusiones', 'wikiEsAmuletoPlumas', 'guiaSteamFusiones', 'guiaSteamKh2fm'])}`, {
+      meter: medidor('kh2-invoc-lista', idsInvocKh2(), 'Invocaciones y niveles'),
+      lead: 'Cada una tiene su límite con Sora, que también cuenta para el apartado Límites del diario.',
+    })}
+    ${bloque('kh2-magia', 'Magia', `<p class="nota-fuente">${esc(NOTA_MAGIAS_KH2FM)}</p><div class="magias-kh2">${MAGIAS_KH2FM.map(magia).join('')}</div>${fuentes(['khwikiMagia', 'guiaSteamKh2fm'])}`, {
+      meter: medidor('kh2-magia', idsMagiaKh2(), 'Niveles de magia'),
+      lead: 'Los seis hechizos llegan al nivel ++ con la historia.',
+    })}
+    ${bloque('kh2-nivel', 'Nivel 99', `<ul class="list">${itemLogro(logroKh2fm.ACH_106, 'kh2fm')}</ul>${fuentes(['guiaSteamKh2fm', 'guiaSteamKh2fmEn'])}`, {
+      lead: 'Misma marca que el logro.',
+    })}`;
+}
+
+// Armas de Sora, Donald y Goofy, con imagen (KHWiki) y lo que da cada una en Final Mix.
+const IMG_ARMAS_KH2 = 'assets/img/kh2fm/armas/';
+function kh2fmArmas() {
+  const tarjeta = (a, g) => {
+    const id = idArmaKh2(a);
+    const comp = id.startsWith('kh2fm.sintesis') ? 'Misma marca que en Orfebrería.' : id.startsWith('kh2fm.tesoro') ? 'Misma marca que su cofre en Tesoros.' : '';
+    return tarjetaImg({
+      id, img: `${IMG_ARMAS_KH2}${a.img}.webp`, nombre: a.nombre,
+      sub: `Fuerza +${a.fue}${g.id !== 'goofy' ? ` · Magia +${a.mag}` : ''}${a.fm ? ` ${chipFM('Nueva en FM')}` : ''}`,
+      cuerpo: `${a.hab ? `<p class="arma-desc"><span class="chip">${esc(a.hab)}</span></p>` : ''}
+        <p class="arma-como"><b>Cómo:</b> ${esc(a.como)}</p>
+        ${a.nt ? `<p class="arma-nota" title="En inglés: ${esc(a.enFM)}">Nombre traducido: no tiene nombre en castellano con fuente (en inglés, «${esc(a.enFM)}»).</p>` : ''}
+        ${comp ? `<p class="arma-nota">${comp}</p>` : ''}`,
+    });
+  };
+  return `
+    <p class="lead seccion-lead">Las 64 armas de Sora, Donald y Goofy, con su fuerza, su magia y su habilidad en Final Mix. No dan logro, pero completan el equipo.</p>
+    ${subnav(ARMAS_KH2FM.map((g) => [`armas-${g.id}`, g.titulo]))}
+    ${ARMAS_KH2FM.map((g) => bloque(`armas-${g.id}`, esc(g.titulo), `<ul class="armas">${g.armas.map((a) => tarjeta(a, g)).join('')}</ul>`, {
+      meter: medidor(`kh2-armas-${g.id}`, idsArmasKh2(g), 'Conseguidas'),
+    })).join('')}
+    <p class="nota-fuente">Los datos son los de la wiki inglesa de Fandom, con los valores de Final Mix. Los nombres, de la Wiki ES (página de cada arma) y de la guía de Megido.</p>
+    ${fuentes(['fandomArmasKh2', 'wikiEsArmasKh2', 'wikiEsCetro', 'wikiEsReceta', 'guiaMegidoSintesis'])}`;
+}
+
+// Minijuegos y misiones del diario, mundo a mundo.
+function kh2fmMinijuegos() {
+  const actividad = (x) => `
+    <article class="mini-kh2">
+      <h4>${esc(x.nombre)}</h4>
+      ${x.consejo ? `<p class="mini-consejo">${esc(x.consejo)}</p>` : ''}
+      <div class="niveles-forma">${x.juego ? marca(ID.kh2fmMinijuego(x.id), '<b>Jugado</b>', 'marca-juego') : ''}${x.retos.map((r, i) => marca(idRetoKh2(x, r, i), esc(r.t))).join('')}</div>
+    </article>`;
+  const mundos = MINIJUEGOS_KH2FM.map((g) => bloque(`mini-${g.mundo}`, esc(g.nombre), `<div class="minis-kh2">${g.items.map(actividad).join('')}</div>`, {
+    meter: medidor(`kh2-mini-${g.mundo}`, idsMiniKh2(g), 'Minijuegos y misiones'),
+  })).join('');
+  medidores['kh2-juegos'] = idsJuegosKh2();
+  medidores['kh2-misiones'] = idsMisionesKh2();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_MINI_KH2FM)}</p>
+    <div class="info-cards info-cards-2">
+      <div class="info-card"><h3>Minijuegos <span class="count" data-count="kh2-juegos">${store.contar(idsJuegosKh2())}/${idsJuegosKh2().length}</span></h3><p>Las casillas «Jugado»: basta con jugar a cada uno una vez.</p>${chipLogroKh2('ACH_142')}</div>
+      <div class="info-card"><h3>Misiones <span class="count" data-count="kh2-misiones">${store.contar(idsMisionesKh2())}/${idsMisionesKh2().length}</span></h3><p>El resto de casillas: cada objetivo que pide el diario.</p>${chipLogroKh2('ACH_141')}</div>
+    </div>
+    ${subnav(MINIJUEGOS_KH2FM.map((g) => [`mini-${g.mundo}`, g.nombre.replace(' / Vergel Radiante', '')]))}
+    ${mundos}
+    <p class="nota-fuente">${esc(NOTA_SETAS)} Las réplicas de la Gruta y las Esencias intangibles comparten marca con la sección Jefes.</p>
+    ${fuentes(['guiaSteamKh2fmEn', 'guiaSteamKh2fm', 'joakokhKh2'])}`;
+}
+
+// Coliseo: las 8 copas con su logro y sus dos marcas del diario.
+function kh2fmColiseo() {
+  const copa = (c) => {
+    const x = miniDeCopa(c);
+    const ids = idsCopaKh2(c);
+    const clave = `kh2-copa-${c.id}`;
+    medidores[clave] = ids;
+    return `
+    <article class="copa">
+      <div class="copa-head">
+        <img class="copa-trofeo" src="${IMG_COLISEO_KH2}${c.img}.webp" alt="" loading="lazy">
+        <div>
+          <h3>${esc(c.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+          <p class="copa-meta">${c.combates} combates · nivel recomendado ${c.nivel}${c.paradoja ? ' · <span class="chip">Paradoja</span>' : ''}</p>
+          <p class="copa-abre"><b>Se abre:</b> ${esc(c.abre)}</p>
+          <p class="copa-abre"><b>Reglas:</b> ${esc(c.reglas)}</p>
+          <p class="copa-abre"><b>Último rival:</b> ${esc(c.rival)}${c.premios ? ` · <b>Premio:</b> ${c.premios.map(esc).join(', ')}` : ''}</p>
+        </div>
+      </div>
+      <div class="niveles-forma">${marca(ID.kh2fmLogro(c.logro), `<b>${esc(logroKh2fm[c.logro].nombre)}</b>`, 'marca-juego')}${marca(ID.kh2fmMinijuego(x.id), '<b>Jugado</b>')}${x.retos.map((r, i) => marca(idRetoKh2(x, r, i), esc(r.t))).join('')}</div>
+      ${x.consejo ? `<p class="mini-consejo">${esc(x.consejo)}</p>` : ''}
+      ${c.nota ? `<p class="arma-nota">${esc(c.nota)}</p>` : ''}
+      ${c.rondas ? `<details class="copa-rivales"><summary>Combates clave</summary><ul class="copa-rondas">${c.rondas.map(([n, t]) => `
+        <li><b>${esc(n)}</b><p>${esc(t)}</p></li>`).join('')}</ul></details>` : ''}
+    </article>`;
+  };
+  const grupo = (par) => `<div class="copas">${COPAS_KH2FM.filter((c) => !!c.paradoja === par).map(copa).join('')}</div>`;
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_COLISEO_KH2FM)}</p>
+    <h3 class="bx-sub">Copas del Infiernódromo</h3>
+    ${grupo(false)}
+    <h3 class="bx-sub copa-sub">Copas Paradoja</h3>
+    ${grupo(true)}
+    ${fuentes(['khwikiCopasKh2', 'wikiEsCopasKh2', 'guiaSteamKh2fm'])}`;
+}
+
+// Jefes: historia (ficha con imagen y estrategia) y secretos (con las marcas compartidas con Minijuegos).
+function jefeKh2(j, { id = ID.kh2fmJefe(j.id), img = j.img ?? j.id, premios = [], marcaTxt = 'Vencido' } = {}) {
+  const chips = [j.bonus ? `<li class="chip">Bonificación: ${esc(j.bonus)}</li>` : '', j.opcional ? '<li class="chip">Opcional</li>' : '', ...premios].join('');
+  return `
+    <article class="boss boss-khfm" id="jefe-${j.id}">
+      <div class="boss-main">
+        <div class="boss-art"><img src="${IMG_JEFES_KH2}${img}.webp" alt="" loading="lazy"></div>
+        <div class="boss-body">
+          <p class="boss-world">${esc(j.lugar)}</p>
+          <h3>${esc(j.nombre)}</h3>
+          ${chips ? `<ul class="boss-premios" aria-label="Recompensas">${chips}</ul>` : ''}
+          ${j.abre ? `<p class="boss-abre"><b>Cómo se llega:</b> ${esc(j.abre)}</p>` : ''}
+          ${marca(id, marcaTxt, 'boss-marca')}
+        </div>
+      </div>
+      ${j.t ? `<details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(j.t)}</p></details>` : ''}
+      ${j.nota ? `<p class="arma-nota">${esc(j.nota)}</p>` : ''}
+    </article>`;
+}
+
+function kh2fmJefes() {
+  const logro = (id) => `<li class="chip chip-logro">Logro: ${esc(logroKh2fm[id].nombre)}</li>`;
+  const sephiroth = jefeKh2({ id: 'sephiroth', nombre: 'Sephiroth', lugar: 'Vergel Radiante', ...SEPHIROTH },
+    { id: ID.kh2fmLogro(SEPHIROTH.logro), premios: [logro(SEPHIROTH.logro), `<li class="chip">Premio: ${esc(SEPHIROTH.premio)}</li>`] });
+  const consciencia = `
+    <article class="info-card"><h3>Consciencia latente</h3>
+      <p><b>Cómo se llega:</b> ${esc(CONSCIENCIA.abre)}</p><p>${esc(CONSCIENCIA.t)}</p>
+      <div class="niveles-forma">${marca(ID.kh2fmLogro(CONSCIENCIA.logro), `<b>${esc(logroKh2fm[CONSCIENCIA.logro].nombre)}</b>`, 'marca-juego')}</div></article>`;
+  const fenrir = `<article class="info-card"><h3>Método Fenrir + Combo Negativo</h3><ol class="sora-resp">${METODO_FENRIR.map((t) => `<li>${esc(t)}</li>`).join('')}</ol></article>`;
+  const org = ORGANIZACION_KH2FM.map((o) => `
+    <article class="mini-kh2">
+      <h4>${esc(o.nombre)}</h4>
+      ${o.esencia ? `<p class="mini-consejo"><b>Esencia intangible:</b> ${esc(o.esencia)}</p>` : ''}
+      <p class="mini-consejo">${esc(o.t)}</p>
+      <div class="niveles-forma">${o.esencia ? marca(ID.kh2fmEsencia(o.slug), 'Esencia vencida') : ''}${marca(ID.kh2fmReplica(o.slug), 'Réplica vencida')}</div>
+    </article>`).join('');
+  const retoSeta = (n) => itemsMiniKh2().find((x) => x.id === `seta-${n}`)?.retos[0].t ?? 'Satisfecha';
+  const setas = SETAS_KH2FM.map((s) => `
+    <article class="mini-kh2">
+      <h4>N.º ${esc(s.n)}</h4>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(s.donde)}</p>
+      <p class="mini-consejo">${esc(s.t)}</p>
+      <div class="niveles-forma">${marca(ID.kh2fmSeta(s.n), esc(retoSeta(s.n)))}</div>
+    </article>`).join('');
+  medidores['kh2-jefes-secretos'] = idsSecretosKh2();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_JEFES_KH2FM)}</p>
+    ${subnav([['jefes-historia', 'Historia'], ['jefes-secretos', 'Sephiroth y Consciencia'], ['jefes-org', 'Organización XIII'], ['jefes-setas', 'Micorganización XIII']])}
+    ${bloque('jefes-historia', 'Jefes de la historia', `<div class="bosses">${JEFES_HISTORIA_KH2FM.map((j) => jefeKh2(j)).join('')}</div>`, {
+      meter: medidor('kh2-jefes-historia', idsHistoriaKh2(), 'Vencidos'),
+    })}
+    ${bloque('jefes-secretos', 'Sephiroth y Consciencia latente', `<div class="bosses">${sephiroth}</div><div class="info-cards info-cards-2">${consciencia}${fenrir}</div>`)}
+    ${bloque('jefes-org', 'Organización XIII', `<p class="group-intro">${esc(REPLICAS_INTRO)}</p>
+      <div class="niveles-forma">${marca(ID.kh2fmLogro('ACH_110'), `<b>${esc(logroKh2fm.ACH_110.nombre)}</b>`, 'marca-juego')}</div>
+      <div class="minis-kh2">${org}</div>`, { meter: medidor('kh2-jefes-org', idsOrgKh2(), 'Esencias y réplicas') })}
+    ${bloque('jefes-setas', 'Micorganización XIII', `<div class="niveles-forma">${marca(ID.kh2fmLogro('ACH_111'), `<b>${esc(logroKh2fm.ACH_111.nombre)}</b>`, 'marca-juego')}</div>
+      <div class="minis-kh2">${setas}</div>`, { meter: medidor('kh2-jefes-setas', SETAS_KH2FM.map((s) => ID.kh2fmSeta(s.n)), 'Satisfechas') })}
+    <p class="nota-fuente">Las marcas de Esencias, réplicas y setas son las mismas que en Minijuegos y misiones.</p>
+    ${fuentes(['wikiEsJefesTabla', 'khwikiJefesKh2', 'guiaSteamKh2fm'])}`;
+}
+
+// `ids`: lo que cuenta para su medidor; `img`: imagen de la tarjeta; `html`: contenido de su página.
+const SECCIONES_KH2FM = [
+  { id: 'mundos', titulo: 'Mundos', desc: 'Los logros de historia de cada mundo y lo que hay en él.', img: 'assets/img/kh2fm/logros/ACH_121.jpg',
+    ids: idsMundosKh2fm, html: kh2fmMundos },
+  { id: 'diario', titulo: 'Diario de Pepito', desc: 'Informes Ansem, sincorazón, incorpóreos, límites, personajes y relaciones.', img: 'assets/img/kh2fm/logros/ACH_134.jpg',
+    ids: idsDiarioKh2fm, html: kh2fmDiario },
+  { id: 'tesoros', titulo: 'Tesoros, puzles y mapas', desc: 'Los 301 cofres con cómo llegar, las 144 piezas de puzle y los 40 mapas.', img: 'assets/img/kh2fm/logros/ACH_138.jpg',
+    ids: idsSecTesorosKh2fm, html: kh2fmTesoros },
+  { id: 'orfebreria', titulo: 'Orfebrería y Arma Artema', desc: 'Los 59 objetos con sus materiales, los 60 materiales con sus enemigos y los 7 Orichalcum+.', img: `${IMG_ORF_KH2}arma-artema.webp`,
+    ids: idsOrfKh2fm, html: kh2fmOrfebreria },
+  { id: 'sora', titulo: 'Sora', desc: 'Las cinco formas de fusión nivel a nivel, las invocaciones, la magia y el nivel 99.', img: 'assets/img/kh2fm/logros/ACH_148.jpg',
+    ids: idsSoraKh2fm, html: kh2fmSora },
+  { id: 'armas', titulo: 'Armas', desc: 'Las 24 llaves espada, los 20 bastones y los 20 escudos, con su habilidad y cómo se consiguen.', img: `${IMG_ARMAS_KH2}ultima-weapon.webp`,
+    ids: () => idsArmasKh2(), html: kh2fmArmas },
+  { id: 'minijuegos', titulo: 'Minijuegos y misiones', desc: 'Todo lo que piden los apartados Minijuegos y Misiones del diario, mundo a mundo y con consejos.', img: 'assets/img/kh2fm/logros/ACH_141.jpg',
+    ids: () => idsMiniKh2(), html: kh2fmMinijuegos },
+  { id: 'coliseo', titulo: 'Coliseo', desc: 'Las 4 copas del Infiernódromo y las 4 Paradoja: desbloqueo, reglas, premios y combates clave.', img: `${IMG_COLISEO_KH2}hades.webp`,
+    ids: idsColiseoKh2, html: kh2fmColiseo },
+  { id: 'jefes', titulo: 'Jefes', desc: 'Los jefes de la historia con su bonificación y estrategia, Sephiroth, la Consciencia latente, la Organización XIII y las 13 setas.', img: `${IMG_JEFES_KH2}sephiroth.webp`,
+    ids: idsJefesKh2, html: kh2fmJefes },
+];
+const seccionKh2fm = (id) => SECCIONES_KH2FM.find((s) => s.id === id);
+
+function vistaKH2FM() {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: KH2FM.nombre }]);
+  return `
+  <section class="page juego-kh2fm" data-modo="${modo()}">
+    <header class="game-hero">
+      <img class="game-hero-logo" src="${KH2FM.logo}" alt="Kingdom Hearts II Final Mix" width="708" height="480">
+      <div class="game-hero-stats">
+        ${medidor('kh2fm-logros', logrosKH2FM(), ETQ_LOGROS)}
+        ${medidor('kh2fm-100', juegoKH2FM(), ETQ_JUEGO)}
+      </div>
+    </header>
+    ${selectorModo('kh2fm-modo-logros', logrosKH2FM(), 'kh2fm-modo-100', juegoKH2FM(), { subLogros: 'Los 50 logros oficiales', subJuego: 'Lo que registra el diario' })}
+    ${modo() === 'logros' ? kh2fmLogros() : `
+    <p class="mode-note">Guía en preparación: por ahora el 100 % cuenta la historia de cada mundo, el diario de Pepito (informes, sincorazón, incorpóreos, límites, personajes y relaciones) los tesoros, puzles y mapas, la Orfebrería, Sora (formas, invocaciones y magia), las armas y los minijuegos y misiones. Cada entrega añadirá una sección (Coliseo, jefes y nave gumi).</p>
+    <div class="secciones-khfm">${SECCIONES_KH2FM.map((s) => `
+      <a class="seccion-khfm" href="#/kh2fm/${s.id}">
+        <span class="seccion-art"><img src="${esc(s.img)}" alt="" loading="lazy"></span>
+        <span class="seccion-cuerpo"><span class="seccion-titulo">${esc(s.titulo)}</span><span class="seccion-desc">${esc(s.desc)}</span>
+          ${medidor(`kh2fm-sec-${s.id}`, s.ids(), 'Progreso')}</span>
+      </a>`).join('')}</div>`}
+  </section>`;
+}
+
+function vistaSeccionKH2FM(s) {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: KH2FM.nombre, href: '#/kh2fm' }, { t: s.titulo }]);
+  const i = SECCIONES_KH2FM.indexOf(s);
+  const ant = SECCIONES_KH2FM[i - 1];
+  const sig = SECCIONES_KH2FM[i + 1];
+  return `
+  <section class="page juego-kh2fm seccion-pagina">
+    <header class="seccion-head">
+      <img class="seccion-head-art" src="${esc(s.img)}" alt="" width="72" height="72">
+      <div class="seccion-head-txt">
+        <p class="seccion-juego"><a href="#/kh2fm">${esc(KH2FM.nombre)}</a> · Informes · 100 %</p>
+        <h1 class="page-title">${esc(s.titulo)}</h1>
+      </div>
+      ${medidor(`kh2fm-pag-${s.id}`, s.ids(), 'Progreso de la sección')}
+    </header>
+    ${s.html()}
+    <nav class="seccion-nav" aria-label="Otras secciones">
+      ${ant ? `<a href="#/kh2fm/${ant.id}"><small>Anterior</small><b>${esc(ant.titulo)}</b></a>` : '<span></span>'}
+      ${sig ? `<a class="seccion-sig" href="#/kh2fm/${sig.id}"><small>Siguiente</small><b>${esc(sig.titulo)}</b></a>` : '<a class="seccion-sig" href="#/kh2fm"><small>Volver</small><b>Portada del juego</b></a>'}
+    </nav>
+  </section>`;
+}
+
+// ---------- KH Dream Drop Distance ----------
+const GRUPO_DDD = (id) => GRUPOS_LOGROS_DDD.find((g) => g.id === id);
+const listaLogrosDdd = (g) => `<ul class="list">${GRUPO_DDD(g).ids.map((id) => itemLogro(logroDdd[id], 'ddd')).join('')}</ul>`;
+const estrellasDdd = (n) => (n ? `<span class="ddd-estrellas" role="img" aria-label="${n} de 5 estrellas">${'★'.repeat(n)}</span> ` : '');
+const lugarDdd = (p) => (p.lugarEn ? `«${esc(p.lugar)}»` : esc(p.lugar));
+const NOMBRE_MUNDO_DDD = Object.fromEntries(MUNDOS_DDD.map((m) => [m.id, m.nombre]));
+
+// Portada del juego, modo Logros: antes de empezar y los 54 logros por sección.
+function dddLogros() {
+  const grupo = (g) => {
+    const ids = g.ids.map(ID.dddLogro);
+    medidores[`ddd-g-${g.id}`] = ids;
+    const sec = seccionDdd(g.id);
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="ddd-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
+        ${sec ? `<a class="ir-seccion" href="#/ddd/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
+      <ul class="list">${g.ids.map((id) => itemLogro(logroDdd[id], 'ddd')).join('')}</ul>
+    </div>`;
+  };
+  return `
+    ${subnav([['ruta', 'Antes de empezar'], ['logros', 'Logros']])}
+    ${bloque('ruta', 'Antes de empezar', `<ol class="steps">${rutaPasos(RUTA_DDD, logroDdd)}</ol>`, { lead: 'Lo que conviene saber antes de la primera partida.' })}
+    ${bloque('logros', 'Los 54 logros', `${GRUPOS_LOGROS_DDD.map(grupo).join('')}${fuentes(['steamDdd', 'gbTrofeos', 'kwGuia'])}`, {
+      meter: medidor('ddd-logros-lista', logrosDdd(), 'Logros'),
+      lead: 'Abre «Cómo conseguirlo» donde lo haya. Los logros ocultos esconden su descripción hasta que la abras.',
+    })}`;
+}
+
+// Mundos y jefes.
+function dddHistoria() {
+  const jefe = (j) => `
+    <article class="mini-kh2">
+      <h4>${esc(j.nombre)} <span class="chip">${j.pj === 'sora' ? 'Sora' : 'Riku'}</span></h4>
+      <details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(j.t)}</p></details>
+      <div class="niveles-forma">${marca(ID.dddJefe(j.id), 'Vencido')}</div>
+    </article>`;
+  const mundo = (m) => {
+    const ids = [ID.dddLogro(m.logro), ...m.jefes.map((j) => ID.dddJefe(j.id))];
+    const clave = `ddd-mundo-${m.id}`;
+    medidores[clave] = ids;
+    return `
+    <article class="mundo-kh2" id="mundo-${m.id}">
+      <h3>${esc(m.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="list">${itemLogro(logroDdd[m.logro], 'ddd')}</ul>
+      ${m.nota ? `<p class="mini-consejo">${esc(m.nota)}</p>` : ''}
+      ${m.llaves ? `<p class="mini-consejo"><b>Llave Espada:</b> ${m.llaves.map(esc).join(' · ')}</p>` : ''}
+      ${m.jefes.length ? `<div class="minis-kh2">${m.jefes.map(jefe).join('')}</div>` : ''}
+    </article>`;
+  };
+  const secretos = SECRETOS_DDD.map((s) => `
+    <article class="mini-kh2">
+      <h4>${esc(s.nombre)}</h4>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(s.donde)}</p>
+      <details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(s.t)}</p></details>
+      <div class="niveles-forma">${s.marcas.map(([k, t]) => marca(ID.dddSecreto(s.id, k), esc(t))).join('')}</div>
+    </article>`).join('');
+  medidores['ddd-jefes'] = idsJefesDdd();
+  medidores['ddd-secretos'] = idsSecretosDdd();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_MUNDOS_DDD)}</p>
+    ${subnav([['mundos-ddd', 'Mundos y jefes'], ['secretos-ddd', 'Jefes secretos']])}
+    ${bloque('mundos-ddd', 'Mundos y jefes', `<div class="mundos-kh2">${MUNDOS_DDD.map(mundo).join('')}</div>`, { meter: medidor('ddd-jefes', idsJefesDdd(), 'Jefes') })}
+    ${bloque('secretos-ddd', 'Jefes secretos', `<div class="minis-kh2">${secretos}</div>`, { meter: medidor('ddd-secretos', idsSecretosDdd(), 'Vencidos') })}
+    ${fuentes(FUENTES_MUNDOS_DDD)}`;
+}
+
+// Portales especiales, secretos y Portales Nexo.
+function dddPortales() {
+  const portal = (p) => marca(ID.dddPortal(p.mundo, p.pj, p.n), `<b>Portal ${p.n} · ${lugarDdd(p)}</b><small>${estrellasDdd(p.estrellas)}${p.luciente ? esc(p.luciente) : `«${esc(p.enemigoEn)}»`} · ${esc(p.objetivo)}</small>`);
+  const mundo = (m) => {
+    // Portal secreto: solo donde lo hay (no en El Mundo Inexistente ni en Sinfonía del Brujo con Riku).
+    const lista = (pj) => {
+      const sec = secretoPortalDdd(m, pj);
+      const secreto = sec ? marca(ID.dddPortal(m, pj, 'secreto'), `<b>Portal secreto${sec.lugar ? ` · «${esc(sec.lugar)}»` : ''}</b><small>Se abre al terminar el juego: revancha con el jefe del mundo</small>`) : '';
+      return `<h4 class="sub-pj">${pj === 'sora' ? 'Sora' : 'Riku'}</h4>
+        <div class="portales-ddd">${portalesDdd(m, pj).map(portal).join('')}${secreto}</div>`;
+    };
+    const ids = idsPortalesMundoDdd(m);
+    medidores[`ddd-portales-${m}`] = ids;
+    return `
+    <article class="mundo-kh2" id="portales-${m}">
+      <h3>${esc(NOMBRE_MUNDO_DDD[m])} <span class="count" data-count="ddd-portales-${m}">${store.contar(ids)}/${ids.length}</span></h3>
+      ${PJ_DDD.map(lista).join('')}
+    </article>`;
+  };
+  const obj = NEXO_OBJETIVOS_DDD.map((t, i) => marca(ID.dddNexoObj(i + 1), esc(t))).join('');
+  medidores['ddd-nexoobj'] = idsNexoObjDdd();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_PORTALES_DDD)}</p>
+    ${bloque('logros-portales', 'Los logros', listaLogrosDdd('portales'))}
+    <div class="info-cards">${COMO_PORTALES_DDD.map((c) => `<div class="info-card"><h3>${esc(c.t)}</h3><p>${esc(c.d)}</p></div>`).join('')}</div>
+    ${subnav([...MUNDOS_PORTALES_DDD.map((m) => [`portales-${m}`, NOMBRE_MUNDO_DDD[m].replace(/^(El|La) (?!Red)/, '')]), ['nexo-objetivos', 'Portales Nexo']])}
+    <div class="mundos-kh2">${MUNDOS_PORTALES_DDD.map(mundo).join('')}</div>
+    ${bloque('nexo-objetivos', 'Objetivos de los Portales Nexo', `<p class="group-intro">${esc(NOTA_NEXO_OBJ)}</p><div class="portales-ddd">${obj}</div>`, { meter: medidor('ddd-nexoobj', idsNexoObjDdd(), 'Objetivos') })}
+    <p class="nota-fuente">${esc(NOTA_PORTALES_DDD)}</p>
+    ${fuentes(['kwPortales', 'gbTrofeos', 'khwikiPortal'])}`;
+}
+
+// Lucientes: fórmulas, creación, Nexos y habilidades.
+function dddLucientes() {
+  const carta = (l) => `
+    <article class="luciente-ddd" id="luciente-${l.id}">
+      <div class="luciente-ddd-head">
+        ${l.img ? `<img class="luciente-ddd-img" src="assets/img/ddd/lucientes/${l.img}.webp" alt="" loading="lazy" width="72" height="72">` : `<span class="luciente-ddd-ph" aria-hidden="true">${l.n}</span>`}
+        <div><h3>${esc(l.nombre)}</h3><small>N.º ${l.n}${l.en ? ` · «${esc(l.en)}»` : ''}</small></div>
+      </div>
+      <p><b>Fórmula:</b> ${esc(l.como)}</p>
+      ${l.ataqueNexo ? `<p><b>Ataque Nexo de Sora:</b> ${esc(l.ataqueNexo)}</p>` : ''}
+      ${l.recetas.length ? `<details><summary>Recetas (${l.recetas.length})</summary><ul>${l.recetas.map((r) => `<li>${esc(r[0])} + ${esc(r[1])}</li>`).join('')}</ul></details>` : ''}
+      <div class="niveles-forma">${marca(ID.dddFormula(l.id), 'Fórmula')}${marca(ID.dddLuciente(l.id), 'Creado')}</div>
+    </article>`;
+  const nexos = GRUPOS_NEXO_DDD.map(([k, titulo]) => {
+    const ids = NEXOS_DDD[k].map((x) => ID.dddNexo(k, x.n));
+    medidores[`ddd-nexo-${k}`] = ids;
+    return bloque(`nexo-${k}`, esc(titulo), `<div class="portales-ddd">${NEXOS_DDD[k].map((x) => marca(ID.dddNexo(k, x.n), `<b>${esc(x.n)}</b><small>${x.lucientes.map(esc).join(' + ')}</small>`)).join('')}</div>`, { meter: medidor(`ddd-nexo-${k}`, ids, 'Hechos') });
+  }).join('');
+  const hab = (titulo, lista) => `<h4 class="sub-pj">${esc(titulo)}</h4><div class="portales-ddd">${lista.map((n) => marca(ID.dddHabilidad(n), esc(n))).join('')}</div>`;
+  medidores['ddd-formulas'] = idsFormulasDdd();
+  medidores['ddd-creados'] = idsCreadosDdd();
+  medidores['ddd-habilidades'] = idsHabilidadesDdd();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_LUCIENTES_DDD)}</p>
+    ${bloque('logros-lucientes', 'Los logros', listaLogrosDdd('lucientes'))}
+    ${subnav([['lista-lucientes', '54 Lucientes'], ['nexos-ddd', 'Nexos'], ['habilidades-ddd', 'Habilidad máxima']])}
+    ${bloque('lista-lucientes', 'Los 54 Lucientes', `<p class="group-intro">${esc(NOTA_LUCIENTES_DDD)}</p><div class="lucientes-ddd">${LUCIENTES_DDD.map(carta).join('')}</div>`, {
+      meter: `${medidor('ddd-formulas', idsFormulasDdd(), 'Fórmulas')}${medidor('ddd-creados', idsCreadosDdd(), 'Creados')}`,
+    })}
+    <div id="nexos-ddd">${nexos}</div>
+    ${bloque('habilidades-ddd', 'Habilidad máxima', `<p class="group-intro">${esc(HABILIDADES_DDD.nota)}</p>${hab('Habilidades de apoyo', HABILIDADES_DDD.apoyo)}${hab('Habilidades de Lucientes', HABILIDADES_DDD.lucientes)}`, { meter: medidor('ddd-habilidades', idsHabilidadesDdd(), 'Activadas') })}
+    <p class="nota-fuente">Los nombres en inglés entre «» son los de KHWiki, solo para identificar a cada Luciente. Las recetas de KHWorld están en inglés y las he emparejado con los nombres de las oniritas en castellano; se han descartado las que no se podían emparejar sin dudas.</p>
+    ${fuentes(['gbAnexo', 'kwSpirits', 'wikiEsOnirido', 'wikiEsNexario', 'khwikiDreamEater', 'gbTrofeos'])}`;
+}
+
+// Naiperama y minijuegos.
+function dddMinijuegos() {
+  const mini = (m) => `
+    <article class="mini-kh2">
+      <h4>${esc(m.nombre)}</h4>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(m.donde)}</p>
+      <p class="mini-consejo">${esc(m.t)}</p>
+      <div class="niveles-forma">${marca(ID.dddMinijuego(m.id), 'Jugado')}${marca(ID.dddLogro(m.logro), `<b>${esc(logroDdd[m.logro].nombre)}</b>`, 'marca-juego')}</div>
+    </article>`;
+  medidores['ddd-minijuegos'] = idsMinijuegosDdd();
+  return `
+    <p class="lead seccion-lead">Los logros de ACH_39 a ACH_45: el Naiperama (juego de cartas) y los minijuegos de los Lucientes y de La Red.</p>
+    ${bloque('logros-minijuegos', 'Los logros', listaLogrosDdd('minijuegos'))}
+    <div class="info-cards info-cards-2">
+      <div class="info-card"><h3>Naiperama</h3><p>${esc(NAIPERAMA_DDD.texto)}</p><p>${esc(NAIPERAMA_DDD.consejo)}</p></div>
+      <div class="info-card"><h3>Minijuegos en el diario</h3><p>Para el 100 % hay que jugar a todos una vez: Globo, Tonel, Gologafas y la moto de luz con Riku, en La Red.</p></div>
+    </div>
+    ${bloque('minijuegos-ddd', 'Minijuegos', `<div class="minis-kh2">${MINIJUEGOS_DDD.map(mini).join('')}</div>`, { meter: medidor('ddd-minijuegos', idsMinijuegosDdd(), 'Jugados') })}
+    ${fuentes(['gbTrofeos', 'wikiEsNaiperama'])}`;
+}
+
+// Realidad Alterna y comandos acrobáticos.
+function dddRealidad() {
+  const tipo = (r) => `
+    <article class="mini-kh2">
+      <h4>${esc(r.nombre)}</h4>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(r.mundo)}</p>
+      <p class="mini-consejo">${esc(r.t)}</p>
+      <div class="niveles-forma">${marca(ID.dddRealidad(r.id), 'Enemigo derrotado con ella')}${marca(ID.dddLogro(r.logro), `<b>${esc(logroDdd[r.logro].nombre)}</b>`, 'marca-juego')}</div>
+    </article>`;
+  const lista = (titulo, items, idf) => `<h4 class="sub-pj">${esc(titulo)}</h4><div class="portales-ddd">${items.map((x) => marca(idf(x), `<b>${x.n.startsWith('«') ? x.n : esc(x.n)}</b><small>${esc(x.d)}</small>`)).join('')}</div>`;
+  const acro = acrobatasDdd().map((n) => ({ n, d: 'Derrota al menos un enemigo con él.' }));
+  medidores['ddd-realidad'] = idsRealidadDdd();
+  return `
+    <p class="lead seccion-lead">La Realidad Alterna es un ataque especial que se activa sobre un enemigo u objeto cuando aparece el círculo rosa. Cada mundo tiene la suya y cada una tiene su logro.</p>
+    ${bloque('logros-realidad', 'Los logros', listaLogrosDdd('realidad'))}
+    ${bloque('tipos-realidad', 'Las siete Realidades Alternas', `<p class="group-intro">${esc(NOTA_REALIDAD)}</p><div class="minis-kh2">${REALIDAD_DDD.map(tipo).join('')}</div>`, { meter: medidor('ddd-realidad', idsRealidadDdd(), 'Realidad Alterna') })}
+    ${bloque('detalles-realidad', 'Comandos que hay que activar', `${lista('Descifrado (La Red): los siete comandos', DESCIFRADO_DDD, (x) => ID.dddDescifrado(x.n))}${lista('Historieta (País de los Mosqueteros): las cuatro viñetas', HISTORIETA_DDD, (x) => ID.dddHistorieta(x.n))}${lista('Modo acróbata', acro, (x) => ID.dddAcrobata(x.n))}`)}
+    <p class="nota-fuente">Los comandos de Descifrado no tienen nombre en castellano en la fuente y van en inglés entre «».</p>
+    ${fuentes(['gbTrofeos'])}`;
+}
+
+// Progreso: porcentajes, final secreto, tránsitos, Sopor.
+function dddProgreso() {
+  const cien = CIEN_DDD.map((c) => (c.marca
+    ? `<li>${marca(idCienDdd(c), esc(c.t))}${c.nota ? `<p class="mini-consejo">${esc(c.nota)}</p>` : ''}</li>`
+    : `<li class="cien-ddd"><span>${esc(c.t)}</span> <a class="ir-seccion" href="#/ddd/${c.seccion}">Ver ${esc(seccionDdd(c.seccion).titulo)}</a></li>`)).join('');
+  const celda = (t, pj) => marca(ID.dddTransito(t.id, pj), `<b>${pj === 'sora' ? 'Sora' : 'Riku'}</b><small>${esc(t[pj][0])} puntos · ${esc(t[pj][1])}</small>`);
+  const tabla = `<div class="transitos-ddd">${TRANSITOS_DDD.map((t) => `
+    <div class="transito-ddd"><h4>${esc(t.mundo)}</h4><div class="portales-ddd">${celda(t, 'sora')}${celda(t, 'riku')}</div></div>`).join('')}</div>`;
+  medidores['ddd-transitos'] = idsTransitosDdd();
+  return `
+    <p class="lead seccion-lead">Los logros de porcentajes, Sopor y tránsitos, con lo que cuenta para el 100 % de historia, de combate y de objetos.</p>
+    ${bloque('logros-progreso', 'Los logros', listaLogrosDdd('progreso'))}
+    ${bloque('cien-ddd', 'Lo que cuenta para el 100 %', `<p class="group-intro">${esc(NOTA_CIEN)}</p><ul class="lista-cien-ddd">${cien}</ul>`)}
+    ${bloque('final-secreto', 'El final secreto', `<div class="info-cards info-cards-2">
+      <div class="info-card"><h3>Trofeos del juego que hacen falta</h3><ul class="bullets">${FINAL_SECRETO_DDD.trofeos.map(([d, t]) => `<li><b>${esc(d)}:</b> ${esc(t)}</li>`).join('')}</ul></div>
+      <div class="info-card"><h3>Las tres respuestas</h3><ol class="sora-resp">${FINAL_SECRETO_DDD.preguntas.map((r) => `<li>${esc(r)}</li>`).join('')}</ol></div>
+    </div><p class="nota-fuente">${esc(FINAL_SECRETO_DDD.nota)}</p>`)}
+    ${bloque('transitos-ddd', 'Tránsitos: objetivo de la calificación A', `<p class="group-intro">${esc(NOTA_TRANSITOS)}</p>${tabla}`, { meter: medidor('ddd-transitos', idsTransitosDdd(), 'Rango A') })}
+    ${fuentes(['gbTrofeos', 'laps4', 'guiasxamonicas'])}`;
+}
+
+// Coleccionismo: comandos, Llaves Espada, oniritas y juguetes.
+function dddColeccion() {
+  const comandos = COMANDOS_DDD.map((c) => {
+    const ids = c.items.map((x) => ID.dddCmd(c.cat, x.n));
+    const clave = `ddd-cmd-${slug(c.cat)}`;
+    medidores[clave] = ids;
+    return bloque(`cmd-${slug(c.cat)}`, esc(c.cat), `<div class="portales-ddd">${c.items.map((x) => marca(ID.dddCmd(c.cat, x.n), `<b>${esc(x.n)}</b><small>${esc(x.como)}</small>`)).join('')}</div>`, { meter: medidor(clave, ids, 'Conseguidos') });
+  }).join('');
+  const llaves = llavesDdd().map((l) => marca(ID.dddLlave(l.n, l.p), `<b>${esc(l.n)} · ${l.p === 'sora' ? 'Sora' : 'Riku'}</b><small>${esc(l.como)}</small>`)).join('');
+  const simples = (lista, idf) => `<div class="portales-ddd">${lista.map((n) => marca(idf(n), esc(n))).join('')}</div>`;
+  medidores['ddd-llaves'] = idsLlavesDdd();
+  medidores['ddd-onir'] = idsOniritasDdd();
+  medidores['ddd-jug'] = idsJuguetesDdd();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_COLECCION_DDD)}</p>
+    ${bloque('logros-coleccion', 'Los logros', listaLogrosDdd('coleccion'))}
+    ${subnav([['comandos-ddd', 'Comandos'], ['llaves-ddd', 'Llaves Espada'], ['oniritas-ddd', 'Oniritas'], ['juguetes-ddd', 'Juguetes'], ['huecos-ddd', 'Sin lista']])}
+    <div id="comandos-ddd"><h2 class="bx-sub">Comandos</h2><p class="group-intro">${esc(NOTA_COMANDOS_DDD)}</p>${comandos}</div>
+    ${bloque('llaves-ddd', 'Llaves Espada', `<p class="group-intro">${esc(NOTA_LLAVES_DDD)}</p><div class="portales-ddd">${llaves}</div>`, { meter: medidor('ddd-llaves', idsLlavesDdd(), 'Conseguidas') })}
+    ${bloque('oniritas-ddd', 'Oniritas', `<p class="group-intro">${esc(NOTA_ONIRITAS_DDD)}</p>${simples(ONIRITAS_DDD, ID.dddOnirita)}`, { meter: medidor('ddd-onir', idsOniritasDdd(), 'Conseguidas') })}
+    ${bloque('juguetes-ddd', 'Juguetes para Lucientes', `${simples(JUGUETES_DDD, ID.dddJuguete)}`, { meter: medidor('ddd-jug', idsJuguetesDdd(), 'Conseguidos') })}
+    ${bloque('huecos-ddd', 'Lo que no tiene lista en la guía', `<ul class="bullets">${HUECOS_DDD.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`)}
+    ${fuentes(['gbTrofeos', 'gbAnexo', 'wikiEsOnirita'])}`;
+}
+
+const SECCIONES_DDD = [
+  { id: 'historia', titulo: 'Historia y mundos', desc: 'Los siete mundos con Sora y Riku, sus jefes, los jefes secretos y la Llave Espada de cada mundo.', img: 'assets/img/ddd/logros/ACH_30.jpg', ids: idsSecHistoriaDdd, html: dddHistoria },
+  { id: 'portales', titulo: 'Portales y Nexos', desc: 'Los 78 portales especiales por mundo y personaje, los portales secretos y los siete objetivos de los Portales Nexo.', img: 'assets/img/ddd/logros/ACH_61.jpg', ids: idsSecPortalesDdd, html: dddPortales },
+  { id: 'lucientes', titulo: 'Lucientes', desc: 'Los 54 Lucientes con su fórmula y recetas, los Nexos y las habilidades de «Habilidad máxima».', img: 'assets/img/ddd/logros/ACH_51.jpg', ids: idsSecLucientesDdd, html: dddLucientes },
+  { id: 'minijuegos', titulo: 'Naiperama y minijuegos', desc: 'El Naiperama, los minijuegos de Lucientes y la moto de luz, con la puntuación de cada logro.', img: 'assets/img/ddd/logros/ACH_39.jpg', ids: idsSecMinijuegosDdd, html: dddMinijuegos },
+  { id: 'realidad', titulo: 'Realidad Alterna', desc: 'Las siete Realidades Alternas, sus comandos y los comandos acrobáticos.', img: 'assets/img/ddd/logros/ACH_54.jpg', ids: idsSecRealidadDdd, html: dddRealidad },
+  { id: 'progreso', titulo: 'Progreso', desc: 'Qué cuenta para el 100 %, el final secreto, el Sopor y los objetivos de cada tránsito.', img: 'assets/img/ddd/logros/ACH_16.jpg', ids: idsSecProgresoDdd, html: dddProgreso },
+  { id: 'coleccion', titulo: 'Coleccionismo', desc: 'Los 124 comandos, las Llaves Espada, las 36 oniritas y los juguetes, con cómo se consigue cada uno.', img: 'assets/img/ddd/logros/ACH_26.jpg', ids: idsSecColeccionDdd, html: dddColeccion },
+];
+const seccionDdd = (id) => SECCIONES_DDD.find((s) => s.id === id);
+
+function vistaDDD() {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: DDD.nombre }]);
+  return `
+  <section class="page juego-ddd" data-modo="${modo()}">
+    <header class="game-hero">
+      <img class="game-hero-logo" src="${DDD.logo}" alt="Kingdom Hearts Dream Drop Distance" width="708" height="421">
+      <div class="game-hero-stats">
+        ${medidor('ddd-logros', logrosDdd(), ETQ_LOGROS)}
+        ${medidor('ddd-100', juegoDDD(), ETQ_JUEGO)}
+      </div>
+    </header>
+    ${selectorModo('ddd-modo-logros', logrosDdd(), 'ddd-modo-100', juegoDDD(), { subLogros: 'Los 54 logros oficiales', subJuego: 'Lo que piden los logros' })}
+    ${modo() === 'logros' ? dddLogros() : `
+    <p class="mode-note">Cada logro de Steam, con lo que hay que hacer para conseguirlo: mundos y jefes, portales, Lucientes, minijuegos, Realidad Alterna, progreso y coleccionables. Si un logro pide el 100 % de algo, la lista está completa y se marca elemento a elemento.</p>
+    <div class="secciones-khfm">${SECCIONES_DDD.map((s) => `
+      <a class="seccion-khfm" href="#/ddd/${s.id}">
+        <span class="seccion-art"><img src="${esc(s.img)}" alt="" loading="lazy"></span>
+        <span class="seccion-cuerpo"><span class="seccion-titulo">${esc(s.titulo)}</span><span class="seccion-desc">${esc(s.desc)}</span>
+          ${medidor(`ddd-sec-${s.id}`, s.ids(), 'Progreso')}</span>
+      </a>`).join('')}</div>`}
+  </section>`;
+}
+
+function vistaSeccionDDD(s) {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: DDD.nombre, href: '#/ddd' }, { t: s.titulo }]);
+  const i = SECCIONES_DDD.indexOf(s);
+  const ant = SECCIONES_DDD[i - 1];
+  const sig = SECCIONES_DDD[i + 1];
+  return `
+  <section class="page juego-ddd seccion-pagina">
+    <header class="seccion-head">
+      <img class="seccion-head-art" src="${esc(s.img)}" alt="" width="72" height="72">
+      <div class="seccion-head-txt">
+        <p class="seccion-juego"><a href="#/ddd">${esc(DDD.nombre)}</a> · Informes · 100 %</p>
+        <h1 class="page-title">${esc(s.titulo)}</h1>
+      </div>
+      ${medidor(`ddd-pag-${s.id}`, s.ids(), 'Progreso de la sección')}
+    </header>
+    ${s.html()}
+    <nav class="seccion-nav" aria-label="Otras secciones">
+      ${ant ? `<a href="#/ddd/${ant.id}"><small>Anterior</small><b>${esc(ant.titulo)}</b></a>` : '<span></span>'}
+      ${sig ? `<a class="seccion-sig" href="#/ddd/${sig.id}"><small>Siguiente</small><b>${esc(sig.titulo)}</b></a>` : '<a class="seccion-sig" href="#/ddd"><small>Volver</small><b>Portada del juego</b></a>'}
+    </nav>
+  </section>`;
+}
+
+// ---------- KH 0.2 Birth by Sleep -A fragmentary passage- ----------
+const objetivosBbs02 = (obj) => (obj ? `<p class="mini-consejo"><b>Objetivo${obj.length > 1 ? 's' : ''} del armario:</b> n.º ${obj.join(' y ')}</p>` : '');
+
+// Portada del juego, modo Logros: antes de empezar y los 15 logros por sección.
+function bbs02Logros() {
+  const grupo = (g) => {
+    const ids = g.ids.map(ID.bbs02Logro);
+    medidores[`bbs02-g-${g.id}`] = ids;
+    const sec = seccionBbs02(g.id);
+    return `
+    <div class="group">
+      <h3>${esc(g.titulo)} <span class="count" data-count="bbs02-g-${g.id}">${store.contar(ids)}/${ids.length}</span>
+        ${sec ? `<a class="ir-seccion" href="#/bbs02/${sec.id}">Ver la sección ${esc(sec.titulo)}</a>` : ''}</h3>
+      <ul class="list">${g.ids.map((id) => itemLogro(logroBbs02[id], 'bbs02')).join('')}</ul>
+    </div>`;
+  };
+  // Lo perdible: cada combate o cofre con su casilla (la del objetivo, el cofre o el logro).
+  const idPerdible = (x) => (x.obj ? ID.bbs02Objetivo(x.obj) : x.cofre ? ID.bbs02Cofre(...x.cofre.split('.')) : ID.bbs02Logro(x.logro));
+  const perdible = (x) => `
+    <article class="mini-kh2 cmd02 perd02">
+      <p class="perd02-cab"><span class="chip">${esc(x.partida)}</span>${x.obj ? `<span class="chip">Objetivo ${x.obj}</span>` : ''}</p>
+      <h3>${esc(x.titulo)}</h3>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(x.zona)}</p>
+      <p class="mini-consejo"><b>Qué pide:</b> ${esc(x.pide)}</p>
+      <p class="mini-consejo"><b>Si sale mal:</b> ${esc(x.fallo)}</p>
+      <p class="mini-consejo"><b>Logro:</b> ${esc(logroBbs02[x.logro].nombre)} · <a href="#/bbs02/${x.seccion}">Ver en ${esc(seccionBbs02(x.seccion).titulo)}</a></p>
+      <div class="niveles-forma">${marca(idPerdible(x), 'Hecho')}</div>
+    </article>`;
+  medidores['bbs02-perdibles'] = PERDIBLES_BBS02.map(idPerdible);
+  // Ruta al 100 %: una tarjeta por fase con sus pasos y el progreso de lo que toca en ella.
+  const fase = (f, i) => {
+    const ids = IDS_FASE_BBS02[f.id]();
+    medidores[`bbs02-fase-${f.id}`] = ids;
+    return `
+    <article class="fase02">
+      <header class="fase02-cab">
+        <span class="fase02-n" aria-hidden="true">${i + 1}</span>
+        <div><h3>${esc(f.titulo)}</h3><p>${esc(f.sub)}</p></div>
+      </header>
+      ${medidor(`bbs02-fase-${f.id}`, ids, 'Hecho en esta fase')}
+      <ol class="fase02-pasos">${f.pasos.map((t) => `<li>${esc(t)}</li>`).join('')}</ol>
+    </article>`;
+  };
+  return `
+    ${subnav([['ruta', 'Antes de empezar'], ['ruta-100', 'Ruta al 100 %'], ['perdibles', 'Lo que se puede perder'], ['logros', 'Logros']])}
+    ${bloque('ruta', 'Antes de empezar', `<ol class="steps">${rutaPasos(RUTA_BBS02, logroBbs02)}</ol>`, { lead: 'Lo que conviene saber antes de la primera partida.' })}
+    ${bloque('ruta-100', 'Ruta al 100 %', `<div class="fases02">${FASES_BBS02.map(fase).join('')}</div>${fuentes(['laps4Bbs02'])}`, {
+      lead: 'Dos partidas bastan: la primera en Principiante, que luego cargas terminada para lo que sale después del final, y una Partida + en Maestro con los objetivos traspasados. Cada fase marca su progreso con las casillas de las secciones.',
+    })}
+    ${bloque('perdibles', 'Lo que se puede perder', `<div class="minis-kh2">${PERDIBLES_BBS02.map(perdible).join('')}</div>${fuentes(['laps4Bbs02'])}`, {
+      meter: medidor('bbs02-perdibles', PERDIBLES_BBS02.map(idPerdible), 'Hechos'), lead: esc(INTRO_PERDIBLES_BBS02),
+    })}
+    ${bloque('logros', 'Los 15 logros', `${GRUPOS_LOGROS_BBS02.map(grupo).join('')}${fuentes(['steamBbs02', 'laps4Bbs02'])}`, {
+      meter: medidor('bbs02-logros-lista', logrosBbs02(), 'Logros'),
+      lead: 'Abre «Cómo conseguirlo» donde lo haya. Los logros ocultos esconden su descripción hasta que la abras.',
+    })}`;
+}
+
+// Zonas en orden, jefes, jefe secreto y logros de dificultad.
+function bbs02Historia() {
+  const jefe = (j) => `
+    <article class="mini-kh2">
+      <h3>${esc(j.nombre)}</h3>
+      ${objetivosBbs02(j.obj)}
+      <details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(j.t)}</p></details>
+      <div class="niveles-forma">${marca(ID.bbs02Jefe(j.id), 'Vencido')}</div>
+    </article>`;
+  const zona = (z) => {
+    const ids = [...(z.logro ? [ID.bbs02Logro(z.logro)] : []), ...z.jefes.map((j) => ID.bbs02Jefe(j.id))];
+    const clave = `bbs02-zona-${z.id}`;
+    medidores[clave] = ids;
+    return `
+    <article class="mundo-kh2" id="zona-${z.id}">
+      <h3>${esc(z.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      ${z.logro ? `<ul class="list">${itemLogro(logroBbs02[z.logro], 'bbs02')}</ul>` : '<p class="mundo-sin">Sin logro de historia propio.</p>'}
+      <p class="mini-consejo">${esc(z.nota)}</p>
+      ${z.jefes.length ? `<div class="minis-kh2">${z.jefes.map(jefe).join('')}</div>` : ''}
+    </article>`;
+  };
+  const s = JEFE_SECRETO_BBS02;
+  const dificultad = ['ACH_08', 'ACH_11'].map((id) => itemLogro(logroBbs02[id], 'bbs02')).join('');
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_HISTORIA_BBS02)}</p>
+    ${subnav([['zonas-bbs02', 'Zonas y jefes'], ['secreto-bbs02', 'Jefe secreto'], ['dificultad-bbs02', 'Dificultad']])}
+    ${bloque('zonas-bbs02', 'Zonas y jefes', `<div class="mundos-kh2">${ZONAS_BBS02.map(zona).join('')}</div>`, { meter: medidor('bbs02-jefes', idsJefesBbs02(), 'Jefes') })}
+    ${bloque('secreto-bbs02', 'Jefe secreto', `<div class="minis-kh2">
+      <article class="mini-kh2">
+        <h3>${esc(s.nombre)}</h3>
+        <p class="mini-consejo"><b>Dónde:</b> ${esc(s.donde)}</p>
+        <p class="mini-consejo">${esc(s.rondas)}</p>
+        ${objetivosBbs02(s.obj)}
+        <details class="boss-est"><summary>Cómo vencerle</summary><p>${esc(s.t)}</p></details>
+        <div class="niveles-forma">${marca(ID.bbs02Jefe(s.id), 'Vencido')}</div>
+      </article></div>`)}
+    ${bloque('dificultad-bbs02', 'Dificultad', `<ul class="list">${dificultad}</ul>`)}
+    ${fuentes(FUENTES_HISTORIA_BBS02)}`;
+}
+
+// Objetivos del Armario: filtro por partida, objetivos por zona, prendas por ranura y recuerdos persistentes.
+const FILTROS_OBJ_BBS02 = [['todos', 'Todos'], ...Object.entries(CUANDO_BBS02).map(([k, c]) => [k, c.t])];
+const filtroObjBbs02 = () => store.ajuste('bbs02ObjFiltro', 'todos');
+// Nombre traducido de la prenda, con el inglés de KHWiki al pasar el ratón.
+const prendaBbs02 = (en) => `<span class="tes-trad" title="Traducción propia; en inglés: ${esc(en)}">${esc(PRENDAS_ES[en])}</span>`;
+function bbs02Objetivos() {
+  const f = filtroObjBbs02();
+  const oculto = (o) => f !== 'todos' && o.c !== f;
+  const tarjeta = (o) => `
+    <article class="obj-bbs02" data-cuando="${o.c}"${oculto(o) ? ' hidden' : ''}>
+      <div class="obj-bbs02-cab">
+        <span class="obj-bbs02-n">N.º ${o.n}</span>
+        <span class="chip chip-cuando chip-${o.c}">${esc(CUANDO_BBS02[o.c].t)}</span>
+        ${o.guarda ? '<span class="chip chip-guarda">Guarda antes</span>' : ''}
+      </div>
+      <h3>${esc(o.t)}</h3>
+      <p class="mini-consejo">${esc(o.como)}</p>
+      ${o.nota ? `<p class="mini-consejo note">${esc(o.nota)}</p>` : ''}
+      <p class="obj-bbs02-premio"><span>Premio</span> ${prendaBbs02(o.p[1])} · ${esc(RANURAS_BBS02[o.p[0]])}</p>
+      <div class="niveles-forma">${marca(ID.bbs02Objetivo(o.n), 'Conseguido')}</div>
+    </article>`;
+  const zona = (z) => {
+    const objs = OBJETIVOS_BBS02.filter((o) => o.z === z.id);
+    const ids = objs.map((o) => ID.bbs02Objetivo(o.n));
+    const clave = `bbs02-obj-${z.id}`;
+    medidores[clave] = ids;
+    return `
+    <div class="obj-bbs02-zona"${objs.every(oculto) ? ' hidden' : ''}>
+      <h3 class="sub-pj">${esc(z.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
+      <div class="minis-kh2">${objs.map(tarjeta).join('')}</div>
+    </div>`;
+  };
+  const filtros = `<div class="cmd-filtros obj-bbs02-filtros" role="group" aria-label="Qué partida">${FILTROS_OBJ_BBS02.map(([k, t]) => `
+    <button type="button" class="cmd-filtro" data-obj-filtro="${k}" aria-pressed="${k === f}">${esc(t)}</button>`).join('')}</div>`;
+  const leyenda = `<dl class="obj-bbs02-leyenda">${Object.entries(CUANDO_BBS02).map(([k, c]) => `<div><dt><span class="chip chip-cuando chip-${k}">${esc(c.t)}</span></dt><dd>${esc(c.d)}</dd></div>`).join('')}</dl>`;
+  const ranura = ([k, nombre]) => {
+    const objs = OBJETIVOS_BBS02.filter((o) => o.p[0] === k);
+    const ids = objs.map((o) => ID.bbs02Objetivo(o.n));
+    medidores[`bbs02-ranura-${k}`] = ids;
+    // Misma marca que el objetivo que da la prenda: tenerla es haberlo completado.
+    return `<div class="info-card"><h3>${esc(nombre)} <span class="count" data-count="bbs02-ranura-${k}">${store.contar(ids)}/${ids.length}</span></h3>
+      <ul class="obj-bbs02-prendas">${objs.map((o) => `<li>${marca(ID.bbs02Objetivo(o.n), `${prendaBbs02(o.p[1])}<small>Obj. ${o.n}</small>`)}</li>`).join('')}</ul></div>`;
+  };
+  const recuerdo = (r) => `
+    <article class="mini-kh2">
+      <h3>${esc(r.zona)}</h3>
+      <p class="mini-consejo"><b>Qué es:</b> ${esc(r.forma)}.</p>
+      <p class="mini-consejo"><b>Dónde:</b> ${esc(r.donde)}</p>
+      <div class="niveles-forma">${marca(ID.bbs02Objetivo(r.obj), `Encontrado <small>(objetivo ${r.obj})</small>`)}</div>
+    </article>`;
+  const logros = ['ACH_07', 'ACH_15'].map((id) => itemLogro(logroBbs02[id], 'bbs02')).join('');
+  medidores['bbs02-objetivos'] = idsObjetivosBbs02();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_OBJETIVOS_BBS02)}</p>
+    ${subnav([['logros-obj-bbs02', 'Los logros'], ['objetivos-bbs02', 'Los 51 objetivos'], ['armario-bbs02', 'Armario'], ['recuerdos-bbs02', 'Recuerdos persistentes']])}
+    ${bloque('logros-obj-bbs02', 'Los logros', `<ul class="list">${logros}</ul>`)}
+    ${bloque('objetivos-bbs02', 'Los 51 objetivos', `${leyenda}${filtros}${ZONAS_OBJ_BBS02.map(zona).join('')}`, { meter: medidor('bbs02-objetivos', idsObjetivosBbs02(), 'Objetivos') })}
+    ${bloque('armario-bbs02', 'Armario: las prendas por ranura', `<p class="group-intro">${esc(INTRO_ARMARIO_BBS02)}</p><div class="info-cards obj-bbs02-ranuras">${Object.entries(RANURAS_BBS02).map(ranura).join('')}</div>`)}
+    ${bloque('recuerdos-bbs02', 'Recuerdos persistentes', `<p class="group-intro">${esc(INTRO_RECUERDOS_BBS02)}</p><div class="minis-kh2">${RECUERDOS_BBS02.map(recuerdo).join('')}</div>`)}
+    <p class="nota-fuente">Los nombres de las prendas son traducción propia: no salen en ninguna fuente en castellano. Al pasar el ratón se ve el nombre inglés de KHWiki.</p>
+    ${fuentes(FUENTES_OBJETIVOS_BBS02)}`;
+}
+
+// Cofres, como los de BBS: un desplegable por zona, con los de la primera visita y los de la partida terminada.
+const VISITAS_BBS02 = [[1, '1.ª visita'], [2, 'Al cargar la partida terminada']];
+function bbs02Cofres() {
+  const cofre = (z, x) => item({
+    id: ID.bbs02Cofre(z.id, x.n),
+    antes: `<span class="cof02-n">${x.n}</span>`,
+    titulo: x.nombre,
+    desc: x.d,
+    meta: [x.tipo !== 'objeto' && `<span class="chip chip-cof02-${x.tipo}">${esc(TIPOS_COFRE_BBS02[x.tipo])}</span>`, x.en && notaTrad(x.en)].filter(Boolean).join(' '),
+  });
+  const zona = (z) => {
+    const n = (v) => z.cofres.filter((x) => x.v === v).length;
+    const resumen = [`${n(1)} en la 1.ª visita`, n(2) && `${n(2)} al terminar`].filter(Boolean).join(' · ');
+    const grupos = VISITAS_BBS02.map(([v, t]) => [t, z.cofres.filter((x) => x.v === v)]).filter(([, l]) => l.length);
+    return desplegableKh2(`cofres-${z.id}`, COFRE_GEN, `${esc(z.nombre)} <small class="tes-premio">${resumen}</small>`, `bbs02-cof-${z.id}`, idsCofresZonaBbs02(z), `
+      ${z.nota ? `<p class="nota-fuente">${esc(z.nota)}</p>` : ''}
+      ${z.obj ? `<p class="cof02-obj">Abrirlos todos completa el <a href="#/bbs02/objetivos">objetivo ${z.obj}</a> del armario.</p>` : ''}
+      <div class="tes-zonas cof02-zonas">${grupos.map(([t, l]) => `
+        <div class="tes-zona"><h3>${esc(t)} <span class="cof02-cuenta">${l.length}</span></h3><ul class="list list-tight">${l.map((x) => cofre(z, x)).join('')}</ul></div>`).join('')}</div>`);
+  };
+  const total = (v) => ZONAS_COFRES_BBS02.reduce((a, z) => a + z.cofres.filter((x) => x.v === v).length, 0);
+  medidores['bbs02-cofres'] = idsCofresBbs02();
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_COFRES_BBS02)}</p>
+    ${bloque('logro-cofres-bbs02', 'El logro', `<ul class="list">${itemLogro(logroBbs02.ACH_06, 'bbs02')}</ul>`)}
+    ${bloque('cofres-bbs02', 'Los 41 cofres', `
+      <p class="group-intro">${total(1)} en la primera visita y ${total(2)} al cargar la partida terminada. Abre cada zona para ver qué guarda cada cofre y dónde está. Si prefieres verlo, el <a href="https://www.youtube.com/watch?v=J43E_iScH3U" target="_blank" rel="noopener">vídeo de factor747</a> (lo enlaza Laps4) los recorre todos.</p>
+      <div class="tes-mundos">${ZONAS_COFRES_BBS02.map(zona).join('')}</div>
+      <p class="nota-fuente">Las reliquias del Zodíaco no tienen nombre en castellano en ninguna fuente: el nombre es traducción propia (el inglés, al pasar el ratón por la etiqueta).</p>`, { meter: medidor('bbs02-cofres', idsCofresBbs02(), 'Cofres') })}
+    ${fuentes(FUENTES_COFRES_BBS02)}`;
+}
+
+// Combate: los cinco logros, la barra de situación, sus comandos (los tres de magia, marcables) y el Tiro certero.
+function bbs02Combate() {
+  const rel = (x) => [
+    x.logros && `<b>Logro:</b> ${x.logros.map((id) => esc(logroBbs02[id].nombre)).join(', ')}`,
+    x.obj && `<b>Objetivos del armario:</b> n.º ${x.obj.join(', ')}`,
+  ].filter(Boolean).map((t) => `<p class="mini-consejo">${t}</p>`).join('');
+  const comando = (x) => `
+    <article class="mini-kh2 cmd02">
+      <h3>${esc(x.nombre)}</h3>
+      <p class="mini-consejo"><b>Cómo sale:</b> ${esc(x.como)}</p>
+      <p class="mini-consejo">${esc(x.t)}</p>
+      ${x.pc ? `<p class="mini-consejo note">${esc(x.pc)}</p>` : ''}
+      ${rel(x)}
+      ${x.marca ? `<div class="niveles-forma">${marca(ID.bbs02Magia(x.id), 'Usado al menos una vez')}</div>` : ''}
+    </article>`;
+  const magia = COMANDOS_BBS02.filter((x) => x.marca);
+  const otros = COMANDOS_BBS02.filter((x) => !x.marca);
+  const logros = LOGROS_COMBATE_BBS02.map(ID.bbs02Logro);
+  medidores['bbs02-magia'] = idsMagiaBbs02();
+  medidores['bbs02-logros-combate'] = logros;
+  return `
+    <p class="lead seccion-lead">${esc(INTRO_COMBATE_BBS02)}</p>
+    ${subnav([['logros-combate-bbs02', 'Los logros'], ['magia-bbs02', 'Comandos de magia'], ['estilos-bbs02', 'Cambios de estilo'], ['tiro-bbs02', 'Tiro certero']])}
+    ${bloque('logros-combate-bbs02', 'Los logros', `<ul class="list">${LOGROS_COMBATE_BBS02.map((id) => itemLogro(logroBbs02[id], 'bbs02')).join('')}</ul>`, { meter: medidor('bbs02-logros-combate', logros, 'Logros') })}
+    ${bloque('magia-bbs02', 'Comandos de magia: «Un final mágico»', `
+      <p class="group-intro">${esc(BARRA_BBS02)}</p>
+      <div class="minis-kh2">${magia.map(comando).join('')}</div>
+      <p class="hint">${esc(NOTA_MAGIA_BBS02)}</p>`, { meter: medidor('bbs02-magia', idsMagiaBbs02(), 'Usados') })}
+    ${bloque('estilos-bbs02', 'Cambios de estilo', `<div class="minis-kh2">${otros.map(comando).join('')}</div>`)}
+    ${bloque('tiro-bbs02', 'Tiro certero', `<div class="minis-kh2"><article class="mini-kh2">
+      <h3>${esc(TIRO_BBS02.nombre)}</h3>
+      <p class="mini-consejo">Nombre en castellano de Birth by Sleep; en inglés, «${esc(TIRO_BBS02.en)}».</p>
+      <p class="mini-consejo">${esc(TIRO_BBS02.t)}</p>${rel(TIRO_BBS02)}
+    </article></div>`)}
+    ${fuentes(FUENTES_COMBATE_BBS02)}`;
+}
+
+function filtrarObjBbs02(boton) {
+  const f = boton.dataset.objFiltro;
+  store.fijarAjuste('bbs02ObjFiltro', f);
+  const bloqueObj = boton.closest('.block, section') ?? document;
+  bloqueObj.querySelectorAll('[data-obj-filtro]').forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
+  bloqueObj.querySelectorAll('.obj-bbs02').forEach((a) => { a.hidden = f !== 'todos' && a.dataset.cuando !== f; });
+  bloqueObj.querySelectorAll('.obj-bbs02-zona').forEach((z) => { z.hidden = ![...z.querySelectorAll('.obj-bbs02')].some((a) => !a.hidden); });
+}
+
+const SECCIONES_BBS02 = [
+  { id: 'historia', titulo: 'Historia y jefes', desc: 'Las zonas del Reino de la oscuridad en orden, sus jefes con cómo vencerlos, el jefe secreto y los logros de dificultad.', img: 'assets/img/bbs02/logros/ACH_05.jpg', ids: idsSecHistoriaBbs02, html: bbs02Historia },
+  { id: 'objetivos', titulo: 'Objetivos y armario', desc: 'Los 51 objetivos con cómo hacer cada uno, en qué partida conviene y la prenda que dan; las prendas por ranura y los recuerdos persistentes.', img: 'assets/img/bbs02/logros/ACH_07.jpg', ids: idsSecObjetivosBbs02, html: bbs02Objetivos },
+  { id: 'cofres', titulo: 'Cofres', desc: 'Los 41 cofres por zona, con qué guarda cada uno y dónde está, separados en primera visita y partida terminada.', img: 'assets/img/bbs02/logros/ACH_06.jpg', ids: idsSecCofresBbs02, html: bbs02Cofres },
+  { id: 'combate', titulo: 'Combate', desc: 'Los logros de combate, la barra y los comandos de situación (los tres de magia, marcables) y el Tiro certero.', img: 'assets/img/bbs02/logros/ACH_12.jpg', ids: idsSecCombateBbs02, html: bbs02Combate },
+];
+const seccionBbs02 = (id) => SECCIONES_BBS02.find((s) => s.id === id);
+
+function vistaBBS02() {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: BBS02.nombre }]);
+  return `
+  <section class="page juego-bbs02" data-modo="${modo()}">
+    <header class="game-hero">
+      <img class="game-hero-logo" src="${BBS02.logo}" alt="Kingdom Hearts 0.2 Birth by Sleep -A fragmentary passage-" width="900" height="568">
+      <div class="game-hero-stats">
+        ${medidor('bbs02-logros', logrosBbs02(), ETQ_LOGROS)}
+        ${medidor('bbs02-100', juegoBBS02(), ETQ_JUEGO)}
+      </div>
+    </header>
+    ${selectorModo('bbs02-modo-logros', logrosBbs02(), 'bbs02-modo-100', juegoBBS02(), { subLogros: 'Los 15 logros oficiales', subJuego: 'Lo que piden los logros' })}
+    ${modo() === 'logros' ? bbs02Logros() : `
+    <p class="mode-note">Cada logro de Steam, con lo que hay que hacer para conseguirlo. Si un logro pide el 100 % de algo, la lista está completa y se marca elemento a elemento. Faltan por llegar las secciones de objetivos, cofres y combate.</p>
+    <div class="secciones-khfm">${SECCIONES_BBS02.map((s) => `
+      <a class="seccion-khfm" href="#/bbs02/${s.id}">
+        <span class="seccion-art"><img src="${esc(s.img)}" alt="" loading="lazy"></span>
+        <span class="seccion-cuerpo"><span class="seccion-titulo">${esc(s.titulo)}</span><span class="seccion-desc">${esc(s.desc)}</span>
+          ${medidor(`bbs02-sec-${s.id}`, s.ids(), 'Progreso')}</span>
+      </a>`).join('')}</div>`}
+  </section>`;
+}
+
+function vistaSeccionBBS02(s) {
+  topbar([{ t: 'Juegos', href: '#/juegos' }, { t: BBS02.nombre, href: '#/bbs02' }, { t: s.titulo }]);
+  const i = SECCIONES_BBS02.indexOf(s);
+  const ant = SECCIONES_BBS02[i - 1];
+  const sig = SECCIONES_BBS02[i + 1];
+  return `
+  <section class="page juego-bbs02 seccion-pagina">
+    <header class="seccion-head">
+      <img class="seccion-head-art" src="${esc(s.img)}" alt="" width="72" height="72">
+      <div class="seccion-head-txt">
+        <p class="seccion-juego"><a href="#/bbs02">${esc(BBS02.nombre)}</a> · Informes · 100 %</p>
+        <h1 class="page-title">${esc(s.titulo)}</h1>
+      </div>
+      ${medidor(`bbs02-pag-${s.id}`, s.ids(), 'Progreso de la sección')}
+    </header>
+    ${s.html()}
+    <nav class="seccion-nav" aria-label="Otras secciones">
+      ${ant ? `<a href="#/bbs02/${ant.id}"><small>Anterior</small><b>${esc(ant.titulo)}</b></a>` : '<span></span>'}
+      ${sig ? `<a class="seccion-sig" href="#/bbs02/${sig.id}"><small>Siguiente</small><b>${esc(sig.titulo)}</b></a>` : '<a class="seccion-sig" href="#/bbs02"><small>Volver</small><b>Portada del juego</b></a>'}
+    </nav>
+  </section>`;
+}
+
 function vista404() {
   topbar([{ t: 'Juegos', href: '#/juegos' }, { t: 'No encontrado' }]);
   return `<section class="page"><h1 class="page-title">Esta página no existe</h1><p class="lead"><a href="#/juegos">Vuelve a la elección de juego</a>.</p></section>`;
@@ -2565,24 +3956,31 @@ function vista404() {
 // ---------- router ----------
 let irA = null; // sección a la que bajar tras el siguiente cambio de página
 function render({ conservarScroll = false } = {}) {
-  const destino = irA;
+  let destino = irA;
   irA = null; // se consume en este render aunque no haya navegación (p. ej., Ctrl+clic)
   medidores = {};
   const y = window.scrollY;
   const ruta = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   let html;
-  if (ruta.length === 0) html = vistaTitulo();
-  else if (ruta[0] === 'juegos') html = vistaJuegos();
+  if (ruta.length === 0) html = vistaPortada();
+  else if (ruta[0] === 'juegos') { html = vistaPortada(); destino ??= 'colecciones'; }
   else if (ruta[0] === 'bbs' && !ruta[1]) html = vistaBBS();
   else if (ruta[0] === 'bbs' && PERSONAJES[ruta[1]]) html = vistaPersonaje(ruta[1]);
   else if (ruta[0] === 'khfm' && !ruta[1]) html = vistaKHFM();
   else if (ruta[0] === 'khfm' && seccionKhfm(ruta[1])) html = vistaSeccionKHFM(seccionKhfm(ruta[1]));
   else if (ruta[0] === 'kh3' && !ruta[1]) html = vistaKH3();
   else if (ruta[0] === 'kh3' && seccionKh3(ruta[1])) html = vistaSeccionKH3(seccionKh3(ruta[1]));
+  else if (ruta[0] === 'kh2fm' && !ruta[1]) html = vistaKH2FM();
+  else if (ruta[0] === 'kh2fm' && seccionKh2fm(ruta[1])) html = vistaSeccionKH2FM(seccionKh2fm(ruta[1]));
+  else if (ruta[0] === 'ddd' && !ruta[1]) html = vistaDDD();
+  else if (ruta[0] === 'ddd' && seccionDdd(ruta[1])) html = vistaSeccionDDD(seccionDdd(ruta[1]));
+  else if (ruta[0] === 'bbs02' && !ruta[1]) html = vistaBBS02();
+  else if (ruta[0] === 'bbs02' && seccionBbs02(ruta[1])) html = vistaSeccionBBS02(seccionBbs02(ruta[1]));
   else html = vista404();
   document.body.dataset.view = ruta[0] || 'titulo';
   $main.innerHTML = html;
   refrescarMedidores();
+  activarPortada();
   if (conservarScroll) window.scrollTo(0, y);
   else if (destino && document.getElementById(destino)) {
     document.getElementById(destino).scrollIntoView();
@@ -2629,6 +4027,8 @@ document.addEventListener('click', (e) => {
   if (sxHab) { elegirHabilidad(sxHab); return; }
   const catCmd = e.target.closest('[data-cmd-cat]');
   if (catCmd) { elegirCategoria(catCmd); return; }
+  const objFiltro = e.target.closest('[data-obj-filtro]');
+  if (objFiltro) { filtrarObjBbs02(objFiltro); return; }
   const filtro = e.target.closest('[data-cmd-filtro]');
   if (filtro) { filtro.setAttribute('aria-pressed', filtro.getAttribute('aria-pressed') !== 'true'); filtrarComandos(filtro.closest('.cmds')); return; }
   const irCmd = e.target.closest('[data-ir-cmd], [data-ver-cmd]');

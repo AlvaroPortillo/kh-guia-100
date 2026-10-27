@@ -14,6 +14,8 @@
   --aqua: #63C9FF;
   --khfm: #6FA8FF;
   --kh3: #B9ABFF;
+  --kh2fm: #8C9AFF;
+  --ddd: #FF66B2;
   --danger: #FF8A8A;
   --lead: #050816;
   --accent: var(--gold);
@@ -46,6 +48,8 @@
   --aqua: #0B6EA8;
   --khfm: #1F55B8;
   --kh3: #5A3DB8;
+  --kh2fm: #3343B3;
+  --ddd: #B3105F;
   --danger: #B42323;
   --lead: #FFFFFF;
   color-scheme: light;
@@ -88,6 +92,9 @@ p { margin: 0; }
 body[data-view="bbs"] .sky,
 body[data-view="khfm"] .sky,
 body[data-view="kh3"] .sky,
+body[data-view="kh2fm"] .sky,
+body[data-view="ddd"] .sky,
+body[data-view="bbs02"] .sky,
 body[data-view="juegos"] .sky { opacity: .9; }
 
 /* ---------- barra superior ---------- */
@@ -95,13 +102,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .t-short { display: none; }
 /* Enlace a la portada de proyectos (barra superior y pantalla de título) */
 .tool-proyectos { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-.tool-proyectos svg, .title-proyectos svg { width: 15px; height: 15px; fill: currentColor; flex: none; }
-.title-proyectos {
-  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
-  color: var(--text-2); font-weight: 600; font-size: .875rem; text-decoration: none;
-  transition: color var(--t) var(--ease); animation: rise 900ms 420ms var(--ease) both;
-}
-.title-proyectos:hover { color: var(--text); text-decoration: underline; }
+.tool-proyectos svg { width: 15px; height: 15px; fill: currentColor; flex: none; }
 .topbar {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; gap: 16px;
@@ -145,44 +146,6 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .file-btn:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; }
 .menu-panel .danger { color: var(--danger); }
 
-/* ---------- pantalla de título ---------- */
-.title-screen {
-  position: relative; min-height: 100svh; display: grid; place-items: center;
-  padding: 48px var(--gutter); overflow: hidden; isolation: isolate;
-}
-.title-glass {
-  position: absolute; inset: 50% auto auto 50%; width: min(118vw, 860px); aspect-ratio: 1;
-  translate: -50% -50%; z-index: -2; opacity: .34;
-  mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
-}
-:root[data-theme="light"] .title-glass { opacity: .4; }
-.title-copy { position: relative; display: grid; justify-items: center; text-align: center; gap: 20px; max-width: 640px; }
-/* Halo oscuro detrás del texto para que la vidriera no reste contraste */
-.title-copy::before {
-  content: ""; position: absolute; inset: -12% -18%; z-index: -1;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg) 88%, transparent), transparent);
-}
-.title-logos { display: flex; align-items: center; justify-content: center; gap: clamp(12px, 4vw, 40px); }
-.title-logo { width: min(300px, 42vw); height: auto; filter: drop-shadow(0 8px 30px rgba(0, 0, 0, .5)); animation: rise 900ms var(--ease) both; }
-.title-logo + .title-logo { animation-delay: 80ms; }
-.title-word {
-  font: 700 clamp(2.4rem, 8vw, 4.6rem)/1 var(--f-display); letter-spacing: .03em;
-  background: linear-gradient(180deg, #FFF7DA 0%, var(--gold) 60%, #B98A22 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: rise 900ms 120ms var(--ease) both;
-}
-:root[data-theme="light"] .title-word { background: none; color: var(--gold); }
-.title-sub { color: var(--text-2); max-width: 46ch; animation: rise 900ms 220ms var(--ease) both; }
-.btn-start {
-  margin-top: 8px; display: inline-flex; align-items: center; gap: 10px;
-  font: 800 1rem/1 var(--f-ui); text-decoration: none; color: var(--gold-ink);
-  background: var(--gold); padding: 16px 34px; border-radius: 999px;
-  box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 50%, transparent);
-  transition: box-shadow var(--t) var(--ease), transform var(--t) var(--ease);
-  animation: rise 900ms 320ms var(--ease) both;
-}
-.btn-start:hover { box-shadow: 0 0 0 6px color-mix(in srgb, var(--gold) 22%, transparent); transform: translateY(-1px); }
-
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes spin { to { rotate: 360deg; } }
 
@@ -201,29 +164,14 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .page-title { font: 700 clamp(2rem, 5vw, 3rem)/1.1 var(--f-display); letter-spacing: .02em; }
 .lead { color: var(--text-2); margin-top: 8px; max-width: 62ch; }
 
-/* Elección de juego */
-.game-grid { margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+/* Fichas de juego (portada) */
 .game {
   position: relative; display: grid; gap: 12px; align-content: start; padding: 20px;
   border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
   text-decoration: none;
 }
-.game-logo { width: 100%; max-width: 260px; height: auto; aspect-ratio: 700 / 485; object-fit: contain; }
 .game-name { font-weight: 600; }
-.game-on {
-  grid-column: 1 / -1; grid-template-columns: minmax(200px, 360px) 1fr; align-items: center; gap: 24px 40px;
-  padding: 28px 32px; border-radius: var(--r-l);
-  background:
-    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--aqua) 14%, transparent), transparent 60%),
-    var(--surface);
-  transition: border-color var(--t) var(--ease), transform var(--t) var(--ease);
-}
-.game-on .game-logo { max-width: 360px; grid-row: span 2; }
-.game-on .game-name { font: 700 clamp(1.4rem, 3vw, 2rem)/1.15 var(--f-display); align-self: end; }
-.game-on .meter { align-self: start; max-width: 420px; }
-.game-on:hover { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); transform: translateY(-2px); }
 .game-off { opacity: .72; }
-.game-off .game-logo { filter: grayscale(.6); }
 .soon { font-size: .875rem; color: var(--text-2); }
 
 /* Medidores de progreso */
@@ -490,7 +438,7 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .tes-mundo[data-extra] .tes-nombre::after { content: ' · Final Mix'; color: var(--text-2); font-weight: 500; }
 .tes-zonas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 6px 22px; padding: 4px 16px 16px; }
 .tes-zona h4 { margin: 10px 0 4px; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; color: var(--accent); width: fit-content; }
-.tes-zona h4.tes-trad { text-decoration: underline dotted color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; cursor: help; }
+.tes-zona h4.tes-trad, .obj-bbs02-premio .tes-trad, .obj-bbs02-prendas .tes-trad { text-decoration: underline dotted color-mix(in srgb, var(--accent) 55%, transparent); text-underline-offset: 3px; cursor: help; }
 .tes-lista .item-row { grid-template-columns: 28px 1fr; padding: 8px 4px; gap: 12px; align-items: center; }
 .tes-lista .item-body { grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
 .tes-lista .item-meta { justify-content: flex-end; }
@@ -551,6 +499,8 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .copa-rivales li { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; font-size: .875rem; }
 .copa-rivales img { width: 56px; height: 56px; object-fit: contain; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); }
 .copa-rivales p { color: var(--text-2); margin-top: 2px; }
+.copa-rondas li { grid-template-columns: 64px 1fr; }
+.copa-rondas b { color: var(--kh2fm, var(--text)); font-variant-numeric: tabular-nums; }
 .copa-sub { margin-top: 40px; }
 .boss-khfm .boss-abre { margin-top: 8px; font-size: .875rem; color: var(--text-2); }
 .boss-khfm .boss-marca { margin-top: 12px; width: fit-content; }
@@ -1133,9 +1083,6 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .game-grid { grid-template-columns: 1fr 1fr; }
-  .game-on { grid-template-columns: 1fr; }
-  .game-on .game-logo { grid-row: auto; max-width: 300px; }
   .game-hero { grid-template-columns: 1fr; }
   .game-hero-logo { max-width: 240px; }
   .hero-card .stage { margin-bottom: 28px; }
@@ -1163,7 +1110,6 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
   .topbar { gap: 10px; }
   .t-long { display: none; }
   .t-short { display: inline; }
-  .game-grid { grid-template-columns: 1fr; }
   .pj-meters, .meters-big { grid-template-columns: 1fr; }
   .info-cards { grid-template-columns: 1fr; }
   .fight { min-height: 88px; padding: 12px; font-size: .875rem; }
@@ -1384,3 +1330,289 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .exp-suma { display: grid; justify-items: start; gap: 2px; margin: 0 0 16px; padding: 16px 20px; border-radius: var(--r-m);
   border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, transparent), var(--surface)); color: var(--text-2); }
 .exp-suma b { font-size: 2rem; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; line-height: 1.1; }
+
+/* KH II Final Mix: azul cobalto del «II» del logo (entre el azul de KH FM y el lila de KH III) */
+.juego-kh2fm { --accent: var(--kh2fm); --pj: var(--kh2fm); }
+.juego-kh2fm .info-card h3 { color: var(--accent); }
+.mundos-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr)); gap: 16px; margin-top: 24px; align-items: start; }
+.mundo-kh2 {
+  position: relative; padding: 18px 20px 20px; border-radius: var(--r-m); border: 1px solid var(--line); scroll-margin-top: 130px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 55%), var(--surface);
+}
+.mundo-kh2::before {
+  content: ''; position: absolute; inset: 0 20px auto; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .7;
+}
+.mundo-kh2 h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 1.125rem; margin: 0 0 10px; color: var(--text); }
+.mundo-kh2 .list { margin: 0; }
+.mundo-sin { color: var(--text-2); font-size: .875rem; margin: 0; }
+.mundo-datos { display: grid; gap: 10px; margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
+.mundo-datos div { display: grid; grid-template-columns: 11rem 1fr; gap: 4px 14px; }
+.mundo-datos dt { font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); padding-top: 2px; }
+.mundo-datos dd { margin: 0; color: var(--text-2); font-size: .875rem; line-height: 1.55; }
+.mundo-datos dd b { color: var(--text); font-weight: 700; }
+@media (max-width: 560px) {
+  .mundo-kh2 { padding: 16px; }
+  .mundo-datos div { grid-template-columns: 1fr; }
+}
+/* KH II FM · diario: casillas compactas para las listas sin descripción */
+.marcas-diario { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0; list-style: none; }
+/* KH II FM · tesoros, puzles y mapas (reutiliza el desplegable de tesoros de BBS) */
+.tes-premio { margin-left: 6px; font-size: .8125rem; font-weight: 500; color: var(--text-2); }
+.tes-resuelto { padding: 4px 16px 0; }
+.tes-mapas { padding: 0; margin-top: 8px; }
+/* BBS · recetas: probabilidad y otros comandos que puede dar la misma mezcla */
+.cmd-receta-otros { display: block; margin-top: 4px; font-size: .8125rem; color: var(--text-2); }
+.cmd-receta-otros b { color: var(--text); }
+.cmd-receta-baja .eq-box { border-style: dashed; }
+/* KH II FM · Orfebrería: título del Arma Artema junto al anillo */
+.forja-tit { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+/* KH II FM · Sora: formas de fusión, invocaciones y magia */
+.info-cards.info-cards-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.formas-kh2 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); }
+.forma-head { display: flex; align-items: center; gap: 10px; }
+.forma-head h3 { margin: 0; font-size: 1.125rem; color: var(--accent); }
+.forma-kh2 .mundo-datos div { grid-template-columns: 9rem 1fr; }
+.niveles-forma { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.niveles-forma .marca { font-weight: 500; }
+.niveles-forma .marca b { font-weight: 700; }
+.magias-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 0 24px; }
+.magias-kh2 .group { margin-top: 18px; }
+.magias-kh2 .bullets { margin-bottom: 4px; font-size: .9375rem; }
+@media (max-width: 560px) { .forma-kh2 .mundo-datos div { grid-template-columns: 1fr; } }
+.forma-kh2 { padding: 18px 20px 20px; gap: 12px; align-content: start; }
+.forma-kh2 .mundo-datos { margin-top: 0; }
+/* KH II FM · minijuegos y misiones */
+.minis-kh2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-top: 12px; }
+.mini-kh2 { padding: 14px 16px 16px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.mini-kh2 h4 { margin: 0; font-size: 1rem; color: var(--text); }
+.mini-consejo { margin: 6px 0 0; font-size: .875rem; color: var(--text-2); line-height: 1.5; }
+.mini-kh2 .niveles-forma { margin-top: 10px; }
+.marca.marca-juego { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+
+/* KH Dream Drop Distance: fucsia del logo y de los marcos de los logros (el azul eléctrico del Nexo, solo en detalles) */
+.juego-ddd { --accent: var(--ddd); --pj: var(--ddd); }
+.juego-bbs02 { --accent: var(--aqua); --pj: var(--aqua); }
+.juego-bbs02 .info-card h3 { color: var(--accent); }
+/* 0.2 · Objetivos: tarjeta por objetivo, chip de la partida en que conviene, prendas por ranura */
+.obj-bbs02-leyenda { display: grid; gap: 8px; margin: 14px 0 16px; }
+.obj-bbs02-leyenda div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.obj-bbs02-leyenda dt { flex: none; }
+.obj-bbs02-leyenda dd { margin: 0; flex: 1 1 240px; font-size: .875rem; color: var(--text-2); line-height: 1.5; }
+.obj-bbs02-filtros { margin-bottom: 4px; }
+.obj-bbs02 { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface);
+  transition: border-color var(--t) var(--ease); }
+.obj-bbs02:has(.is-done) { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.obj-bbs02 h4 { margin: 2px 0 0; font-size: 1rem; line-height: 1.4; color: var(--text); }
+.obj-bbs02 .mini-consejo { margin: 0; }
+.obj-bbs02 .niveles-forma { margin-top: auto; padding-top: 6px; }
+.obj-bbs02-cab { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.obj-bbs02-n { font: 800 .8125rem/1 var(--f-ui); letter-spacing: .04em; color: var(--accent); margin-right: 4px; }
+.chip-cuando.chip-primera { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.chip-cuando.chip-final { border-color: color-mix(in srgb, var(--gold) 60%, transparent); color: var(--gold); }
+.chip-cuando.chip-plus { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.chip-guarda { border-style: dashed; border-color: var(--text-2); color: var(--text-2); }
+.obj-bbs02-premio { margin: 0; font-size: .875rem; color: var(--text); }
+.obj-bbs02-premio span { margin-right: 6px; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+.obj-bbs02-ranuras { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.obj-bbs02-ranuras h3 small { margin-left: 6px; font-size: .8125rem; color: var(--text-2); }
+.obj-bbs02-prendas { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 2px; font-size: .875rem; }
+.obj-bbs02-prendas .marca { display: flex; width: 100%; padding: 5px 8px 5px 4px; border-color: transparent; border-radius: var(--r-s, 10px); background: transparent; font-weight: 500; }
+.obj-bbs02-prendas .marca > span:last-child { flex: 1; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.obj-bbs02-prendas .marca:hover { background: var(--surface-2); }
+.obj-bbs02-prendas .marca.is-done { border-color: transparent; background: color-mix(in srgb, var(--gold) 10%, transparent); }
+.obj-bbs02-prendas small { flex: none; color: var(--text-2); font-size: .75rem; }
+.juego-ddd .info-card h3 { color: var(--accent); }
+.lucientes-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; margin-top: 18px; align-items: start; }
+.luciente-ddd { display: grid; gap: 10px; align-content: start; padding: 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.luciente-ddd-head { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; }
+.luciente-ddd-img { width: 72px; height: 72px; object-fit: contain; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+.luciente-ddd-ph { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 14px; background: var(--surface-2); border: 1px dashed var(--line); color: var(--text-2); font-weight: 800; }
+.luciente-ddd h3 { font-size: 1.0625rem; font-weight: 800; line-height: 1.2; }
+.luciente-ddd small { color: var(--text-2); font-size: .8125rem; }
+.luciente-ddd p { margin: 0; font-size: .875rem; color: var(--text-2); line-height: 1.45; }
+.luciente-ddd details summary { cursor: pointer; font-weight: 600; font-size: .875rem; width: fit-content; }
+.luciente-ddd details ul { margin: 8px 0 0; padding-left: 18px; font-size: .8125rem; color: var(--text-2); }
+.portales-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; margin-top: 12px; }
+.portales-ddd .marca { align-items: start; border-radius: var(--r-m); padding: 8px 12px 8px 8px; }
+.portales-ddd .marca > span:last-child { display: grid; gap: 2px; }
+.portales-ddd small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.transitos-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-top: 14px; }
+.transito-ddd { padding: 12px 14px 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.transito-ddd h4 { margin: 0; font-size: 1rem; color: var(--text); }
+.transito-ddd .portales-ddd { grid-template-columns: 1fr 1fr; margin-top: 10px; }
+.sub-pj { margin: 18px 0 0; font-size: 1.0625rem; font-weight: 800; color: var(--accent); }
+.ddd-estrellas { color: var(--gold); letter-spacing: 1px; }
+/* 0.2 · Cofres: cada cofre con su número, contenido, lugar y tipo; columnas por visita */
+.cof02-zonas { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 4px 28px; }
+.cof02-zonas .item-row { align-items: start; }
+.cof02-zonas .crown { margin-top: 2px; }
+.cof02-zonas .item-desc { font-size: .875rem; line-height: 1.5; }
+.cof02-zonas .item-meta { margin-top: 4px; }
+.cof02-n {
+  display: inline-grid; place-items: center; min-width: 24px; height: 22px; margin-right: 8px; padding: 0 6px; border-radius: 99px;
+  font: 800 .75rem/1 var(--f-ui); color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); vertical-align: 2px;
+}
+.cof02-cuenta { margin-left: 4px; color: var(--text-2); font-weight: 600; }
+.cof02-obj { margin: 2px 16px 0; font-size: .875rem; color: var(--text-2); }
+.chip-cof02-mapa { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+.chip-cof02-reliquia { border-color: color-mix(in srgb, var(--gold) 60%, transparent); color: var(--gold); }
+#cofres-bbs02 .tes-nombre small { display: block; margin: 3px 0 0; }
+/* 0.2 · Combate: la casilla de cada comando siempre al pie de la tarjeta */
+.cmd02 { display: flex; flex-direction: column; }
+.cmd02 .niveles-forma { margin-top: auto; padding-top: 10px; }
+.perd02-cab { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+/* 0.2 · Encabezados: las tarjetas y subgrupos son h3 (cuelgan del h2 del bloque) con el aspecto de los h4 del resto de la guía.
+   Texto corrido a 54ch (unos 75-80 caracteres de Sora por línea; DESIGN.md pide líneas cortas). */
+.juego-bbs02 .mini-kh2 h3 { margin: 0; font-size: 1rem; color: var(--text); }
+.juego-bbs02 .obj-bbs02 h3 { margin: 2px 0 0; font-size: 1rem; line-height: 1.4; color: var(--text); }
+.juego-bbs02 .tes-zona h3 { margin: 10px 0 4px; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; color: var(--accent); width: fit-content; }
+.juego-bbs02 .mundo-kh2 .mini-kh2 h3 { display: block; margin: 0; font-size: 1rem; }
+.juego-bbs02 :is(.seccion-lead, .lead, .group-intro, .hint, .nota-fuente, .obj-bbs02-leyenda dd, .steps p, .item-desc) { max-width: 54ch; }
+/* 0.2 · Ruta al 100 %: tres fases en columna (una debajo de otra en móvil), número grande, progreso y pasos */
+.fases02 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 12px; align-items: start; }
+.fase02 { display: grid; gap: 14px; padding: 18px 18px 20px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
+.fase02-cab { display: flex; align-items: center; gap: 14px; }
+.fase02-n {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  font: 700 1.375rem/1 var(--f-display); color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.fase02-cab h3 { margin: 0; font-size: 1.125rem; font-weight: 800; color: var(--text); }
+.fase02-cab p { margin: 2px 0 0; font-size: .8125rem; color: var(--text-2); }
+.fase02-pasos { margin: 0; padding-left: 1.25rem; display: grid; gap: 8px; font-size: .9375rem; line-height: 1.5; color: var(--text); }
+.fase02-pasos li::marker { color: var(--accent); font-weight: 700; }
+
+/* ---------- portada única: las tres colecciones de Steam son la portada ---------- */
+/* Cabecera: aurora con los acentos de las colecciones, vidriera detrás y los tres logos como puertas */
+.portada-hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: calc(100svh - 64px); display: grid; place-items: center; align-content: center;
+  padding: 56px var(--gutter) 104px;
+}
+.hero-aurora {
+  position: absolute; inset: -25%; z-index: -3; pointer-events: none;
+  background:
+    radial-gradient(34% 40% at 22% 38%, color-mix(in srgb, var(--khfm) 30%, transparent), transparent 75%),
+    radial-gradient(30% 36% at 52% 30%, color-mix(in srgb, var(--ddd) 22%, transparent), transparent 75%),
+    radial-gradient(34% 40% at 80% 44%, color-mix(in srgb, var(--kh3) 26%, transparent), transparent 75%),
+    radial-gradient(42% 32% at 50% 88%, color-mix(in srgb, var(--aqua) 16%, transparent), transparent 75%);
+  will-change: transform;
+  animation: aurora 26s cubic-bezier(.45, 0, .55, 1) infinite alternate;
+}
+:root[data-theme="light"] .hero-aurora { opacity: .7; }
+@keyframes aurora {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  100% { transform: translate3d(4%, -3%, 0) rotate(10deg) scale(1.12); }
+}
+.hero-glass {
+  position: absolute; inset: 50% auto auto 50%; z-index: -2; width: min(130vw, 880px); aspect-ratio: 1; translate: -50% -50%;
+  opacity: .16; pointer-events: none; mask-image: radial-gradient(closest-side, #000 50%, transparent 100%);
+}
+:root[data-theme="light"] .hero-glass { opacity: .22; }
+
+.hero-cols {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center;
+  gap: clamp(16px, 4vw, 64px); width: min(1220px, 100%);
+}
+.hero-col {
+  display: grid; justify-items: center; gap: 18px; padding: 16px 12px 20px; border-radius: var(--r-l);
+  text-decoration: none; color: var(--text-2);
+  transition: background var(--t) var(--ease), color var(--t) var(--ease);
+  animation: hero-in 1200ms cubic-bezier(.16, 1, .3, 1) both; animation-delay: calc(var(--k, 0) * 140ms + 120ms);
+}
+.hero-col:hover { color: var(--text); }
+.hero-col:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; color: var(--text); }
+.hero-logo { width: min(100%, 380px); }
+.hero-col .logo3d img { filter: drop-shadow(0 18px 34px rgba(0, 0, 0, .55)); }
+:root[data-theme="light"] .hero-col .logo3d img { filter: drop-shadow(0 14px 24px rgba(15, 22, 51, .25)); }
+.hero-col-meta { font-size: .875rem; font-weight: 600; letter-spacing: .01em; text-align: center; }
+.hero-col-meta small { display: block; margin-top: 2px; font-size: .75rem; font-weight: 500; }
+.hero-col-meta b { color: var(--gold); font-weight: 800; font-variant-numeric: tabular-nums; }
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(26px) scale(.96); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.hero-bajar {
+  position: absolute; left: 50%; bottom: 28px; translate: -50% 0;
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 60%, transparent); color: var(--text-2);
+  transition: color var(--t) var(--ease), border-color var(--t) var(--ease);
+  animation: bajar 2.6s cubic-bezier(.45, 0, .55, 1) 1.6s infinite;
+}
+.hero-bajar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-bajar:hover { color: var(--text); border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); }
+.hero-bajar:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+@keyframes bajar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* Secciones: una por colección, con su vidriera y sus juegos */
+.portada { overflow-x: clip; }
+.colecciones { max-width: var(--max); margin: 0 auto; padding: 24px var(--gutter) 120px; display: grid; gap: clamp(72px, 10vw, 120px); }
+.coleccion { position: relative; isolation: isolate; scroll-margin-top: 88px; }
+.coleccion-glass {
+  position: absolute; z-index: -1; top: -170px; right: -120px; width: min(540px, 95vw); aspect-ratio: 1; pointer-events: none;
+  opacity: .22; mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+  transition: opacity 1400ms cubic-bezier(.16, 1, .3, 1), scale 1600ms cubic-bezier(.16, 1, .3, 1);
+}
+.coleccion:nth-child(even) .coleccion-glass { right: auto; left: -160px; }
+.coleccion:nth-child(even) .vidriera.spin { animation-direction: reverse; }
+:root[data-theme="light"] .coleccion-glass { opacity: .28; }
+.coleccion-cab { display: grid; gap: 8px; margin-bottom: 28px; max-width: min(100%, 52rem); }
+.coleccion-titulo { margin: 0; font: 700 clamp(1.6rem, 3.6vw, 2.4rem)/1.1 var(--f-display); letter-spacing: .02em; text-wrap: balance; }
+.coleccion-sub { margin: 0; font-size: .9375rem; font-weight: 600; color: var(--text-2); }
+
+.coleccion-juegos { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.juego-tile {
+  --pj: var(--tile); grid-template-columns: minmax(110px, 190px) 1fr; align-items: center; gap: 20px 28px;
+  padding: 22px 26px; border-radius: var(--r-l);
+  background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--tile) 16%, transparent), transparent 62%),
+    color-mix(in srgb, var(--bg) 86%, transparent);
+  transition: border-color var(--t) var(--ease), translate 700ms cubic-bezier(.16, 1, .3, 1), opacity 600ms cubic-bezier(.16, 1, .3, 1);
+}
+a.juego-tile:hover, a.juego-tile:focus-visible { border-color: color-mix(in srgb, var(--tile) 60%, var(--line)); }
+a.juego-tile:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.juego-cuerpo { display: grid; gap: 14px; min-width: 0; }
+.juego-tile .game-name { font: 700 clamp(1.15rem, 2.2vw, 1.5rem)/1.15 var(--f-display); color: var(--text); }
+.juego-tile .soon {
+  justify-self: start; margin: 0; padding: 6px 12px; border-radius: 99px; border: 1px dashed var(--line);
+  font-weight: 700; font-size: .8125rem; color: var(--text-2);
+}
+
+/* Logo con relieve: se inclina hacia el ratón y un destello lo recorre (la máscara es el propio logo) */
+.logo3d {
+  position: relative; display: block;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms cubic-bezier(.16, 1, .3, 1);
+}
+.is-tilt .logo3d { transition-duration: 120ms; }
+.logo3d img { display: block; width: 100%; height: auto; filter: drop-shadow(0 12px 22px rgba(0, 0, 0, .45)); }
+:root[data-theme="light"] .logo3d img { filter: drop-shadow(0 10px 18px rgba(15, 22, 51, .22)); }
+.logo3d-luz {
+  position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask: var(--img) center / contain no-repeat; mask: var(--img) center / contain no-repeat;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, .55) 50%, transparent 60%) 160% 0 / 260% 100% no-repeat;
+  transition: background-position 1100ms cubic-bezier(.16, 1, .3, 1);
+}
+[data-tilt]:hover .logo3d-luz, [data-tilt]:focus-visible .logo3d-luz { background-position: -60% 0; }
+.game-off .logo3d img { filter: grayscale(.7) drop-shadow(0 12px 22px rgba(0, 0, 0, .35)); }
+
+/* Entrada: al aparecer cada colección se enciende su vidriera y sus juegos suben escalonados */
+.js-portada .coleccion:not(.is-in) .coleccion-glass { opacity: 0; scale: .86; }
+.js-portada .coleccion:not(.is-in) .juego-tile { opacity: 0; translate: 0 22px; }
+.js-portada .coleccion .juego-tile { transition-delay: 0ms, calc(var(--k, 0) * 90ms + 120ms), calc(var(--k, 0) * 90ms + 120ms); }
+
+@media (max-width: 760px) {
+  .portada-hero { min-height: auto; padding: 40px var(--gutter) 96px; }
+  .hero-cols { grid-template-columns: 1fr; gap: 8px; }
+  .hero-logo { width: min(300px, 78vw); }
+}
+@media (max-width: 560px) {
+  .juego-tile { grid-template-columns: 1fr; padding: 20px; }
+  .game-logo3d { width: min(240px, 80%); }
+  .coleccion-glass { top: -40px; right: -45vw; }
+  .coleccion:nth-child(even) .coleccion-glass { left: -45vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo3d { transform: none; }
+  .logo3d-luz { display: none; }
+}
