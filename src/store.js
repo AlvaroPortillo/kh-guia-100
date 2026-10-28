@@ -76,9 +76,11 @@ export const store = {
   },
   // Devuelve una promesa: falla si el archivo no vale o si el servidor lo rechaza.
   importar(texto) {
-    const data = JSON.parse(texto);
-    if (!data || typeof data.hechos !== 'object' || (data.ajustes && typeof data.ajustes !== 'object')) {
-      throw new Error('El archivo no es una copia de progreso de esta guía.');
+    const noValido = new Error('El archivo no es una copia de progreso de esta guía.');
+    let data;
+    try { data = JSON.parse(texto); } catch { throw noValido; }
+    if (!data || !data.hechos || typeof data.hechos !== 'object' || (data.ajustes && typeof data.ajustes !== 'object')) {
+      throw noValido;
     }
     estado = { version: 1, hechos: data.hechos, ajustes: data.ajustes || {} };
     guardar();

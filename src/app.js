@@ -4022,8 +4022,8 @@ document.addEventListener('change', (e) => {
   } else if (t.matches('[data-accion="importar"]') && t.files[0]) {
     t.files[0].text().then((txt) => {
       Promise.resolve().then(() => store.importar(txt))
-        .then(() => { render(); alert('Progreso importado.'); })
-        .catch((err) => { render(); alert(`No se pudo importar: ${err.message}`); });
+        .then(() => { render(); avisar('Progreso importado', 'Tus marcas y ajustes ya están en esta guía.'); })
+        .catch((err) => { render(); avisar('No se pudo importar', err.message, true); });
     });
   }
 });
@@ -4099,9 +4099,57 @@ document.addEventListener('click', (e) => {
     a.click();
     URL.revokeObjectURL(a.href);
   } else if (accion === 'borrar') {
-    if (confirm('¿Borrar todo tu progreso? No se puede deshacer (salvo que tengas una copia exportada).')) { store.borrarTodo(); render(); }
+    abrirBorrarTodo();
   }
 });
+
+// Aviso propio en lugar del alert del navegador: un destello dorado (la llave espada) o una cruz si algo falla.
+function avisar(titulo, texto, error = false) {
+  const d = dialogo(titulo);
+  const icono = error ? 'M6 6l12 12M18 6 6 18' : 'M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3-6.3-2.2 6.3-2.2z';
+  d.innerHTML = `
+    <div class="bx-dialog-in aviso${error ? ' aviso-error' : ''}" role="alertdialog" aria-labelledby="aviso-titulo">
+      <div class="aviso-cuerpo">
+        <span class="aviso-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="${icono}"/></svg></span>
+        <h2 id="aviso-titulo" class="aviso-titulo">${esc(titulo)}</h2>
+        <p class="aviso-texto">${esc(texto)}</p>
+      </div>
+      <div class="aviso-pie"><button type="button" class="aviso-ok" data-cerrar>Aceptar</button></div>
+    </div>`;
+  if (!d.open) d.showModal();
+  d.querySelector('.aviso-ok').focus();
+}
+
+// Borrar todo exige escribir BORRAR: un clic por error no basta.
+function abrirBorrarTodo() {
+  document.querySelector('details.menu')?.removeAttribute('open');
+  const d = dialogo('Borrar todo el progreso');
+  d.innerHTML = `
+    <div class="bx-dialog-in borrar-dialog">
+      <div class="bx-dialog-bar"><b>Borrar todo el progreso</b>${BOTON_CERRAR}</div>
+      <form class="borrar-cuerpo">
+        <p>Se borrarán todas las marcas y los ajustes de esta guía. No se puede deshacer, salvo que tengas una copia exportada.</p>
+        <label for="borrar-confirmar">Para confirmar, escribe <b>BORRAR</b> en mayúsculas:</label>
+        <input id="borrar-confirmar" autocomplete="off" spellcheck="false">
+        <div class="borrar-botones">
+          <button type="button" data-cerrar>Cancelar</button>
+          <button type="submit" class="danger" disabled>Borrar todo</button>
+        </div>
+      </form>
+    </div>`;
+  const entrada = d.querySelector('#borrar-confirmar');
+  const confirmar = d.querySelector('.borrar-botones .danger');
+  entrada.addEventListener('input', () => { confirmar.disabled = entrada.value !== 'BORRAR'; });
+  d.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (entrada.value !== 'BORRAR') return;
+    d.close();
+    store.borrarTodo();
+    render();
+  });
+  if (!d.open) d.showModal();
+  entrada.focus();
+}
 
 // Flechas izquierda/derecha entre las dos pestañas del selector de modo y entre los combates de la build.
 document.addEventListener('keydown', (e) => {
