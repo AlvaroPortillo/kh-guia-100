@@ -1028,7 +1028,10 @@ body[data-view="juegos"] .sky { opacity: .9; }
 }
 .tb-marcas-t { font-size: .875rem; color: var(--text-2); min-width: 7.5em; }
 .marca { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: .875rem; font-weight: 600; transition: border-color var(--t) var(--ease), background var(--t) var(--ease); }
-.marca .crown { width: 24px; height: 24px; padding: 3px; border-radius: 50%; }
+.marca .crown { width: 24px; height: 24px; padding: 3px; border-radius: 50%; flex-shrink: 0; }
+.marca-obj { align-items: start; border-radius: var(--r-m); padding: 8px 12px 8px 8px; }
+.marca-obj > span:last-child { display: grid; gap: 2px; }
+.marca-obj small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
 .marca:hover { border-color: color-mix(in srgb, var(--accent, var(--gold)) 55%, var(--line)); }
 .marca:has(.check-input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 2px; }
 .marca.is-done { border-color: color-mix(in srgb, var(--gold) 60%, var(--line)); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
@@ -1437,6 +1440,13 @@ button.tb-num:focus-visible, .tb-mapa:focus-visible, .tb-ver:focus-visible, .cas
 .portales-ddd .marca { align-items: start; border-radius: var(--r-m); padding: 8px 12px 8px 8px; }
 .portales-ddd .marca > span:last-child { display: grid; gap: 2px; }
 .portales-ddd small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.lista-cien-ddd { display: grid; gap: 8px; margin-top: 12px; }
+.cien-ddd { display: grid; grid-template-columns: minmax(0, 1fr) 13rem; align-items: center; gap: 4px 14px; }
+.cien-ddd .marca { min-width: 0; align-items: start; border-radius: var(--r-m); padding: 8px 12px 8px 8px; }
+@media (max-width: 720px) { .cien-ddd { grid-template-columns: 1fr; } .cien-ddd .ir-seccion { padding-left: 8px; } }
+.cien-ddd .marca > span:last-child { display: grid; gap: 2px; }
+.cien-ddd small { color: var(--text-2); font-size: .8125rem; font-weight: 500; }
+.cien-ddd .ir-seccion { margin-left: 0; }
 .transitos-ddd { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-top: 14px; }
 .transito-ddd { padding: 12px 14px 14px; border-radius: var(--r-m); border: 1px solid var(--line); background: var(--surface); }
 .transito-ddd h4 { margin: 0; font-size: 1rem; color: var(--text); }
