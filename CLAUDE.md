@@ -213,7 +213,9 @@ Ojo con `hidden`: `[hidden] { display: none !important; }` en `styles.css` (una 
    **Plan maestro de todos los KH** (317 logros, guía de cada logro y de cada «100 %»): `notas/plan-todos-kh.md`.
    **Después: KH HD 2.8 Final Chapter Prologue, Dream Drop Distance (KH DDD)**, plan en `notas/plan-ddd.md`
    (app Steam 2552440: DDD tiene 54 logros, ACH_16…ACH_69; los 15 de ACH_01…ACH_15 son de 0.2 Birth by Sleep). **Hecho el 27-10-2026 (pendiente de revisión):** `#/ddd` y `#/ddd/<sección>`
-   (historia, portales, lucientes, minijuegos, realidad, progreso, coleccion); ids `ddd.*`. Portales secretos: 11 (KHWiki). Estado en `notas/plan-ddd.md`. Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).
+   (historia, portales, lucientes, minijuegos, realidad, progreso, coleccion); ids `ddd.*`. Revisión del 28-10-2026: todo
+   se marca (las 18 condiciones del 100 %, `ddd.cien.<id>`; nivel del Naiperama con las 10 copas y 9 objetivos de KHWiki,
+   `ddd.naiperama.copa.<id>` y `ddd.naiperama.<id>`; las Llaves Espada de cada mundo reutilizan `ddd.llave.*`). Portales secretos: 11 (KHWiki). Estado en `notas/plan-ddd.md`. Acento propuesto `--ddd` `#FF66B2` / `#B3105F` (fucsia del logo). Guías en castellano: Gamerbase y KHWorld. Después, Re:Chain of Memories (ACH_056…ACH_102).
 5. **KH 0.2 Birth by Sleep -A fragmentary passage-** (juego de Aqua, misma app 2552440, ACH_01…ACH_15). **Plan en
    `notas/plan-bbs02.md`** (aprobado el 27-10-2026). **Entrega 1 hecha** (27-10-2026, pendiente de revisión): `#/bbs02` con los 15
    logros y «Antes de empezar» (`bbs02.js`), y `#/bbs02/historia` (`bbs02-historia.js`: zonas, jefes con estrategia, jefe secreto;

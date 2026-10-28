@@ -15,6 +15,7 @@ export const FUENTES_DDD = {
   wikiEsOnirido: { nombre: 'Wiki ES — Onírido (Lucientes, Terrores y jefes)', url: `${WES}On%C3%ADrido` },
   wikiEsOnirita: { nombre: 'Wiki ES — Onirita', url: `${WES}Onirita` },
   wikiEsNaiperama: { nombre: 'Wiki ES — Naiperama', url: `${WES}Naiperama` },
+  khwikiNaiperama: { nombre: 'KHWiki — Flick Rush (copas y nivel del Naiperama)', url: 'https://www.khwiki.com/Flick_Rush' },
   wikiEsNexario: { nombre: 'Wiki ES — Nexario', url: `${WES}Nexario` },
   khwikiPortal: { nombre: 'KHWiki — Portal (portales secretos)', url: 'https://www.khwiki.com/Portal#Secret_Portal' },
   khwikiDreamEater: { nombre: 'KHWiki — Dream Eater (imágenes y nombres en inglés)', url: 'https://www.khwiki.com/Dream_Eater' },

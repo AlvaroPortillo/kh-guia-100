@@ -84,7 +84,7 @@ import { FUENTES_COLISEO_KH2FM, IMG_COLISEO_KH2, INTRO_COLISEO_KH2FM, COPAS_KH2F
 import { FUENTES_DDD, DDD, GRUPOS_LOGROS_DDD, RUTA_DDD, CONSEJOS_DDD } from './data/ddd.js';
 import { FUENTES_MUNDOS_DDD, INTRO_MUNDOS_DDD, MUNDOS_DDD, SECRETOS_DDD } from './data/ddd-mundos.js';
 import {
-  TRANSITOS_DDD, NOTA_TRANSITOS, CIEN_DDD, NOTA_CIEN, FINAL_SECRETO_DDD, NAIPERAMA_DDD, MINIJUEGOS_DDD, REALIDAD_DDD, NOTA_REALIDAD,
+  TRANSITOS_DDD, NOTA_TRANSITOS, CIEN_DDD, NOTA_CIEN, FINAL_SECRETO_DDD, NAIPERAMA_DDD, NAIPERAMA_COPAS_DDD, NAIPERAMA_OBJ_DDD, NOTA_NAIPERAMA_NIVEL, MINIJUEGOS_DDD, REALIDAD_DDD, NOTA_REALIDAD,
   DESCIFRADO_DDD, HISTORIETA_DDD, NEXO_OBJETIVOS_DDD, NOTA_NEXO_OBJ, HABILIDADES_DDD, INTRO_PORTALES_DDD, COMO_PORTALES_DDD, NOTA_PORTALES_DDD,
   INTRO_LUCIENTES_DDD, NOTA_LUCIENTES_DDD, INTRO_COLECCION_DDD, NOTA_COMANDOS_DDD, NOTA_LLAVES_DDD, NOTA_ONIRITAS_DDD, HUECOS_DDD,
 } from './data/ddd-progreso.js';
@@ -199,6 +199,8 @@ const ID = {
   dddNexo: (grupo, n) => `ddd.nexo.${grupo}.${slugCmd(n)}`,
   dddHabilidad: (n) => `ddd.habilidad.${slugCmd(n)}`,
   dddMinijuego: (id) => `ddd.minijuego.${id}`,
+  dddCopa: (id) => `ddd.naiperama.copa.${id}`,
+  dddNaiperama: (id) => `ddd.naiperama.${id}`,
   dddRealidad: (id) => `ddd.realidad.${id}`,
   dddDescifrado: (n) => `ddd.descifrado.${slug(n)}`,
   dddHistorieta: (n) => `ddd.historieta.${slug(n)}`,
@@ -376,7 +378,7 @@ const idsRealidadDdd = () => [
   ...HISTORIETA_DDD.map((x) => ID.dddHistorieta(x.n)), ...acrobatasDdd().map(ID.dddAcrobata),
 ];
 const idsTransitosDdd = () => TRANSITOS_DDD.flatMap((t) => PJ_DDD.map((pj) => ID.dddTransito(t.id, pj)));
-const idsCienDdd = () => CIEN_DDD.filter((c) => c.marca).map(idCienDdd);
+const idsCienDdd = () => CIEN_DDD.map(idCienDdd);
 const idsComandosDdd = () => COMANDOS_DDD.flatMap((c) => c.items.map((x) => ID.dddCmd(c.cat, x.n)));
 // Una entrada por Llave Espada y personaje («Sora/Riku» = dos marcas).
 const llavesDdd = () => LLAVES_DDD.flatMap((l) => l.pj.map((p) => ({ n: l.n, p: p.toLowerCase(), como: l.como })));
@@ -386,7 +388,8 @@ const idsJuguetesDdd = () => JUGUETES_DDD.map(ID.dddJuguete);
 const idsSecHistoriaDdd = () => [...MUNDOS_DDD.map((m) => ID.dddLogro(m.logro)), ...idsJefesDdd(), ...idsSecretosDdd()];
 const idsSecPortalesDdd = () => [...idsPortalesDdd(), ...idsNexoObjDdd()];
 const idsSecLucientesDdd = () => [...idsFormulasDdd(), ...idsCreadosDdd(), ...idsNexosDdd(), ...idsHabilidadesDdd()];
-const idsSecMinijuegosDdd = () => idsMinijuegosDdd();
+const idsNaiperamaDdd = () => [...NAIPERAMA_COPAS_DDD.map((c) => ID.dddCopa(c.id)), ...NAIPERAMA_OBJ_DDD.map((o) => ID.dddNaiperama(o.id))];
+const idsSecMinijuegosDdd = () => [...idsNaiperamaDdd(), ...idsMinijuegosDdd()];
 const idsSecRealidadDdd = () => idsRealidadDdd();
 const idsSecProgresoDdd = () => [...new Set([...idsCienDdd(), ...idsTransitosDdd()])];
 const idsSecColeccionDdd = () => [...idsComandosDdd(), ...idsLlavesDdd(), ...idsOniritasDdd(), ...idsJuguetesDdd()];
@@ -3405,6 +3408,12 @@ function dddLogros() {
     })}`;
 }
 
+// «Retumbadora (Sora y Riku)» → una casilla por personaje, con la misma marca que en Coleccionismo.
+const llavesMundoDdd = (m) => (m.llaves || []).flatMap((txt) => {
+  const [, n, quien] = txt.match(/^(.*) \((Sora y Riku|Sora|Riku)\)$/);
+  return quien.split(' y ').map((pj) => ({ n, pj, id: ID.dddLlave(n, pj.toLowerCase()) }));
+});
+
 // Mundos y jefes.
 function dddHistoria() {
   const jefe = (j) => `
@@ -3414,7 +3423,8 @@ function dddHistoria() {
       <div class="niveles-forma">${marca(ID.dddJefe(j.id), 'Vencido')}</div>
     </article>`;
   const mundo = (m) => {
-    const ids = [ID.dddLogro(m.logro), ...m.jefes.map((j) => ID.dddJefe(j.id))];
+    const llaves = llavesMundoDdd(m);
+    const ids = [ID.dddLogro(m.logro), ...m.jefes.map((j) => ID.dddJefe(j.id)), ...llaves.map((l) => l.id)];
     const clave = `ddd-mundo-${m.id}`;
     medidores[clave] = ids;
     return `
@@ -3422,7 +3432,7 @@ function dddHistoria() {
       <h3>${esc(m.nombre)} <span class="count" data-count="${clave}">${store.contar(ids)}/${ids.length}</span></h3>
       <ul class="list">${itemLogro(logroDdd[m.logro], 'ddd')}</ul>
       ${m.nota ? `<p class="mini-consejo">${esc(m.nota)}</p>` : ''}
-      ${m.llaves ? `<p class="mini-consejo"><b>Llave Espada:</b> ${m.llaves.map(esc).join(' · ')}</p>` : ''}
+      ${llaves.length ? `<div class="niveles-forma">${llaves.map((l) => marca(l.id, `Llave Espada <b>${esc(l.n)}</b> · ${l.pj}`)).join('')}</div>` : ''}
       ${m.jefes.length ? `<div class="minis-kh2">${m.jefes.map(jefe).join('')}</div>` : ''}
     </article>`;
   };
@@ -3519,7 +3529,10 @@ function dddMinijuegos() {
       <p class="mini-consejo">${esc(m.t)}</p>
       <div class="niveles-forma">${marca(ID.dddMinijuego(m.id), 'Jugado')}${marca(ID.dddLogro(m.logro), `<b>${esc(logroDdd[m.logro].nombre)}</b>`, 'marca-juego')}</div>
     </article>`;
+  const copa = (c) => marca(ID.dddCopa(c.id), `<b>«${esc(c.n)}»</b><small>${estrellasDdd(c.dif)}${c.rondas} ronda${c.rondas > 1 ? 's' : ''} · ${esc(c.abre)}</small>`);
+  const obj = (o) => marca(ID.dddNaiperama(o.id), esc(o.t));
   medidores['ddd-minijuegos'] = idsMinijuegosDdd();
+  medidores['ddd-naiperama'] = idsNaiperamaDdd();
   return `
     <p class="lead seccion-lead">Los logros de ACH_39 a ACH_45: el Naiperama (juego de cartas) y los minijuegos de los Lucientes y de La Red.</p>
     ${bloque('logros-minijuegos', 'Los logros', listaLogrosDdd('minijuegos'))}
@@ -3527,8 +3540,12 @@ function dddMinijuegos() {
       <div class="info-card"><h3>Naiperama</h3><p>${esc(NAIPERAMA_DDD.texto)}</p><p>${esc(NAIPERAMA_DDD.consejo)}</p></div>
       <div class="info-card"><h3>Minijuegos en el diario</h3><p>Para el 100 % hay que jugar a todos una vez: Globo, Tonel, Gologafas y la moto de luz con Riku, en La Red.</p></div>
     </div>
+    ${bloque('naiperama-ddd', 'Naiperama: del nivel 1 al 20', `<p class="group-intro">${esc(NOTA_NAIPERAMA_NIVEL)}</p>
+      <h4 class="sub-pj">Las 10 copas: ganar cada una por primera vez</h4><div class="portales-ddd">${NAIPERAMA_COPAS_DDD.map(copa).join('')}</div>
+      <h4 class="sub-pj">Medallas y trofeos</h4><div class="portales-ddd">${NAIPERAMA_OBJ_DDD.map(obj).join('')}</div>
+      <p class="nota-fuente">Las copas no tienen nombre en castellano en ninguna fuente: van con el de KHWiki. Las estrellas son su dificultad.</p>`, { meter: medidor('ddd-naiperama', idsNaiperamaDdd(), 'Nivel') })}
     ${bloque('minijuegos-ddd', 'Minijuegos', `<div class="minis-kh2">${MINIJUEGOS_DDD.map(mini).join('')}</div>`, { meter: medidor('ddd-minijuegos', idsMinijuegosDdd(), 'Jugados') })}
-    ${fuentes(['gbTrofeos', 'wikiEsNaiperama'])}`;
+    ${fuentes(['gbTrofeos', 'khwikiNaiperama', 'wikiEsNaiperama'])}`;
 }
 
 // Realidad Alterna y comandos acrobáticos.
@@ -3554,9 +3571,10 @@ function dddRealidad() {
 
 // Progreso: porcentajes, final secreto, tránsitos, Sopor.
 function dddProgreso() {
-  const cien = CIEN_DDD.map((c) => (c.marca
-    ? `<li>${marca(idCienDdd(c), esc(c.t))}${c.nota ? `<p class="mini-consejo">${esc(c.nota)}</p>` : ''}</li>`
-    : `<li class="cien-ddd"><span>${esc(c.t)}</span> <a class="ir-seccion" href="#/ddd/${c.seccion}">Ver ${esc(seccionDdd(c.seccion).titulo)}</a></li>`)).join('');
+  const cien = CIEN_DDD.map((c) => `
+    <div class="cien-ddd">${marca(idCienDdd(c), `<b>${esc(c.t)}</b>${c.nota ? `<small>${esc(c.nota)}</small>` : ''}`)}
+      ${c.seccion === 'progreso' ? '' : `<a class="ir-seccion" href="#/ddd/${c.seccion}">Ver ${esc(seccionDdd(c.seccion).titulo)}</a>`}</div>`).join('');
+  medidores['ddd-cien'] = idsCienDdd();
   const celda = (t, pj) => marca(ID.dddTransito(t.id, pj), `<b>${pj === 'sora' ? 'Sora' : 'Riku'}</b><small>${esc(t[pj][0])} puntos · ${esc(t[pj][1])}</small>`);
   const tabla = `<div class="transitos-ddd">${TRANSITOS_DDD.map((t) => `
     <div class="transito-ddd"><h4>${esc(t.mundo)}</h4><div class="portales-ddd">${celda(t, 'sora')}${celda(t, 'riku')}</div></div>`).join('')}</div>`;
@@ -3564,7 +3582,7 @@ function dddProgreso() {
   return `
     <p class="lead seccion-lead">Los logros de porcentajes, Sopor y tránsitos, con lo que cuenta para el 100 % de historia, de combate y de objetos.</p>
     ${bloque('logros-progreso', 'Los logros', listaLogrosDdd('progreso'))}
-    ${bloque('cien-ddd', 'Lo que cuenta para el 100 %', `<p class="group-intro">${esc(NOTA_CIEN)}</p><ul class="lista-cien-ddd">${cien}</ul>`)}
+    ${bloque('cien-ddd', 'Lo que cuenta para el 100 %', `<p class="group-intro">${esc(NOTA_CIEN)}</p><div class="lista-cien-ddd">${cien}</div>`, { meter: medidor('ddd-cien', idsCienDdd(), 'Cumplido') })}
     ${bloque('final-secreto', 'El final secreto', `<div class="info-cards info-cards-2">
       <div class="info-card"><h3>Trofeos del juego que hacen falta</h3><ul class="bullets">${FINAL_SECRETO_DDD.trofeos.map(([d, t]) => `<li><b>${esc(d)}:</b> ${esc(t)}</li>`).join('')}</ul></div>
       <div class="info-card"><h3>Las tres respuestas</h3><ol class="sora-resp">${FINAL_SECRETO_DDD.preguntas.map((r) => `<li>${esc(r)}</li>`).join('')}</ol></div>
@@ -3602,7 +3620,7 @@ const SECCIONES_DDD = [
   { id: 'historia', titulo: 'Historia y mundos', desc: 'Los siete mundos con Sora y Riku, sus jefes, los jefes secretos y la Llave Espada de cada mundo.', img: 'assets/img/ddd/logros/ACH_30.jpg', ids: idsSecHistoriaDdd, html: dddHistoria },
   { id: 'portales', titulo: 'Portales y Nexos', desc: 'Los 78 portales especiales por mundo y personaje, los portales secretos y los siete objetivos de los Portales Nexo.', img: 'assets/img/ddd/logros/ACH_61.jpg', ids: idsSecPortalesDdd, html: dddPortales },
   { id: 'lucientes', titulo: 'Lucientes', desc: 'Los 54 Lucientes con su fórmula y recetas, los Nexos y las habilidades de «Habilidad máxima».', img: 'assets/img/ddd/logros/ACH_51.jpg', ids: idsSecLucientesDdd, html: dddLucientes },
-  { id: 'minijuegos', titulo: 'Naiperama y minijuegos', desc: 'El Naiperama, los minijuegos de Lucientes y la moto de luz, con la puntuación de cada logro.', img: 'assets/img/ddd/logros/ACH_39.jpg', ids: idsSecMinijuegosDdd, html: dddMinijuegos },
+  { id: 'minijuegos', titulo: 'Naiperama y minijuegos', desc: 'Las 10 copas y los objetivos que suben el Naiperama al nivel 20, los minijuegos de Lucientes y la moto de luz.', img: 'assets/img/ddd/logros/ACH_39.jpg', ids: idsSecMinijuegosDdd, html: dddMinijuegos },
   { id: 'realidad', titulo: 'Realidad Alterna', desc: 'Las siete Realidades Alternas, sus comandos y los comandos acrobáticos.', img: 'assets/img/ddd/logros/ACH_54.jpg', ids: idsSecRealidadDdd, html: dddRealidad },
   { id: 'progreso', titulo: 'Progreso', desc: 'Qué cuenta para el 100 %, el final secreto, el Sopor y los objetivos de cada tránsito.', img: 'assets/img/ddd/logros/ACH_16.jpg', ids: idsSecProgresoDdd, html: dddProgreso },
   { id: 'coleccion', titulo: 'Coleccionismo', desc: 'Los 124 comandos, las Llaves Espada, las 36 oniritas y los juguetes, con cómo se consigue cada uno.', img: 'assets/img/ddd/logros/ACH_26.jpg', ids: idsSecColeccionDdd, html: dddColeccion },
@@ -3850,18 +3868,18 @@ function bbs02Cofres() {
 
 // Combate: los cinco logros, la barra de situación, sus comandos (los tres de magia, marcables) y el Tiro certero.
 function bbs02Combate() {
-  const rel = (x) => [
-    x.logros && `<b>Logro:</b> ${x.logros.map((id) => esc(logroBbs02[id].nombre)).join(', ')}`,
-    x.obj && `<b>Objetivos del armario:</b> n.º ${x.obj.join(', ')}`,
-  ].filter(Boolean).map((t) => `<p class="mini-consejo">${t}</p>`).join('');
+  // Los de magia llevan su propia casilla; el resto, las de sus logros y objetivos (mismas marcas que en sus secciones).
+  const rel = (x) => `<div class="niveles-forma">${[
+    ...(x.logros || []).map((id) => marca(ID.bbs02Logro(id), `<b>${esc(logroBbs02[id].nombre)}</b>`, 'marca-juego')),
+    ...(x.obj || []).map((n) => marca(ID.bbs02Objetivo(n), `<b>Objetivo ${n}</b><small>${esc(OBJETIVOS_BBS02.find((o) => o.n === n).t)}</small>`, 'marca-obj')),
+  ].join('')}</div>`;
   const comando = (x) => `
     <article class="mini-kh2 cmd02">
       <h3>${esc(x.nombre)}</h3>
       <p class="mini-consejo"><b>Cómo sale:</b> ${esc(x.como)}</p>
       <p class="mini-consejo">${esc(x.t)}</p>
       ${x.pc ? `<p class="mini-consejo note">${esc(x.pc)}</p>` : ''}
-      ${rel(x)}
-      ${x.marca ? `<div class="niveles-forma">${marca(ID.bbs02Magia(x.id), 'Usado al menos una vez')}</div>` : ''}
+      ${x.marca ? `<div class="niveles-forma">${marca(ID.bbs02Magia(x.id), 'Usado al menos una vez')}</div>` : rel(x)}
     </article>`;
   const magia = COMANDOS_BBS02.filter((x) => x.marca);
   const otros = COMANDOS_BBS02.filter((x) => !x.marca);
@@ -3880,7 +3898,8 @@ function bbs02Combate() {
     ${bloque('tiro-bbs02', 'Tiro certero', `<div class="minis-kh2"><article class="mini-kh2">
       <h3>${esc(TIRO_BBS02.nombre)}</h3>
       <p class="mini-consejo">Nombre en castellano de Birth by Sleep; en inglés, «${esc(TIRO_BBS02.en)}».</p>
-      <p class="mini-consejo">${esc(TIRO_BBS02.t)}</p>${rel(TIRO_BBS02)}
+      <p class="mini-consejo">${esc(TIRO_BBS02.t)}</p>
+      ${rel(TIRO_BBS02)}
     </article></div>`)}
     ${fuentes(FUENTES_COMBATE_BBS02)}`;
 }

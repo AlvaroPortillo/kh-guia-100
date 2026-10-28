@@ -12,21 +12,21 @@ export const TRANSITOS_DDD = [
   { id: 'sinfonia-del-brujo', mundo: 'Sinfonía del Brujo', sora: ['1.000.000', '1\' 15"'], riku: ['800.000', '1\' 25"'] },
   { id: 'mundo-inexistente', mundo: 'El Mundo Inexistente', sora: ['140.000', '2\' 00"'], riku: ['1.000.000', '1\' 05"'] },
 ];
-export const NOTA_TRANSITOS = 'Cada celda es la puntuación mínima y el tiempo máximo para sacar la A. Gamerbase aconseja ir lo más rápido posible pulsando en cuanto puedas, evitar los golpes (te frenan) y coger solo los premios necesarios. Sora tiene además un tránsito adicional tras los créditos. Rango A en todos los tránsitos da la Llave Espada Inmersia.';
+export const NOTA_TRANSITOS = 'Cada celda es la puntuación mínima y el tiempo máximo para sacar la A. Gamerbase aconseja ir lo más rápido posible pulsando en cuanto puedas, evitar los golpes (te frenan) y coger solo los premios necesarios. Sora tiene además un tránsito adicional tras los créditos, que no tiene calificación (KHWiki). Rango A en todos los tránsitos da la Llave Espada Inmersia. Ojo: en El Paraíso del Bromista, KHWiki da las puntuaciones al revés (Sora 730.000 y Riku 400.000); si con la cifra de Gamerbase no sale la A, prueba con la otra.';
 
 // ---------- Lo que cuenta para el 100 % (Perfección absoluta) ----------
-// `marca`: id propio (ddd.cien.<id>) si no tiene otra casilla en la guía; `seccion`: dónde está su lista.
+// Todas se marcan: id `ddd.cien.<id>` (Julius usa la marca de su jefe secreto); `seccion`: dónde está su lista.
 export const CIEN_DDD = [
-  { id: 'fin-secreto', t: 'Completar la historia y ver el final secreto', marca: true, seccion: 'progreso' },
-  { id: 'cofres-sora', t: 'Abrir todos los cofres (Tesoros) con Sora', marca: true, seccion: 'coleccion', nota: 'Informes > Tesoros del juego muestra cuáles faltan; los cofres están numerados y los mapas por mundo mantienen la numeración.' },
-  { id: 'cofres-riku', t: 'Abrir todos los cofres (Tesoros) con Riku', marca: true, seccion: 'coleccion' },
+  { id: 'fin-secreto', t: 'Completar la historia y ver el final secreto', seccion: 'progreso' },
+  { id: 'cofres-sora', t: 'Abrir todos los cofres (Tesoros) con Sora', seccion: 'coleccion', nota: 'Informes > Tesoros del juego muestra cuáles faltan; los cofres están numerados y los mapas por mundo mantienen la numeración.' },
+  { id: 'cofres-riku', t: 'Abrir todos los cofres (Tesoros) con Riku', seccion: 'coleccion' },
   { id: 'formulas', t: 'Conseguir todas las fórmulas', seccion: 'lucientes' },
   { id: 'comandos', t: 'Conseguir todos los comandos', seccion: 'coleccion' },
   { id: 'juguetes', t: 'Conseguir todos los objetos para Lucientes (Globo, Tonel, Gologafas, tintes y galletas)', seccion: 'coleccion' },
   { id: 'oniritas', t: 'Conseguir todas las oniritas', seccion: 'coleccion' },
   { id: 'creados', t: 'Crear un Luciente de cada tipo', seccion: 'lucientes' },
-  { id: 'julius-sora', t: 'Vencer a Julius con Sora', marca: true, seccion: 'historia' },
-  { id: 'julius-riku', t: 'Vencer a Julius con Riku', marca: true, seccion: 'historia' },
+  { id: 'julius-sora', t: 'Vencer a Julius con Sora', seccion: 'historia' },
+  { id: 'julius-riku', t: 'Vencer a Julius con Riku', seccion: 'historia' },
   { id: 'portales', t: 'Completar los portales especiales y secretos con los dos personajes', seccion: 'portales' },
   { id: 'transitos', t: 'Rango A en todos los tránsitos con los dos personajes', seccion: 'progreso' },
   { id: 'naiperama', t: 'Llegar al nivel 20 del Naiperama (una estrella en cada copa)', seccion: 'minijuegos' },
@@ -49,6 +49,33 @@ export const NAIPERAMA_DDD = {
   texto: 'El Naiperama es el juego de cartas de DDD. Para el nivel 20 hay que sacar la calificación de estrella en todas las copas, lo que desbloquea objetos en la tienda de Medallas y la Llave Espada Dulcesueños (que se da al completar todas las copas, sin necesidad de estrella; para el segundo personaje basta repetir la ronda final de la última copa).',
   consejo: 'Para la estrella conviene ganar sin perder casi vida. Un truco de Gamerbase: un Luciente con la habilidad Megafulgor (Rextiriano o Draconte) daña a los tres Lucientes rivales a la vez. En la última copa llegó a llevar dos.',
 };
+// Nivel del Naiperama: KHWiki «Flick Rush» (copas, dificultad, rondas, desbloqueo y los 19 objetivos que suben el nivel).
+// Las copas no tienen nombre en castellano en ninguna fuente: van en inglés entre «». Ids: ddd.naiperama.copa.<id> y ddd.naiperama.<id>.
+export const NAIPERAMA_COPAS_DDD = [
+  { id: 'training', n: 'Training Cup', dif: 1, rondas: 1, abre: 'Disponible desde el principio.' },
+  { id: 'beginners', n: 'Beginner\'s Cup', dif: 1, rondas: 2, abre: 'Llega al nivel 2 del Naiperama.' },
+  { id: 'rainbow', n: 'Rainbow Cup', dif: 2, rondas: 4, abre: 'Termina La Ciudad de las Campanas y El Paraíso del Bromista con Sora o con Riku.' },
+  { id: 'digital', n: 'Digital Cup', dif: 2, rondas: 2, abre: 'Termina La Red con Sora o con Riku.' },
+  { id: 'tin-pin', n: 'Tin Pin Cup', dif: 3, rondas: 4, abre: 'Llega al nivel 6 del Naiperama.' },
+  { id: 'speed', n: 'Speed Cup', dif: 3, rondas: 1, abre: 'Llega al nivel 7 del Naiperama.' },
+  { id: 'yummy', n: 'Yummy Cup', dif: 4, rondas: 3, abre: 'Termina la segunda visita a Ciudad de Paso con Sora o con Riku.' },
+  { id: 'final', n: 'Final Cup', dif: 4, rondas: 4, abre: 'Termina El País de los Mosqueteros y Sinfonía del Brujo con Sora o con Riku.' },
+  { id: 'horror', n: 'Horror Cup', dif: 5, rondas: 1, abre: 'Llega al nivel 13 del Naiperama.' },
+  { id: 'secret', n: 'Secret Cup', dif: 5, rondas: 5, abre: 'Gana todas las demás copas y llega al nivel 15 del Naiperama.' },
+];
+export const NAIPERAMA_OBJ_DDD = [
+  { id: 'medallas-300', t: 'Consigue 300 medallas en total' },
+  { id: 'medallas-700', t: 'Consigue 700 medallas en total' },
+  { id: 'medallas-3000', t: 'Consigue 3000 medallas en total' },
+  { id: 'medallas-5000', t: 'Consigue 5000 medallas en total' },
+  { id: 'plata-oro-5', t: 'Consigue 5 trofeos de plata u oro en total' },
+  { id: 'plata-oro-10', t: 'Consigue 10 trofeos de plata u oro en total' },
+  { id: 'oro-3', t: 'Consigue 3 trofeos de oro' },
+  { id: 'oro-5', t: 'Consigue 5 trofeos de oro' },
+  { id: 'oro-10', t: 'Consigue 10 trofeos de oro' },
+];
+export const NOTA_NAIPERAMA_NIVEL = 'Se empieza en el nivel 1 y cada uno de estos 19 objetivos sube uno, hasta el 20 (KHWiki): ganar cada copa por primera vez y los de medallas y trofeos. El trofeo (bronce, plata u oro) lo da cada ronda según cómo la hayas ganado. Gamerbase lo resume en sacar la calificación de estrella en todas las copas; si te falta algún nivel, mira qué objetivo de esta lista queda sin marcar.';
+
 export const MINIJUEGOS_DDD = [
   { id: 'globo', nombre: 'Globo', logro: 'ACH_43', donde: 'Menú Lucientes, con el juguete Globo', t: '200 puntos o más. Los globos se explotan rozando la pantalla táctil; si esperas a que el globo esté muy cerca (las flechas cambian de color y sale «Estupendo»), vale 3 puntos.' },
   { id: 'tonel', nombre: 'Tonel', logro: 'ACH_44', donde: 'Menú Lucientes, con el juguete Tonel', t: '400 puntos o más. Los Lucientes van en burbujas, como en un pinball: golpéalos hacia las flores amarillas, los cofres o las bolas rojas, y usa las corrientes de agua. Mantén al menos dos en juego y recoge las esferas rojas.' },
