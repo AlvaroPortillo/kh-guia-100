@@ -146,6 +146,63 @@ body[data-view="juegos"] .sky { opacity: .9; }
 .file-btn:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; }
 .menu-panel .danger { color: var(--danger); }
 
+.borrar-dialog { width: min(440px, calc(100vw - 32px)); }
+.borrar-cuerpo { display: grid; gap: 12px; padding: 16px; font-size: .9375rem; color: var(--text-2); }
+.borrar-cuerpo input {
+  font: 600 1rem/1 var(--f-ui); letter-spacing: .08em; color: var(--text);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-s); padding: 12px;
+}
+.borrar-cuerpo input:focus-visible { outline: 2px solid var(--danger); outline-offset: 3px; }
+.borrar-botones { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
+.borrar-botones button {
+  font: 600 .875rem/1 var(--f-ui); color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r-s); padding: 11px 16px; cursor: pointer;
+}
+.borrar-botones button:hover { background: var(--surface-2); }
+.borrar-botones .danger { color: var(--danger); border-color: var(--danger); }
+.borrar-botones .danger:disabled { opacity: .45; cursor: not-allowed; background: var(--surface); }
+
+/* Aviso de importación: un destello dorado y el título en Cinzel, como las cabeceras de la guía. */
+.aviso {
+  position: relative; width: min(400px, calc(100vw - 32px)); text-align: center;
+  background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--gold) 16%, transparent), transparent 62%), var(--bg-2);
+}
+.aviso::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent) 0 0 / 200% 100%;
+  animation: aviso-brillo 1.4s var(--ease) 1;
+}
+.aviso-cuerpo { display: grid; justify-items: center; gap: 10px; padding: 28px 24px 16px; }
+.aviso-icono {
+  width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line));
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  box-shadow: 0 0 26px color-mix(in srgb, var(--gold) 35%, transparent);
+  animation: aviso-subir 300ms var(--ease) both;
+}
+.aviso-icono svg { width: 26px; height: 26px; fill: var(--gold); }
+.aviso-error .aviso-icono {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--line));
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  box-shadow: 0 0 26px color-mix(in srgb, var(--danger) 30%, transparent);
+}
+.aviso-error .aviso-icono svg { fill: none; stroke: var(--danger); stroke-width: 2.2; stroke-linecap: round; }
+.aviso-error::before { background: linear-gradient(90deg, transparent, var(--danger), transparent) 0 0 / 200% 100%; }
+.aviso-titulo { font: 600 1.375rem/1.2 var(--f-display); letter-spacing: .06em; color: var(--text); }
+.aviso-texto { color: var(--text-2); font-size: .9375rem; max-width: 34ch; overflow-wrap: anywhere; }
+.aviso-pie { display: flex; justify-content: center; padding: 8px 20px 22px; }
+.aviso-ok {
+  font: 700 .9375rem/1 var(--f-ui); color: var(--bg); background: var(--gold); border: 0;
+  border-radius: 99px; padding: 13px 32px; min-width: 150px; cursor: pointer;
+  transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+}
+.aviso-ok:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--gold) 40%, transparent); }
+.aviso-ok:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.aviso-error .aviso-ok { background: var(--danger); }
+.aviso-error .aviso-ok:hover { box-shadow: 0 8px 24px color-mix(in srgb, var(--danger) 40%, transparent); }
+@keyframes aviso-subir { from { opacity: 0; transform: translateY(8px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes aviso-brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes spin { to { rotate: 360deg; } }
 
